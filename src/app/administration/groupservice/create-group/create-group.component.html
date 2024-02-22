@@ -1,0 +1,31 @@
+<div class="listgroup">
+  <ul class="line-service">
+    <div class="infos">
+      <h3>Liste des groupes existant :</h3>
+      <img
+        src="assets/add-icon.svg"
+        alt="#"
+        (click)="openDialogCreateGroup()"
+      />
+    </div>
+    <hr />
+    @for (row of groupeServices; track row) {
+    <li>
+      <p (click)="onChangeGroupAssociate(row.id)">{{ row.label }}</p>
+      <div class="actions">
+        <img
+          (click)="edit_label_group({ id: row.id, label: row.label })"
+          src="assets/edit-icon.svg"
+          alt="#"
+        />
+        <hr />
+        <img
+          (click)="delete_label_groupe(row.id)"
+          src="assets/close.svg"
+          alt="#"
+        />
+      </div>
+    </li>
+    }
+  </ul>
+</div>

@@ -1,0 +1,14 @@
+<mat-dialog-content>
+  <p>Modifier le nom du groupe de service</p>
+  <p>
+    Nom actuel : <span>{{ data.label }}</span>
+  </p>
+  <mat-form-field>
+    <mat-label>Nom</mat-label>
+    <input matInput placeholder="Ex. Pipa" [(ngModel)]="nomDuGroupe" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button (click)="onOkClick()">Ok</button>
+</mat-dialog-actions>

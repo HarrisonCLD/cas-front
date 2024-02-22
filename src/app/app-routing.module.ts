@@ -1,10 +1,39 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [];
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ListservicesComponent } from './listservices/listservices.component';
+import { ClassementComponent } from './classement/classement.component';
+import { AdministrationComponent } from './administration/administration.component';
+import { GroupserviceComponent } from './administration/groupservice/groupservice.component';
+import { AssociateGroupserviceComponent } from './administration/groupservice/associate-groupservice/associate-groupservice.component';
+import { CreateGroupComponent } from './administration/groupservice/create-group/create-group.component';
+
+export const routes: Routes = [
+  { path: '', component: DashboardComponent },
+  {
+    path: 'services/:id',
+    component: ListservicesComponent,
+  },
+  {
+    path: 'classement',
+    component: ClassementComponent,
+  },
+  {
+    path: 'administration',
+    component: AdministrationComponent,
+    children: [
+      {
+        path: 'group',
+        component: GroupserviceComponent,
+      },
+    ],
+  },
+  // { path: '**', redirectTo: '/' },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

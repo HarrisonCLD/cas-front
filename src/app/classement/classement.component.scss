@@ -1,0 +1,146 @@
+.classement {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+
+  .bot {
+    display: flex;
+    justify-content: space-between;
+    height: 90%;
+    max-width: 1590px;
+    width: 90%;
+
+    .left {
+      width: 35%;
+      height: 100%;
+      overflow-y: scroll;
+      padding: 20px 30px;
+      border-radius: 5px;
+      background-color: white;
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
+        rgba(0, 0, 0, 0.24) 0px 1px 2px;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        border-radius: 8px;
+        background-color: #f5f5f5;
+        border: 1px solid #cacaca;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #448a95;
+      }
+
+      .example {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 25px;
+
+        p {
+          font-size: 1.1em;
+          font-weight: 500;
+        }
+      }
+
+      mat-list-item {
+        height: 60px;
+        margin: 15px 0px;
+        padding: 20px 0px;
+        cursor: pointer;
+
+        .min,
+        .moy,
+        .max {
+          color: white;
+          padding: 5px 8px;
+          border-radius: 5px;
+        }
+
+        .min {
+          background-color: red;
+        }
+
+        .moy {
+          background-color: #00da00;
+        }
+
+        .max {
+          background-color: #448a95;
+        }
+
+        p:nth-child(3) {
+          padding: 5px 10px;
+          border-radius: 5px;
+        }
+
+        &:hover {
+          background-color: #e8e8e8;
+        }
+
+        .row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+      }
+
+      .row {
+        display: flex;
+
+        > * {
+          margin: 0px 10px;
+        }
+      }
+    }
+
+    .right {
+      position: relative;
+      width: 60%;
+      height: 100%;
+      padding: 20px 30px 20px 15px;
+      border-radius: 3px;
+      background-color: white;
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
+        rgba(0, 0, 0, 0.24) 0px 1px 2px;
+
+      h3 {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 1.6em;
+        font-weight: 500;
+        color: #448a95;
+        margin: 0;
+      }
+
+      hr {
+        width: 70%;
+        height: 1px;
+        background-color: #448a95;
+        border: none;
+        margin: 15px auto;
+      }
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        border-radius: 8px;
+        background-color: #f5f5f5;
+        border: 1px solid #cacaca;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #448a95;
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+<section class="administration">
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab label="Utilisateur" class="users">
+      <utilisateur></utilisateur>
+    </mat-tab>
+    <mat-tab label="Service" class="services">
+      <ul *ngIf="listServices" class="listServices">
+        <div class="params">
+          <h3>Rechercher un service :</h3>
+          <mat-form-field>
+            <mat-label>Nom du service</mat-label>
+            <input
+              matInput
+              [(ngModel)]="serviceName"
+              (input)="get_searchChange($event)"
+              placeholder="Ex. ebureau.univ-reims.fr"
+              value=""
+            />
+          </mat-form-field>
+          <button *ngIf="serviceName" (click)="resetSearch()">
+            <img src="../../assets/close-o.svg" alt="#" />
+          </button>
+        </div>
+        <hr />
+        @for(service of listServices; track service) {
+        <li>
+          <div class="infos">
+            <p>{{ service.id }}</p>
+            <p>{{ service.name }}</p>
+            <p class="new" *ngIf="service.new === 1">NEW</p>
+          </div>
+          <div class="actions" [formGroup]="getActionsForm(service)">
+            <mat-checkbox [(ngModel)]="service.isDev" formControlName="isDev"
+              >Développement</mat-checkbox
+            >
+            <mat-checkbox
+              [(ngModel)]="service.isEnded"
+              formControlName="isEnded"
+              >Arrêté</mat-checkbox
+            >
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="
+                validateChange(service.id, getActionsForm(service).value)
+              "
+            >
+              Valider
+            </button>
+          </div>
+        </li>
+        }
+      </ul>
+    </mat-tab>
+    <mat-tab label="Groupe Service" class="groupe-services">
+     <groupservice></groupservice>
+    </mat-tab>
+  </mat-tab-group>
+</section>

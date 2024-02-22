@@ -1,0 +1,59 @@
+<h3>Récapitulatif des derniers 24h</h3>
+<div class="content">
+  <div class="left">
+    <div class="top">
+      <div class="simply_stat">
+        <img src="../../assets/screen.svg" alt="#" />
+        <p>{{ totalaccess }}</p>
+        <h4>Accès total</h4>
+      </div>
+      <div class="simply_stat">
+        <img src="../../assets/check-o.svg" alt="#" />
+        <p>{{ successConnection }}</p>
+        <h4>Connexion réussie</h4>
+      </div>
+      <div class="simply_stat">
+        <img src="../../assets/close-o.svg" alt="#" />
+        <p>{{ failedConnection }}</p>
+        <h4>Connexion échouée</h4>
+      </div>
+    </div>
+    <hr />
+    <div class="bot">
+      <scoreboard
+        *ngIf="scoreboardCharts"
+        [dataSending]="scoreboardCharts"
+      ></scoreboard>
+    </div>
+  </div>
+  <hr class="separation-right" />
+  <div class="right">
+    <mat-accordion>
+      @for(user of resumeStats; track user) {
+      <mat-expansion-panel
+        hideToggle
+        (click)="get_resume_access_detail(user.name)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <img src="assets/{{ user.name }}.svg" alt="#" />
+            {{ user.name }}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ user.valeur }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="content">
+          @if(resumeDetailStats) { @for (row of resumeDetailStats; track
+          row.id_service) {
+          <div class="detail" routerLink="/services/{{ row.id_service }}">
+            <p>{{ row.name }}</p>
+            <p>{{ row.access }}</p>
+          </div>
+          } }
+        </div>
+      </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </div>
+</div>

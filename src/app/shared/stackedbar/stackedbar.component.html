@@ -1,0 +1,17 @@
+<div class="stackedbar">
+  <div class="infos">
+    <p>ID :</p>
+    <p >{{ dataServiceID }}</p>
+  </div>
+  <h3>{{dataService?.name}}</h3>
+  <hr>
+  <canvas
+    baseChart
+    class="chart"
+    [data]="barChartData"
+    [options]="barChartOptions"
+    [plugins]="barChartPlugins"
+    [type]="barChartType"
+  >
+  </canvas>
+</div>

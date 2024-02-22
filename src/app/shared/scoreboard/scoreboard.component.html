@@ -1,0 +1,15 @@
+@if (dataSending.data.length > 0) {
+  <canvas
+    [style.height]="height + 'px'"
+    [style.width]="'100%'"
+    baseChart
+    [data]="barChartData"
+    [options]="barChartOptions"
+    [plugins]="barChartPlugins"
+    [type]="barChartType"
+  >
+  </canvas>
+} @else {
+  <p>Aucune donnée récupérée pour ces dernières 24h</p>
+}
+

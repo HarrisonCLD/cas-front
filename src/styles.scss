@@ -1,1 +1,271 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #e8e8e8;
+
+  header {
+    min-height: 85px;
+    max-height: 85px;
+    width: 100%;
+
+    button {
+      cursor: pointer;
+    }
+  }
+
+  dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    max-width: 1500px;
+    width: 80%;
+    max-height: 80%;
+    height: 80%;
+    margin: auto !important;
+    padding: 40px !important;
+    border-radius: 5px;
+    background-color: white !important;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+
+    .mat-expansion-panel {
+      margin: 20px 0px;
+
+      .mat-expansion-panel-header {
+        .mat-expansion-panel-header-title {
+          margin: 0;
+          display: flex;
+
+          img {
+            width: 20px;
+            margin-right: 15px;
+          }
+        }
+        .mat-expansion-panel-header-description {
+          flex-grow: 0;
+          margin: 0;
+        }
+      }
+
+      .mat-expansion-panel-content {
+        .mat-expansion-panel-body {
+          padding: 5px 8px 5px 0px !important;
+          margin-right: 3px;
+
+          div {
+            p:nth-child(1) {
+              font-size: 0.9em !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  listservices {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    overflow: hidden;
+
+    .stackedbar {
+      height: 100%;
+
+      canvas {
+        max-height: 600px;
+      }
+    }
+
+    mat-list {
+      mat-list-item {
+        span {
+          span {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
+
+  classement {
+    height: 93%;
+  }
+
+  administration {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    width: 80%;
+    max-width: 80%;
+    height: 85%;
+    max-height: 85%;
+    margin: auto;
+
+    section {
+      height: 95%;
+      margin: auto;
+      background-color: white;
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
+        rgba(0, 0, 0, 0.24) 0px 1px 2px;
+      border-radius: 3px;
+
+      mat-tab-group {
+        height: 100%;
+      }
+    }
+
+    .mat-mdc-tab-body-wrapper {
+      height: 100%;
+      padding: 20px;
+
+      .mat-mdc-tab-body:nth-child(1) {
+        overflow: hidden;
+        .mat-mdc-tab-body-content {
+          display: flex;
+        }
+      }
+
+      .mat-mdc-tab-body:nth-child(2) {
+        overflow-y: hidden;
+        &::-webkit-scrollbar {
+          width: 12px;
+        }
+
+        &::-webkit-scrollbar-track {
+          border-radius: 8px;
+          background-color: #f5f5f5;
+          border: 1px solid #cacaca;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          border-radius: 8px;
+          background-color: #448a95;
+        }
+      }
+
+      .mat-mdc-tab-body:nth-child(3) {
+        overflow: hidden;
+        .mat-mdc-tab-body-content {
+          display: flex;
+        }
+      }
+
+      .mat-mdc-tab-body {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        .mat-mdc-tab-body-content {
+          overflow: visible !important;
+          width: 100%;
+        }
+
+        .listServices {
+          li:nth-child(odd) {
+            background-color: #e8e8e8;
+            border-radius: 3px;
+          }
+
+          li {
+            display: flex;
+            justify-content: space-between;
+            margin: 0px 10px;
+            padding: 10px 50px;
+
+            .infos {
+              display: flex;
+              align-items: center;
+              width: 40%;
+
+              p {
+                margin: 0;
+                font-size: 1.2em;
+              }
+
+              p:nth-child(1) {
+                margin-right: 40px;
+                font-weight: 500;
+                color: #448a95;
+              }
+              p:nth-child(2) {
+                margin-right: 15px;
+              }
+            }
+
+            .actions {
+              display: flex;
+
+              mat-checkbox:nth-child(1) {
+                margin-right: 15px;
+              }
+              mat-checkbox:nth-child(2) {
+                margin-right: 40px;
+              }
+            }
+          }
+        }
+      }
+    }
+    groupservice {
+      height: 100%;
+      flex-grow: 1;
+      overflow: hidden;
+    }
+  }
+  scoreboard {
+    p {
+      color: #448a95;
+      font-size: 1.1em;
+      white-space: 5px;
+      font-weight: 500;
+    }
+  }
+}
+
+.cdk-overlay-container {
+  .mdc-snackbar__surface {
+    padding: 0;
+
+    .mat-mdc-snack-bar-label {
+      text-align: center;
+    }
+  }
+}
+
+create-group {
+  height: 100%;
+}
+
+associate-groupservice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+}

@@ -1,0 +1,28 @@
+<mat-toolbar>
+  <div class="navigation">
+    <span routerLink="/">CAS Statistique</span>
+    <hr>
+      <button mat-button routerLink="/services/477">
+        <span>Détail des services</span>
+      </button>
+      <button mat-button routerLink="/classement"><span>Classement</span></button>
+      <button mat-button routerLink="/administration"><span>Administration</span></button>
+  </div>
+    <!-- <div class="options" *ngIf="showInputs">
+      <mat-form-field>
+        <mat-label>Date de début</mat-label>
+        <input matInput [(ngModel)]="dateDebut" [matDatepicker]="picker1">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Date de fin</mat-label>
+        <input matInput [(ngModel)]="dateFin" [matDatepicker]="picker2">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+      <button mat-stroked-button (click)="DateChanged()">Validation</button>
+    </div> -->
+</mat-toolbar>

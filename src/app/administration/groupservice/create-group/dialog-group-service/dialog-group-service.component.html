@@ -1,0 +1,11 @@
+<mat-dialog-content>
+  <p>Nouveau groupe de service</p>
+  <mat-form-field>
+    <mat-label>Nom</mat-label>
+    <input matInput placeholder="Ex. ebureau.univ-reims.fr" [(ngModel)]="nomDuGroupe" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button (click)="onOkClick()">Ok</button>
+</mat-dialog-actions>

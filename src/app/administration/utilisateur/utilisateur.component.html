@@ -1,0 +1,42 @@
+<div class="search-name">
+  <mat-form-field>
+    <mat-label>Recherche par le nom</mat-label>
+    <input matInput type="text" [(ngModel)]="nom" placeholder="Ex. Doe" />
+    @if (nom) {
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="nom = ''">
+      <mat-icon>close</mat-icon>
+    </button>
+    }
+  </mat-form-field>
+  <button (click)="search_user({ nom: nom })">
+    <img src="assets/search-icon.svg" alt="search-icon" />
+  </button>
+</div>
+<div class="search-firstname">
+  <mat-form-field>
+    <mat-label>Recherche par le prénom</mat-label>
+    <input matInput type="text" [(ngModel)]="prenom" placeholder="Ex. John" />
+    @if (prenom) {
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="prenom = ''">
+      <mat-icon>close</mat-icon>
+    </button>
+    }
+  </mat-form-field>
+  <button (click)="search_user({ prenom: prenom })">
+    <img src="assets/search-icon.svg" alt="search-icon" />
+  </button>
+</div>
+<div class="search-lastname">
+  <mat-form-field>
+    <mat-label>Recherche par UID</mat-label>
+    <input matInput type="text" [(ngModel)]="uid" placeholder="Ex. john01" />
+    @if (uid) {
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="uid = ''">
+      <mat-icon>close</mat-icon>
+    </button>
+    }
+  </mat-form-field>
+  <button (click)="search_user({ uid: uid })">
+    <img src="assets/search-icon.svg" alt="search-icon" />
+  </button>
+</div>

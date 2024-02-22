@@ -1,0 +1,11 @@
+
+<canvas *ngIf="dataChart"
+  [style.height]="height + 'px'"
+  [style.width]="'100%'"
+  baseChart
+  [data]="barChartData"
+  [options]="barChartOptions"
+  [plugins]="barChartPlugins"
+  [type]="barChartType"
+>
+</canvas>

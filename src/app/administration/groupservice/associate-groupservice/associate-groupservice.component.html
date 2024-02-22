@@ -1,0 +1,54 @@
+<div class="selection-group">
+  <h3>Selectionner un service :</h3>
+  <mat-form-field>
+    <mat-label>Groupe de service</mat-label>
+    <mat-select [(ngModel)]="associateTo" (valueChange)="changeGroupe($event)">
+      @for (row of listgroup; track row) {
+      <mat-option [value]="row.id">
+      {{ row.label }}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+<hr class="separation-associate">
+<div class="bot">
+  <div class="actual-group">
+    @if(groupeServices && groupeServices.length > 0) {
+    <ul>
+      @for(row of groupeServices; track row) {
+      <li>
+        <p class="serviceLabel">{{ row.label }}</p>
+        <ul>
+          @for (line of row.services; track line) {
+          <li>{{ line }}</li>
+          }
+        </ul>
+      </li>
+      }
+    </ul>
+    } @else {
+      <div class="error-group">
+        <p>Aucun service n'est rattaché à ce groupe</p>
+      </div>
+    }
+  </div>
+  <hr>
+  <div class="selection-services">
+    <ul *ngIf="listservices">
+      @for(row of listservices; track row) {
+      <li>
+        <p>{{ row.name }}</p>
+        <mat-checkbox
+          [(ngModel)]="row.checked"
+          (change)="onCheckboxChange(row)"
+        />
+      </li>
+      }
+    </ul>
+    <div class="validate-association" *ngIf="associateServices.length > 0">
+      <p>Voulez-vous valider votre association de service</p>
+      <button (click)="validate_associationGroup()">OK</button>
+    </div>
+  </div>
+</div>
