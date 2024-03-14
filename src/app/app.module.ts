@@ -35,6 +35,9 @@ import {
   MatDialogClose,
 } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -57,6 +60,7 @@ import { AssociateGroupserviceComponent } from './administration/groupservice/as
 import { CreateGroupComponent } from './administration/groupservice/create-group/create-group.component';
 import { DialogEditLabelComponent } from './administration/groupservice/create-group/dialog-edit-label/dialog-edit-label.component';
 import { UtilisateurComponent } from './administration/utilisateur/utilisateur.component';
+import { ServiceComponent } from './administration/service/service.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +84,7 @@ import { UtilisateurComponent } from './administration/utilisateur/utilisateur.c
     CreateGroupComponent,
     DialogEditLabelComponent,
     UtilisateurComponent,
+    ServiceComponent,
   ],
   imports: [
     BrowserModule,
@@ -118,6 +123,9 @@ import { UtilisateurComponent } from './administration/utilisateur/utilisateur.c
     MatDialogActions,
     MatDialogClose,
     MatSelectModule,
+    MatProgressSpinnerModule,
+    MatAutocompleteModule,
+    MatTooltipModule,
   ],
   providers: [provideNativeDateAdapter()],
   bootstrap: [AppComponent],

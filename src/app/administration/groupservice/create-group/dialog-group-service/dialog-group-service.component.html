@@ -1,11 +1,13 @@
 <mat-dialog-content>
-  <p>Nouveau groupe de service</p>
+  <p>Créer un nouveau groupe de service :</p>
+  <hr />
   <mat-form-field>
-    <mat-label>Nom</mat-label>
-    <input matInput placeholder="Ex. ebureau.univ-reims.fr" [(ngModel)]="nomDuGroupe" />
+    <mat-label>Nom de votre groupe</mat-label>
+    <input matInput placeholder="Ex. Pipa" [(ngModel)]="nomDuGroupe" />
+    <mat-hint *ngIf="errorLength">{{ errorLength }}</mat-hint>
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button (click)="onOkClick()">Ok</button>
+  <button mat-button (click)="onNoClick()">Quitter</button>
+  <button mat-button (click)="onOkClick()">Valider</button>
 </mat-dialog-actions>

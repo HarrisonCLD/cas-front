@@ -1,44 +1,33 @@
+@import "../../scss/variables";
+@import "../../scss/mixins";
+@import "../../scss/animations";
+
 .mat-toolbar {
-  display: flex;
-  align-items: center;
+  @extend %flexCenter;
   justify-content: space-between;
   height: 100%;
   padding: 15px 30px !important;
   color: white;
-  background-color: #448a95;
+  background-color: $main-color;
 
   .navigation {
     display: flex;
+
+    span {
+      cursor: pointer;
+    }
 
     hr {
       margin: 0px 30px;
       background-color: white;
       width: 2px;
     }
-  }
-
-  span {
-    cursor: pointer;
-  }
-
-  button {
-    margin: 0px 15px;
-    padding: 15px;
-    color: white;
-
-    &:hover {
-      background-color: darken(#448a95, 9);
-    }
-  }
-
-  .options {
-    mat-form-field {
-      margin: 0px 15px;
-      margin-top: 10px;
-    }
 
     button {
-      background-color: darken(#448a95, 6);
+      margin: 0px 15px;
+      padding: 15px;
+      color: white;
+      cursor: pointer;
 
       &:hover {
         background-color: darken(#448a95, 9);

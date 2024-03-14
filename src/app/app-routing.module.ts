@@ -6,8 +6,6 @@ import { ListservicesComponent } from './listservices/listservices.component';
 import { ClassementComponent } from './classement/classement.component';
 import { AdministrationComponent } from './administration/administration.component';
 import { GroupserviceComponent } from './administration/groupservice/groupservice.component';
-import { AssociateGroupserviceComponent } from './administration/groupservice/associate-groupservice/associate-groupservice.component';
-import { CreateGroupComponent } from './administration/groupservice/create-group/create-group.component';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -29,7 +27,6 @@ export const routes: Routes = [
       },
     ],
   },
-  // { path: '**', redirectTo: '/' },
 ];
 
 @NgModule({

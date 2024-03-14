@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'groupservice',
@@ -7,10 +6,14 @@ import { Subject } from 'rxjs';
   styleUrl: './groupservice.component.scss',
 })
 export class GroupserviceComponent {
+  // navigation tab in groupe service administration :
   public groupServiceNavigation: number = 1;
-  public serviceToAssociate!: number;
 
-  public listgroup!: any;
+  // association array (groupe_service, user_service, user_groupe) :
+  public serviceToAssociate!: number | undefined;
+
+  // list of groups services :
+  public listgroup!: any | undefined;
 
   constructor() {}
 
@@ -18,8 +21,8 @@ export class GroupserviceComponent {
     this.groupServiceNavigation = id;
   }
 
-  onServiceClicked(id:number) {
-    this.serviceToAssociate= id;
+  onServiceClicked(id: number) {
+    this.serviceToAssociate = id;
     this.groupServiceNavigation = 2;
   }
 }

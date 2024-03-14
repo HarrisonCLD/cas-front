@@ -1,9 +1,11 @@
 import { Component, Inject, inject } from '@angular/core';
-import { StatistiquesService } from '../../../../services/statistiques.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PopupValidateComponent } from '../../../popup-validate/popup-validate.component';
-import { PopupErrorComponent } from '../../../popup-error/popup-error.component';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+import { StatistiquesService } from '../../../../services/statistiques.service';
+
+import { openValidateSnackBar } from '../../../../helpers/popup.helper';
+import { openErrorSnackBar } from '../../../../helpers/popup.helper';
 
 @Component({
   selector: 'dialog-edit-label',
@@ -13,9 +15,9 @@ import { PopupErrorComponent } from '../../../popup-error/popup-error.component'
 export class DialogEditLabelComponent {
   private statService = inject(StatistiquesService);
 
-  public durationInSeconds: number = 40;
-
   public nomDuGroupe: string = '';
+
+  public errorLength!: any;
 
   constructor(
     public dialogRef: MatDialogRef<DialogEditLabelComponent>,
@@ -24,29 +26,28 @@ export class DialogEditLabelComponent {
   ) {}
 
   onOkClick(): void {
-    this.statService
-      .set_edit_label_group({ id: this.data.id, label: this.nomDuGroupe })
-      .subscribe((res) => {
-        res.data > 0 ? this.openValidateSnackBar() : this.openErrorSnackBar();
-      });
-    this.dialogRef.close();
-    setTimeout(() => {
-      location.reload();
-    }, 500);
+    if (this.nomDuGroupe.length > 2) {
+      this.statService
+        .set_edit_label_group({ id: this.data.id, label: this.nomDuGroupe })
+        .subscribe((res) => {
+          if (res.data > 0) {
+            openValidateSnackBar(this._snackBar);
+            return this.dialogRef.close({
+              code: 1,
+              id: this.data.id,
+              label: this.nomDuGroupe,
+            });
+          } else {
+            openErrorSnackBar(this._snackBar);
+            return this.dialogRef.close({ code: 0 });
+          }
+        });
+    } else {
+      this.errorLength = 'min. 3 lettres';
+    }
   }
 
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  openValidateSnackBar() {
-    this._snackBar.openFromComponent(PopupValidateComponent, {
-      duration: this.durationInSeconds * 1000,
-    });
-  }
-  openErrorSnackBar() {
-    this._snackBar.openFromComponent(PopupErrorComponent, {
-      duration: this.durationInSeconds * 1000,
-    });
   }
 }

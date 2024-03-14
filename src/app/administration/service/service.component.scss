@@ -1,0 +1,137 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins";
+@import "../../../scss/animations";
+
+.error-select {
+  @extend %flexCenter;
+  flex-grow: 1;
+
+  .unknown {
+    font-size: 1.2em;
+    font-weight: 300;
+    color: $main-color;
+    background: none;
+  }
+}
+
+.params {
+  @extend %flexCenter;
+  margin: 0px auto;
+
+  h4 {
+    margin-right: 25px;
+    color: $main-color;
+  }
+
+  mat-form-field {
+    width: 300px;
+
+    mat-icon {
+      @extend %flexCenter;
+      position: absolute;
+      top: 12%;
+      right: -10px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+
+      &:hover {
+        background-color: darken($main-grey, 10);
+      }
+    }
+  }
+}
+
+hr {
+  width: 70%;
+  height: 1px;
+  margin: 8px auto 25px auto;
+  border: none;
+  background-color: $main-color;
+}
+
+.listServices {
+  @extend %overflowY;
+  @extend %webkitScrollbar;
+  @extend %flexCenter;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  li:nth-child(odd) {
+    background-color: $main-grey;
+    border-radius: 3px;
+  }
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin: 3px 10px;
+    padding: 5px 40px;
+
+    .infos {
+      display: flex;
+      align-items: center;
+
+      p {
+        margin: 0;
+        font-size: 1.2em;
+      }
+
+      .new {
+        margin: 0;
+        margin-left: 15px;
+        padding: 2px 8px;
+        font-size: 0.8em;
+        font-weight: 500;
+        border-radius: 3px;
+        color: white;
+        background-color: green;
+      }
+
+      p:nth-child(1) {
+        margin-right: 35px;
+        font-weight: 500;
+        color: $main-color;
+      }
+
+      p:nth-child(2) {
+        font-weight: 300;
+      }
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+
+      mat-checkbox:nth-child(1) {
+        margin-right: 15px;
+      }
+      mat-checkbox:nth-child(2) {
+        margin-right: 40px;
+      }
+
+      button {
+        height: fit-content;
+        width: fit-content;
+        padding: 4px 10px;
+        background-color: $main-color;
+        transition: all 150ms ease-in;
+
+        span {
+          font-size: 0.9em;
+        }
+
+        &:hover {
+          background-color: darken($main-color, 10);
+        }
+      }
+    }
+  }
+}

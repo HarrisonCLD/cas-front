@@ -1,30 +1,33 @@
-hr {
-  width: 100%;
-  height: 0px;
-  background-color: black;
-  margin: 20px 0px;
-}
+@import "../../scss/variables";
+@import "../../scss/mixins";
+@import "../../scss/animations";
 
 h3 {
-  display: flex;
+  @extend %flexCenter;
   flex-direction: column;
-  align-items: center;
-  color: #448a95;
+  color: $main-color;
   font-size: 2em;
-  font-weight: 400;
+  font-weight: 300;
 
   &::after {
     content: "";
-    background-color: #448a95;
     width: 95%;
-    height: 1px;
-    margin-top: 3px;
+    height: 0.1px;
+    margin-top: 4px;
+    background-color: $main-color;
   }
 }
+
 .content {
   display: flex;
-  height: 100%;
   width: 100%;
+  height: 100%;
+
+  .separation-left {
+    width: 100%;
+    height: 0px;
+    margin: 20px 0px;
+  }
 
   .separation-right {
     width: 1px;
@@ -33,24 +36,22 @@ h3 {
   }
 
   .left {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
 
     .top {
       display: flex;
       justify-content: space-around;
       align-items: center;
-      width: 100%;
-      height: 40%;
 
       .simply_stat {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        @extend %flexCenter;
         justify-content: space-between;
-        width: 250px;
-        height: 250px;
-        padding: 30px;
-        border-radius: 50%;
+        flex-direction: column;
+        width: 230px;
+        height: 230px;
+        padding: 40px 0 25px 0;
 
         img {
           height: 40px;
@@ -58,7 +59,7 @@ h3 {
 
         p {
           font-size: 2em;
-          font-weight: 500;
+          font-weight: 400;
           margin: 0;
         }
 
@@ -68,86 +69,78 @@ h3 {
           color: #969696;
         }
 
+        // color simply stat dashboard window
         &:nth-child(1) {
-          p {
-            color: #448a95;
-          }
+          color: $main-color;
         }
-
         &:nth-child(2) {
-          p {
-            color: #00da00;
-          }
+          color: #00da00;
         }
-
         &:nth-child(3) {
-          p {
-            color: red;
-          }
+          color: red;
         }
       }
     }
 
     .bot {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 60%;
+      @extend %flexCenter;
+      flex-grow: 1;
     }
   }
 
   .right {
     width: 25%;
-    height: 100%;
+
+    .mat-expansion-panel {
+      margin: 15px 0px;
+
+      img {
+        width: 20px;
+        margin-right: 15px;
+      }
+
+      .mat-expansion-panel-header-description {
+        flex-grow: 0;
+        margin: 0;
+      }
+    }
 
     .content {
+      @extend %overflowY;
+      @extend %webkitScrollbar;
       display: flex;
       flex-direction: column;
-      max-height: 350px;
-      overflow-y: scroll;
+      max-height: 220px;
 
       &::-webkit-scrollbar {
-        width: 5px;
-      }
-
-      &::-webkit-scrollbar-track {
-        border-radius: 8px;
-        background-color: #f5f5f5;
-        border: 1px solid #cacaca;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        border-radius: 8px;
-        background-color: #448a95;
+        width: 7px;
       }
 
       .detail {
         display: flex;
         justify-content: space-between;
         width: 95%;
+        margin: 3px 0 3px 10px;
         padding: 8px 10px;
-        margin: 3px 0px;
-        margin-left: 10px;
+        border-radius: 5px;
         cursor: pointer;
 
         &:hover {
-          background-color: #448a95;
+          background-color: $main-color;
           color: white;
         }
 
         p {
           margin: 0;
+          font-size: 0.9em;
         }
 
         p:nth-child(1) {
-          font-size: 1.2em;
-          font-weight: 500;
+          font-weight: 400;
         }
 
         p:nth-child(2) {
-          font-size: 1em;
-          font-weight: 400;
+          font-weight: 500;
         }
       }
     }

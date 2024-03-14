@@ -4,28 +4,34 @@
       <h3>Liste des groupes existant :</h3>
       <img
         src="assets/add-icon.svg"
-        alt="#"
+        alt="add-icon"
         (click)="openDialogCreateGroup()"
       />
     </div>
     <hr />
-    @for (row of groupeServices; track row) {
-    <li>
-      <p (click)="onChangeGroupAssociate(row.id)">{{ row.label }}</p>
+    @if(groupServices.length >0) { @for (row of groupServices; track row) {
+    <li (click)="onChangeGroupAssociate(row.id)">
+      <p>{{ row.label }}</p>
       <div class="actions">
         <img
-          (click)="edit_label_group({ id: row.id, label: row.label })"
+          (click)="
+            openDialogLabelGroup($event, { id: row.id, label: row.label })
+          "
           src="assets/edit-icon.svg"
-          alt="#"
+          alt="edit-icon"
         />
         <hr />
         <img
-          (click)="delete_label_groupe(row.id)"
+          (click)="delete_label_groupe($event, row.id)"
           src="assets/close.svg"
-          alt="#"
+          alt="close-icon"
         />
       </div>
     </li>
+    } }@else {
+    <div class="empty-groups">
+      <p>Aucune groupe disponible en base de données</p>
+    </div>
     }
   </ul>
 </div>

@@ -1,0 +1,49 @@
+%flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+%absoluteCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+%absoluteCenterX {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+%overflowY {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+%webkitScrollbar {
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    border: 1px solid #cacaca;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #448a95;
+  }
+}
+
+%hrMainColor {
+    width: 70%;
+    height: 0.1px;
+    margin: 0px auto;
+    border: none;
+    background-color: $main-color;
+}
+

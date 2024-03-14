@@ -2,7 +2,7 @@
   <mat-list class="sidenav open">
     <img
       class="arrowtoggle1"
-      src="./assets/arrow_back.svg"
+      src="assets/arrow_back.svg"
       alt="arrow"
       (click)="set_sidenav()"
     />
@@ -18,14 +18,14 @@
           value=""
         />
       </mat-form-field>
-      <button *ngIf="serviceName" (click)="resetSearch()">
-        <img src="../../assets/close-o.svg" alt="#" />
-      </button>
+      @if (serviceName) {
+      <mat-icon (click)="resetSearch()">close</mat-icon>
+      }
     </div>
     @for (service of filterListServices; track service.id) {
     <mat-list-item
       *ngIf="filterListServices"
-      [ngClass]="{ selected: service.id == selectedID }"
+      [ngClass]="{ selected: service.id === selectedService.id }"
       routerLink="/services/{{ service.id }}"
       class="row"
     >
@@ -38,7 +38,7 @@
   <div class="view">
     <img
       class="arrowtoggle2"
-      src="./assets/arrow_back.svg"
+      src="assets/arrow_back.svg"
       alt="arrow"
       (click)="set_sidenav()"
     />
@@ -85,27 +85,70 @@
         }
       </div>
     </div>
-    <div class="presentation" *ngIf="service">
+    <div class="presentation" *ngIf="selectedService.id != 0">
       <h3>Informations</h3>
-      <div class="status">
-        <div *ngIf="serviceDev || serviceStop || serviceActive" class="check">
-          <div *ngIf="serviceDev" class="devServer">
-            <img src="assets/dev-icon.svg" alt="#" />
-            <p>Service de développement</p>
+      <div class="bot">
+        <div class="left">
+          <div class="pick">
+            <h4>Pick utilisateur :</h4>
+            <p>{{ selectedService.pick }}</p>
           </div>
-          <div *ngIf="serviceStop" class="stopServer">
-            <img src="assets/stop-icon.svg" alt="#" />
-            <p>Service arrêté</p>
+          <div class="moy">
+            <h4>Moyenne utilisateur :</h4>
+            <p>{{ selectedService.moyenne }}</p>
           </div>
-          <div *ngIf="serviceActive" class="nodata">
-            <img src="assets/warning.svg" alt="#" />
-            <p>Aucune donnée pour les dates demandées</p>
+        </div>
+        <div
+          class="status"
+          *ngIf="
+            selectedService.isDev ||
+            selectedService.isEnded ||
+            selectedService.active
+          "
+        >
+          <div class="check">
+            <div
+              *ngIf="selectedService.isDev"
+              class="devServer"
+              mat-raised-button
+              #tooltip="matTooltip"
+              matTooltip="Service de développement"
+              [matTooltipPosition]="'above'"
+              matTooltipHideDelay="200"
+            >
+              <img src="assets/dev-icon.svg" alt="#" />
+            </div>
+            <div
+              *ngIf="selectedService.isEnded"
+              class="stopServer"
+              mat-raised-button
+              #tooltip="matTooltip"
+              matTooltip="Service arrêté"
+              [matTooltipPosition]="'above'"
+              matTooltipHideDelay="200"
+            >
+              <img src="assets/stop-icon.svg" alt="#" />
+            </div>
+            <div
+              *ngIf="selectedService.active"
+              class="nodata"
+              mat-raised-button
+              #tooltip="matTooltip"
+              matTooltip="Aucune donnée pour les dates demandées"
+              [matTooltipPosition]="'above'"
+              matTooltipHideDelay="200"
+            >
+              <img src="assets/warning.svg" alt="#" />
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="stats">
-      <stackedbar [onDataChanged]="dataChanged"></stackedbar>
+    <div class="stats" [ngClass]="{ full: fullScreen }">
+      <stackedbar
+        [onDataChanged]="dataChanged"
+        (onFullScreen)="fullscreen($event)"
+      />
     </div>
   </div>
 </div>

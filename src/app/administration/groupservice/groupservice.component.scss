@@ -1,60 +1,66 @@
-.admin-service {
-  height: 100%;
+@import "../../../scss/variables";
+@import "../../../scss/mixins";
+@import "../../../scss/animations";
+
+ul {
   display: flex;
-  flex-direction: column;
+  height: 45px;
+  border-radius: 3px;
 
-  .service-nav {
+  .on {
+    position: relative;
     z-index: 2;
-    width: fit-content;
-    color: white;
-    border-radius: 3px;
+    border: 3px solid $main-grey;
+    border-bottom: none;
+    background-color: white;
 
-    ul {
-      display: flex;
-      height: 45px;
-      border-radius: 3px;
-
-      .on {
-        border-top: 3px solid #e8e8e8;
-        border-left: 3px solid #e8e8e8;
-        border-right: 3px solid #e8e8e8;
-        background-color: white;
-
-        &:hover {
-          background-color: white;
-        }
-      }
-
-      li {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 5px 15px;
-        margin-right: 7px;
-        font-weight: 300;
-        border-radius: 2px;
-        cursor: pointer;
-        color: black;
-
-        &:hover {
-          background-color: darken(#e8e8e8, 3);
-        }
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
+    &:hover {
+      background-color: white;
     }
   }
 
-  .content {
-    position: relative;
-    z-index: 1;
-    top: -3px;
-    overflow: hidden;
-    height: 100%;
-    padding: 8px 15px;
-    border: 3px solid #e8e8e8;
-    border-radius: 3px;
+  li {
+    @extend %flexCenter;
+    padding: 0px 15px;
+    font-size: 0.9em;
+    font-weight: 400;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken($main-grey, 3);
+    }
+  }
+}
+
+.content {
+  overflow: hidden;
+  position: relative;
+  top: -3px;
+  height: 100%;
+  padding: 8px 15px;
+  border: 3px solid $main-grey;
+  border-radius: 3px;
+
+  ul {
+    hr {
+      width: 70%;
+      height: 1px;
+      margin: 8px auto 25px auto;
+      border: none;
+      background-color: $main-color;
+    }
+
+    li {
+      justify-content: space-between;
+      width: 80%;
+      margin: 5px 0px;
+      padding: 5px 5px 5px 25px;
+      border: 3px solid #e8e8e8;
+      border-radius: 3px;
+      font-size: 1.3em;
+      font-weight: 500;
+      color: #448a95;
+      cursor: pointer;
+    }
   }
 }

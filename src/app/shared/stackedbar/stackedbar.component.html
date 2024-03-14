@@ -1,10 +1,17 @@
 <div class="stackedbar">
   <div class="infos">
-    <p>ID :</p>
-    <p >{{ dataServiceID }}</p>
+    <div class="id">
+      <p>ID :</p>
+      <p>{{ dataServiceID }}</p>
+    </div>
+    <h3 *ngIf="dataService">{{ dataService.name }}</h3>
+    <img
+      src="assets/expand-icon.svg"
+      alt="expand-icon"
+      (click)="fullScreen()"
+    />
   </div>
-  <h3>{{dataService?.name}}</h3>
-  <hr>
+  <hr />
   <canvas
     baseChart
     class="chart"

@@ -1,119 +1,170 @@
-.selection-group {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 80px;
-  padding-top: 20px;
+@import "../../../../scss/variables";
+@import "../../../../scss/mixins";
+@import "../../../../scss/animations";
 
-  h3 {
-    margin-right: 20px;
+.no-select-group {
+  height: 100%;
+
+  p {
+    font-size: 1.2em !important;
+  }
+}
+
+.empty-groups {
+  flex-grow: 1;
+}
+
+.empty-groups,
+.no-select-group {
+  @extend %flexCenter;
+
+  p {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: 300;
     color: #448a95;
   }
+}
+
+.selection-group {
+  @extend %flexCenter;
+  width: 100%;
+  margin: 20px 0 0 0;
+
+  h3 {
+    margin-right: 25px;
+    color: $main-color;
+  }
+
   mat-form-field {
     width: 300px;
   }
-}
 
-.separation-associate {
-  margin: 10px 0px;
-  background-color: #448a95;
-  height: 2px;
-  width: 80%;
-  border: none;
+  img {
+    height: 40px;
+    margin: 0 10px 15px 15px;
+    padding: 6px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $main-grey;
+    }
+  }
 }
 
 .bot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   overflow: hidden;
-  flex-grow: 1;
+  @extend %flexCenter;
+  justify-content: space-between;
   width: 100%;
-
-  hr {
-    height: 85%;
-    width: 1px;
-    border: none;
-    background-color: #448a95;
-  }
+  flex-grow: 1;
+  padding: 0 25px;
 
   .actual-group {
-    width: 49%;
+    @extend %webkitScrollbar;
+    @extend %overflowY;
+    width: 40%;
     height: 100%;
-    padding: 15px;
-    overflow-y: scroll;
 
     &::-webkit-scrollbar {
-      width: 12px;
-    }
-
-    &::-webkit-scrollbar-track {
-      border-radius: 8px;
-      background-color: #f5f5f5;
-      border: 1px solid #cacaca;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 8px;
-      background-color: #448a95;
-    }
-
-    .error-group {
-      width: 90%;
-      height: 90%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 9px;
     }
 
     li {
-      margin-bottom: 25px;
+      margin-bottom: 20px;
 
-      .serviceLabel {
-        padding-left: 5px;
-        font-size: 1.3em;
+      p {
+        font-size: 1.4em;
         font-weight: 500;
         margin: 0;
-        margin-bottom: 5px;
-        color: #448a95;
+        color: $main-color;
       }
 
       ul {
-        margin: 3px 0px;
-        padding-left: 35px;
+        margin: 5px 0px;
+        padding-left: 20px;
 
         li {
-          margin: 0;
-          margin: 8px 0px;
-          padding-left: 10px;
-          font-size: 1em;
-          font-weight: 400;
-          list-style-type: disc;
+          @extend %flexCenter;
+          justify-content: space-between;
+          margin: 10px 0px;
+
+          p {
+            margin: 0;
+            font-size: 1em;
+            font-weight: 300;
+            color: black;
+          }
+
+          img {
+            height: 20px;
+            cursor: pointer;
+            transition: transform 150ms ease-in;
+
+            &:hover {
+              transform: scale(1.1);
+            }
+          }
         }
       }
     }
   }
 
+  hr {
+    height: 85%;
+    width: 1px;
+    border: none;
+    background-color: $main-color;
+  }
+
   .selection-services {
+    @extend %overflowY;
+    @extend %webkitScrollbar;
+    display: flex;
+    flex-direction: column;
     width: 49%;
-    height: 100%;
-    padding: 15px;
-    overflow-y: scroll;
+    height: 92%;
+    padding: 0 20px 0 0;
 
     &::-webkit-scrollbar {
-      width: 12px;
+      width: 9px;
     }
 
-    &::-webkit-scrollbar-track {
-      border-radius: 8px;
-      background-color: #f5f5f5;
-      border: 1px solid #cacaca;
+    .row {
+      position: relative;
+
+      mat-form-field {
+        width: 100%;
+      }
+      mat-icon {
+        @extend %flexCenter;
+        position: absolute;
+        top: 10%;
+        right: 10px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken($main-grey, 10);
+        }
+      }
     }
 
-    &::-webkit-scrollbar-thumb {
-      border-radius: 8px;
-      background-color: #448a95;
+    .error-select {
+      @extend %flexCenter;
+      flex-grow: 1;
+
+      .unknown {
+        font-size: 1.2em;
+        font-weight: 300;
+        color: $main-color;
+        background: none;
+      }
     }
 
     ul {
@@ -121,49 +172,17 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 2px 15px;
-        margin: 10px 0px;
+        padding: 1px 15px;
+        margin: 7px 0px;
         border-radius: 5px;
 
         p {
           margin: 0;
+          color: $main-color;
         }
 
         &:nth-child(odd) {
-          background-color: #e8e8e8;
-        }
-      }
-    }
-
-    .validate-association {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      z-index: 50;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      color: white;
-      font-size: 1.1em;
-      border-radius: 3px;
-      background-color: rgba(0,0,0,0.9);
-      transform: translateX(-50%);
-
-      button {
-        padding: 8px 15px;
-        background: #448a95;
-        border: none;
-        outline: none;
-        color: white;
-        font-weight: 600;
-        border-radius: 3px;
-        width: 150px;
-        margin-top: 8px;
-        cursor: pointer;
-
-        &:hover{
-          background-color: darken(#448a95, 5);
+          background-color: $main-grey;
         }
       }
     }

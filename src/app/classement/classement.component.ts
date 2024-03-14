@@ -12,7 +12,7 @@ import { StatistiquesService } from '../services/statistiques.service';
 export class ClassementComponent implements OnInit {
   private statService = inject(StatistiquesService);
 
-  // Pagination :
+  // pagination :
   public length!: any;
   public pageSize = 25;
   public pageIndex = 0;
@@ -21,17 +21,17 @@ export class ClassementComponent implements OnInit {
   public showPageSizeOptions = true;
   public showFirstLastButtons = true;
   public disabled = false;
-  public pageEvent!: PageEvent;
+  public pageEvent: PageEvent = new PageEvent();
 
-  // Classement Chart:
+  // classement services :
   public dataScoreboard: any;
   public dataScoreboardPagination: any;
 
-  // Liste des services :
+  // list of services :
   public listScoreboard: Array<any> = [];
-  public listPagination!: Array<any>;
+  public listPagination: Array<any> = [];
 
-  // Subject change data :
+  // subject change data :
   public onDataChange: Subject<any> = new Subject();
 
   ngOnInit() {
@@ -67,14 +67,6 @@ export class ClassementComponent implements OnInit {
       this.onDataChange.next(this.dataScoreboardPagination);
     }, 300);
   }
-
-  // get_order() {
-  //   this.order = !this.order;
-  //   this.listScoreboard.reverse();
-  //   this.dataScoreboard.ids.reverse();
-  //   this.dataScoreboard.labels.reverse();
-  //   this.dataScoreboard.data.reverse();
-  // }
 
   handlePageEvent(e: PageEvent) {
     this.pageEvent = e;

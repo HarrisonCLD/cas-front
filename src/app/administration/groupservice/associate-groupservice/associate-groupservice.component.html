@@ -1,41 +1,68 @@
+@if(listgroup.length > 0 || groupServices.length > 0) {
 <div class="selection-group">
-  <h3>Selectionner un service :</h3>
+  <h3>Sélectionner un service :</h3>
   <mat-form-field>
     <mat-label>Groupe de service</mat-label>
     <mat-select [(ngModel)]="associateTo" (valueChange)="changeGroupe($event)">
       @for (row of listgroup; track row) {
-      <mat-option [value]="row.id">
-      {{ row.label }}
+      <mat-option [value]="row.id_service">
+        {{ row.label }}
       </mat-option>
       }
     </mat-select>
   </mat-form-field>
+  <img
+    src="assets/valid-check-icon.svg"
+    alt="valid-check-icon"
+    *ngIf="associateServices.length > 0"
+    (click)="validate_associationGroup()"
+  />
 </div>
-<hr class="separation-associate">
 <div class="bot">
   <div class="actual-group">
-    @if(groupeServices && groupeServices.length > 0) {
+    @if(listgroup.length > 0 || groupServices.length > 0) {
     <ul>
-      @for(row of groupeServices; track row) {
+      @if(groupServices.length > 0) { @for(row of groupServices; track row) {
       <li>
-        <p class="serviceLabel">{{ row.label }}</p>
+        <p>{{ row.label }}</p>
         <ul>
           @for (line of row.services; track line) {
-          <li>{{ line }}</li>
+          <li>
+            <p>- {{ line.fqdn }}</p>
+            <img
+              src="assets/close.svg"
+              alt="close-icon"
+              (click)="delete(row.id, line.id_service)"
+              class="delete"
+            />
+          </li>
           }
         </ul>
       </li>
-      }
+      } }
     </ul>
-    } @else {
-      <div class="error-group">
-        <p>Aucun service n'est rattaché à ce groupe</p>
-      </div>
     }
   </div>
-  <hr>
+  <hr />
   <div class="selection-services">
-    <ul *ngIf="listservices">
+    @if(this.associateTo != undefined) {
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Nom du service</mat-label>
+        <input
+          matInput
+          [(ngModel)]="serviceName"
+          (input)="get_searchChange($event)"
+          placeholder="Ex. ebureau.univ-reims.fr"
+          value=""
+        />
+      </mat-form-field>
+      @if (serviceName) {
+      <mat-icon (click)="clear_search()">close</mat-icon>
+      }
+    </div>
+    @if (listservices.length > 0) {
+    <ul>
       @for(row of listservices; track row) {
       <li>
         <p>{{ row.name }}</p>
@@ -46,9 +73,19 @@
       </li>
       }
     </ul>
-    <div class="validate-association" *ngIf="associateServices.length > 0">
-      <p>Voulez-vous valider votre association de service</p>
-      <button (click)="validate_associationGroup()">OK</button>
+    } @else {
+    <div class="error-select">
+      <p class="unknown">Aucun résultat !</p>
     </div>
+    } } @else {
+    <div class="no-select-group">
+      <p>Veuillez sélectionner un groupe pour y ajouter des services</p>
+    </div>
+    }
   </div>
 </div>
+} @else {
+<div class="empty-groups">
+  <p>Aucune groupe disponible en base de données</p>
+</div>
+}

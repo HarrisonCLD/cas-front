@@ -1,4 +1,4 @@
-@if (dataSending.data.length > 0) {
+@if (data) {
   <canvas
     [style.height]="height + 'px'"
     [style.width]="'100%'"
@@ -10,6 +10,6 @@
   >
   </canvas>
 } @else {
-  <p>Aucune donnée récupérée pour ces dernières 24h</p>
+  <p class="unknown">Aucune donnée récupérée pour ces dernières 24h</p>
 }
 

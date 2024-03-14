@@ -1,64 +1,27 @@
-@keyframes sidenavEffect {
-  0% {
-    width: 25%;
-    opacity: 1;
-  }
-  60% {
-    padding: 0px !important;
-  }
-  100% {
-    padding: 0px !important;
-    width: 0%;
-    opacity: 0;
-  }
-}
+@import "../../scss/_variables";
+@import "../../scss/_mixins";
+@import "../../scss/_animations";
 
-@keyframes reverse_sidenavEffect {
-  0% {
-    width: 0%;
-    opacity: 0;
-  }
-  25% {
-    padding: 10px !important;
-  }
-  100% {
-    width: 25%;
-    opacity: 1;
-  }
-}
-
-@keyframes fadeInRangeDate {
-  0% {
-    width: 5%;
-  }
-  100% {
-    width: 35%;
-  }
-}
-
-@keyframes fadeOutRangeDate {
-  0% {
-    width: 35%;
-  }
-  100% {
-    width: 5%;
-  }
-}
-
+// class scss active by javascript :
 .close {
+  min-width: 0px;
   padding: 0px !important;
   animation: sidenavEffect 400ms forwards;
 }
-
 .open {
+  min-width: 400px;
   animation: reverse_sidenavEffect 400ms forwards;
 }
-
 .active {
   display: block !important;
   opacity: 1 !important;
 }
 
+.full {
+  width: 95% !important;
+}
+
+// global arrow toggle sidenav :
 .arrowtoggle1,
 .arrowtoggle2 {
   position: absolute;
@@ -67,55 +30,91 @@
   cursor: pointer;
 }
 
-.selected {
-  background-color: #e8e8e8;
+.arrowtoggle1 {
+  top: 10px;
+  right: 20px;
 }
 
+.arrowtoggle2 {
+  display: none;
+  position: absolute;
+  opacity: 0;
+  top: 95px;
+  left: 20px;
+  transform: rotate(180deg);
+}
+
+// scss :
 .listservices {
   display: flex;
   width: 100%;
 
-  mat-list {
+  .params {
+    display: flex;
+    align-items: center;
     position: relative;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    button {
+      position: absolute;
+      right: 17px;
+      top: 17px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+    }
+  }
+
+  mat-list {
+    @extend %webkitScrollbar;
+    @extend %overflowY;
+    position: relative;
+    min-width: 400px;
     padding: 10px 30px;
-    overflow-y: scroll;
     background-color: white;
 
     &::-webkit-scrollbar {
-      width: 12px;
-    }
-
-    &::-webkit-scrollbar-track {
-      border-radius: 8px;
-      background-color: #f5f5f5;
-      border: 1px solid #cacaca;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 8px;
-      background-color: #448a95;
-    }
-
-    .arrowtoggle1 {
-      top: 10px;
-      right: 20px;
+      width: 10px;
     }
 
     h2 {
       text-wrap: nowrap;
       margin-top: 15px;
+      color: $main-color;
+    }
+
+    .params {
+      mat-icon {
+        @extend %flexCenter;
+        position: absolute;
+        top: 8%;
+        right: 7px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken($main-grey, 10);
+        }
+      }
     }
 
     mat-list-item {
       text-wrap: nowrap;
       width: 100%;
-      margin-bottom: 10px;
+      height: fit-content;
+      margin: 8px 0;
+      padding: 8px 12px;
+      border-radius: 3px;
       cursor: pointer;
 
       .new {
-        margin: 0;
-        margin-right: 10px;
-        padding: 2px 8px;
+        margin: 0 10px 0 0;
+        padding: 0 6px;
         color: white;
         background-color: green;
         font-size: 0.8em;
@@ -124,88 +123,58 @@
       }
 
       &:hover {
-        background-color: #e8e8e8;
-      }
-    }
-    .params {
-      display: flex;
-      align-items: center;
-      position: relative;
-
-      mat-form-field {
-        width: 100%;
-      }
-
-      button {
-        position: absolute;
-        right: 17px;
-        top: 17px;
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
+        background-color: $main-grey;
       }
     }
   }
 
   .view {
-    display: flex;
+    @extend %flexCenter;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-
-    .arrowtoggle2 {
-      display: none;
-      position: absolute;
-      opacity: 0;
-      top: 95px;
-      left: 20px;
-      transform: rotate(180deg);
-    }
+    width: 90%;
+    margin: auto;
 
     .date {
       display: flex !important;
-      animation: fadeInRangeDate 200ms ease-in-out forwards !important;
+      animation: fadeInRangeDate 200ms ease-in forwards !important;
     }
 
     .options {
+      @extend %flexCenter;
       position: absolute;
+      z-index: 1;
       top: 100px;
       right: 0px;
+      width: 35%;
       max-width: 400px;
-      height: 100px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      height: 90px;
       background-color: rgba(104, 104, 104, 0.8);
       border-radius: 5px 0px 0px 5px;
-      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
-        rgba(0, 0, 0, 0.24) 0px 1px 2px;
-      width: 35%;
-      animation: fadeOutRangeDate 200ms ease-in-out forwards;
+      box-shadow: $main-boxShadow;
+      animation: fadeOutRangeDate 200ms ease-in forwards;
 
-      .mat-mdc-form-field {
+      mat-form-field {
         position: relative;
         top: 5px;
         padding: 13px 25px 13px 35px;
 
         .mat-mdc-form-field-hint {
-          color: white;
           font-size: 1em;
           font-weight: 200;
+          text-wrap: nowrap;
+          color: white;
         }
       }
+
       .actions {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        @extend %flexCenter;
         height: 100%;
-        padding: 0px 5px;
         cursor: pointer;
 
         &:hover {
           background-color: darken(rgba(104, 104, 104, 0.5), 1);
         }
+
         img {
           height: 35px;
         }
@@ -217,84 +186,115 @@
     }
 
     .presentation {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      @extend %flexCenter;
+      flex-direction: column;
+      align-items: flex-start;
       width: 75%;
       max-width: 1350px;
-
-      height: 80px !important;
-      margin: 20px 0px;
-
-      padding: 23px 25px 20px 25px;
+      height: fit-content;
+      padding: 15px 20px 18px 40px;
       border-radius: 5px;
       background-color: white;
-      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
-        rgba(0, 0, 0, 0.24) 0px 1px 2px;
+      box-shadow: $main-boxShadow;
 
       h3 {
-        margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
         font-size: 1.3em;
         font-weight: 400;
-        color: #448a95;
+        color: $main-color;
         text-transform: uppercase;
         margin: 0;
+
+        &::after {
+          content: "";
+          width: 40%;
+          height: 0.1px;
+          margin-top: -2px;
+          background-color: $main-color;
+        }
       }
-      .status {
-        display: flex;
-        justify-content: flex-end;
+
+      .bot {
+        @extend %flexCenter;
+        justify-content: space-between;
         width: 100%;
+        margin: 15px 0 0 0;
 
-        .check {
+        .left {
+          @extend %flexCenter;
+
+          .moy,
+          .pick {
+            @extend %flexCenter;
+            margin-right: 10px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: $main-grey;
+
+            h4,
+            p {
+              margin: 0;
+              font-size: 0.9em;
+              font-weight: 400;
+              color: $main-color;
+            }
+
+            p {
+              margin: 0 0 0 15px;
+            }
+          }
+        }
+
+        .status {
           display: flex;
-          align-items: center;
+          justify-content: flex-end;
+          padding: 0 15px;
 
-          .devServer {
-            background-color: #4b87c6;
-          }
-          .stopServer {
-            background-color: #ff5d5d;
-          }
-          .nodata {
-            background-color: #d45c5c;
-            border-radius: 3px;
-          }
-          div:nth-child(n) {
+          .check {
             display: flex;
             align-items: center;
-            margin-right: 8px;
-            padding: 6px 10px;
-            border-radius: 3px;
-          }
-          div:last-child {
-            margin-right: 0;
-          }
 
-          img {
-            height: 25px;
-            margin-right: 10px;
-          }
+            div:nth-child(n) {
+              @extend %flexCenter;
+              width: 43px;
+              height: 43px;
+              margin-right: 12px;
+              padding: 11px;
+              border-radius: 50%;
+              cursor: pointer;
 
-          p {
-            margin: 0;
-            text-wrap: nowrap;
-            color: white;
+              img {
+                position: relative;
+              }
+            }
+
+            .devServer {
+              background-color: #4b87c6;
+            }
+            .stopServer {
+              background-color: #ff5d5d;
+            }
+            .nodata {
+              background-color: #d45c5c;
+            }
+            div:last-child {
+              margin-right: 0;
+            }
+            p {
+              margin: 0;
+              text-wrap: nowrap;
+              color: white;
+            }
           }
         }
       }
     }
-
     .stats {
-      display: flex;
-      align-items: center;
       width: 75%;
-      height: fit-content;
       margin: 20px 0px;
-      max-width: 1350px;
-
-      stackedbar {
-        width: 100%;
-      }
+      transition: width 300ms ease-in-out;
     }
   }
 }

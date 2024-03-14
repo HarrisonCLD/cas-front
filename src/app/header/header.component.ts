@@ -1,6 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { StatistiquesService } from '../services/statistiques.service';
-import { UIService } from '../services/ui.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'header',

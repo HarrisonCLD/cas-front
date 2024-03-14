@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl:"http://localhost:8080/cas-stat-api",
+    apiUrl:"https://dev-stagiaire01.univ-reims.fr",
 }

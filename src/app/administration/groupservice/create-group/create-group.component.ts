@@ -1,21 +1,17 @@
 import {
   Component,
   EventEmitter,
-  Injectable,
-  Input,
   OnInit,
   Output,
   inject,
 } from '@angular/core';
 import { DialogGroupServiceComponent } from './dialog-group-service/dialog-group-service.component';
 import { MatDialog } from '@angular/material/dialog';
+
 import { StatistiquesService } from '../../../services/statistiques.service';
-import { Subject } from 'rxjs';
+
 import { DialogEditLabelComponent } from './dialog-edit-label/dialog-edit-label.component';
 
-@Injectable({
-  providedIn: 'root',
-})
 @Component({
   selector: 'create-group',
   templateUrl: './create-group.component.html',
@@ -24,41 +20,59 @@ import { DialogEditLabelComponent } from './dialog-edit-label/dialog-edit-label.
 export class CreateGroupComponent implements OnInit {
   private statService = inject(StatistiquesService);
 
+  // switch navigation in groupe service from create-group :
   @Output() serviceNavigation: EventEmitter<number> =
     new EventEmitter<number>();
-  @Input() associateTo!: number;
 
-  public groupeServices!: any;
+  // list of groups services :
+  public groupServices: Array<any> = [];
 
   constructor(private dialog: MatDialog) {}
 
   ngOnInit() {
+    this.get_groupe_service();
+  }
+
+  get_groupe_service() {
     this.statService.get_groupe().subscribe((res) => {
-      this.groupeServices = res.data.slice();
+      if (res.data && res.data.length > 0) {
+        this.groupServices = res.data.slice();
+      }
     });
   }
 
   openDialogCreateGroup(): void {
     const dialogRef = this.dialog.open(DialogGroupServiceComponent);
+    dialogRef.afterClosed().subscribe(() => {
+      this.get_groupe_service();
+    });
   }
 
-  openDialogLabelGroup(body: object): void {
+  // edit dialog :
+  openDialogLabelGroup(event: any, body: object): void {
+    event.stopPropagation();
     const dialogRef = this.dialog.open(DialogEditLabelComponent, {
       data: body,
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.get_groupe_service();
+    });
+  }
+
+  // delete dialog :
+  delete_label_groupe(event: any, id: number) {
+    event.stopPropagation();
+    this.statService.set_delete_label_group(id).subscribe(() => {
+      const indexToDelete = this.groupServices.findIndex(
+        (row: any) => row.id === id
+      );
+      if (indexToDelete !== 1) {
+        this.groupServices.splice(indexToDelete, 1);
+      }
     });
   }
 
   onChangeGroupAssociate(id: number) {
-    this.associateTo = id;
     this.serviceNavigation.emit(id);
-  }
-
-  delete_label_groupe(id: number) {
-    this.statService.set_delete_label_group(id).subscribe((res) => {
-      console.log(res);
-    });
-  }
-  edit_label_group(body: any) {
-    this.openDialogLabelGroup(body);
   }
 }

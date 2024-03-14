@@ -1,9 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 
 import { StatistiquesService } from '../services/statistiques.service';
-import { UIService } from '../services/ui.service';
+import { Subject } from 'rxjs';
 
-const svgStudent = 'assets/student.svg';
+interface Access {
+  access: number;
+  success: number;
+  error: number;
+}
 
 @Component({
   selector: 'dashboard',
@@ -12,53 +16,45 @@ const svgStudent = 'assets/student.svg';
 })
 export class DashboardComponent implements OnInit {
   private statService = inject(StatistiquesService);
-  private uiService = inject(UIService);
 
-  // Stats access :
-  public totalaccess!: number;
-  public successConnection!: number;
-  public failedConnection!: number;
+  // stats access users :
+  public access: Access = {
+    access: 0,
+    success: 0,
+    error: 0,
+  };
 
-  // Data sending to charts dashboard :
-  public scoreboardCharts: any;
+  // data sending to charts dashboard :
+  public scoreboardCharts: Subject<any> = new Subject();
 
-  // Access per usertypes :
-  public resumeStats: any;
-  public resumeDetailStats: any;
+  // access per usertypes :
+  public resumeStats: Array<any> = [];
+  public resumeDetailStats: Array<any> = [];
 
   public constructor() {}
 
   ngOnInit() {
-    // Stats access subscribe :
     this.statService.get_access().subscribe((res: any) => {
-      if (parseInt(res.data) > 0) {
-        this.totalaccess = res.data.access;
-        this.successConnection = res.data.success;
-        this.failedConnection = res.data.error;
-      } else {
-        this.totalaccess = 0;
-        this.successConnection = 0;
-        this.failedConnection = 0;
+      if (res.data) {
+        this.access = res.data;
       }
     });
 
-    // Stats scoreboard subscribe :
     this.statService.get_scoreboard().subscribe((res: any) => {
-      this.scoreboardCharts = res.data;
+      this.scoreboardCharts.next(res.data);
     });
 
-    // Resume stats dashboard subscribe :
     this.statService.get_resume_access().subscribe((res: any) => {
-      this.resumeStats = res.data;
+      this.resumeStats = res.data.slice();
     });
   }
 
-  // Resume detail stats dashboard subscribe :
   get_resume_access_detail(usertype: string) {
     this.statService
       .get_resume_access_detail(usertype)
       .subscribe((res: any) => {
-        this.resumeDetailStats = res.data;
+        this.resumeDetailStats = res.data.slice();
+        console.log(this.resumeDetailStats);
       });
   }
 }

@@ -1,0 +1,94 @@
+// sidenav effect (Détail des services) :
+@keyframes sidenavEffect {
+  0% {
+    min-width: 0px;
+    width: 25%;
+    opacity: 1;
+  }
+  60% {
+    min-width: 0px;
+    padding: 0px !important;
+  }
+  100% {
+    min-width: 0px;
+    padding: 0px !important;
+    width: 0%;
+    opacity: 0;
+  }
+}
+@keyframes reverse_sidenavEffect {
+  0% {
+    min-width: 0px;
+    width: 0%;
+    opacity: 0;
+  }
+  25% {
+    min-width: 0px;
+    padding: 10px !important;
+  }
+  100% {
+    min-width: 400px;
+    width: 25%;
+    opacity: 1;
+  }
+}
+
+// date picker effect (Détail des services) :
+@keyframes fadeInRangeDate {
+  0% {
+    width: 5%;
+  }
+  100% {
+    width: 35%;
+  }
+}
+@keyframes fadeOutRangeDate {
+  0% {
+    width: 35%;
+  }
+  100% {
+    width: 5%;
+  }
+}
+
+@keyframes fadeInListUser {
+  0% {
+    opacity: 0;
+    width: 0%;
+  }
+  100% {
+    opacity: 1;
+    width: 25%;
+  }
+}
+
+@keyframes fadeInListActions {
+  0% {
+    opacity: 0;
+    width: 0%;
+  }
+  100% {
+    opacity: 1;
+    width: 45%;
+  }
+}
+
+@keyframes fadeInHrListActions {
+  0% {
+    opacity: 0;
+    width: 0%;
+  }
+  100% {
+    opacity: 1;
+    width: 70%;
+  }
+}
+
+@keyframes fadeInClassic {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

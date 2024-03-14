@@ -38,7 +38,6 @@ export class StatistiquesService {
   }
 
   // GETTER
-
   get_access() {
     const url = this.http.get(`${environment.apiUrl}/services/access`);
     return url;
@@ -126,6 +125,45 @@ export class StatistiquesService {
     return url;
   }
 
+  get_service_user(id: number): Observable<any> {
+    let params = new HttpParams();
+    params = params.set('id', id);
+    const url = this.http.get(
+      `${environment.apiUrl}/services/administration/user/service`,
+      { params: params }
+    );
+    return url;
+  }
+
+  get_groupe_user(id: number): Observable<any> {
+    let params = new HttpParams();
+    params = params.set('id', id);
+    const url = this.http.get(
+      `${environment.apiUrl}/services/administration/user/groupe`,
+      { params: params }
+    );
+    return url;
+  }
+
+  get_user_admin_service(id: number): Observable<any> {
+    let params = new HttpParams();
+    params = params.set('id', id);
+    const url = this.http.get(
+      `${environment.apiUrl}/services/administration/user/service/admin`,
+      { params: params }
+    );
+    return url;
+  }
+
+  get_infos_user(uid: string) {
+    let params = new HttpParams();
+    params = params.set('uid', uid);
+    const url = this.http.get(`${environment.apiUrl}/auth/user/info`, {
+      params: params,
+    });
+    return url;
+  }
+
   // SETTER
   set_groupe(body: any): Observable<any> {
     const url = `${environment.apiUrl}/services/administration/groupe`;
@@ -150,6 +188,36 @@ export class StatistiquesService {
   }
   set_edit_label_group(body: object): Observable<any> {
     const url = `${environment.apiUrl}/services/administration/groupe/label`;
+    return this.http.patch(url, body);
+  }
+  set_service_to_user(body: object): Observable<any> {
+    const url = `${environment.apiUrl}/services/administration/user/service`;
+    return this.http.post(url, body);
+  }
+  set_group_to_user(body: object): Observable<any> {
+    const url = `${environment.apiUrl}/services/administration/user/groupe`;
+    return this.http.post(url, body);
+  }
+  set_user_admin_service(body: object): Observable<any> {
+    const url = `${environment.apiUrl}/services/administration/user/service/admin`;
+    return this.http.post(url, body);
+  }
+
+  // DELETE
+  delete_service_to_user(body: object): Observable<any> {
+    const url = `${environment.apiUrl}/services/administration/user/service`;
+    return this.http.patch(url, body);
+  }
+  delete_group_to_user(body: object): Observable<any> {
+    const url = `${environment.apiUrl}/services/administration/user/groupe`;
+    return this.http.patch(url, body);
+  }
+  delete_admin_to_user(body: object): Observable<any> {
+    const url = `${environment.apiUrl}/services/administration/user/service/admin`;
+    return this.http.patch(url, body);
+  }
+  delete_service_to_group(body: object): Observable<any> {
+    const url = `${environment.apiUrl}/services/administration/groupe/service`;
     return this.http.patch(url, body);
   }
 }

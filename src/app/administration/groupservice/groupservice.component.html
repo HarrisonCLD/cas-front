@@ -1,22 +1,24 @@
-<section class="admin-service">
-  <div class="service-nav">
-    <ul>
-      <li [ngClass]="{'on': groupServiceNavigation === 1}" (click)="set_groupServiceNavigation(1)">
-        Créer un groupe de service
-      </li>
-      <li [ngClass]="{'on': groupServiceNavigation === 2}" (click)="set_groupServiceNavigation(2)">
-        Associer des services à des groupes
-      </li>
-    </ul>
-  </div>
-  <div class="content" [ngSwitch]="groupServiceNavigation">
-    <create-group
-      *ngSwitchCase="1"
-      (serviceNavigation)="onServiceClicked($event)"
-    ></create-group>
-    <associate-groupservice
-      *ngSwitchCase="2"
-      [associateTo]="serviceToAssociate"
-    ></associate-groupservice>
-  </div>
-</section>
+<ul>
+  <li
+    [ngClass]="{ on: groupServiceNavigation === 1 }"
+    (click)="set_groupServiceNavigation(1)"
+  >
+    Créer un groupe de service
+  </li>
+  <li
+    [ngClass]="{ on: groupServiceNavigation === 2 }"
+    (click)="set_groupServiceNavigation(2)"
+  >
+    Associer des services à des groupes
+  </li>
+</ul>
+<div class="content" [ngSwitch]="groupServiceNavigation">
+  <create-group
+    *ngSwitchCase="1"
+    (serviceNavigation)="onServiceClicked($event)"
+  />
+  <associate-groupservice
+    *ngSwitchCase="2"
+    [associateTo]="serviceToAssociate"
+  />
+</div>

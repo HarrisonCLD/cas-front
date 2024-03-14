@@ -1,9 +1,18 @@
-import { Component, OnInit, inject } from '@angular/core';
-
-import { StatistiquesService } from '../services/statistiques.service';
-import { UIService } from '../services/ui.service';
+import { Component, EventEmitter, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
+
+import { StatistiquesService } from '../services/statistiques.service';
+
+interface Service {
+  id: number;
+  name: string;
+  active: number | null;
+  isDev: number | null;
+  isEnded: number | null;
+  moyenne: number;
+  pick: number;
+}
 
 @Component({
   selector: 'listservices',
@@ -13,29 +22,32 @@ import { Subject, Subscription } from 'rxjs';
 export class ListservicesComponent implements OnInit {
   public statService = inject(StatistiquesService);
 
-  // Filter Search bar :
+  // filter search name :
   public serviceName!: string;
 
-  // List and filter :
+  // list and filter about services :
   public listServices: any;
   public filterListServices: any;
 
-  // Data Charts :
-  public service: any;
+  // service selected (id, name and flags):
+  public selectedService: Service = {
+    id: 0,
+    name: '',
+    active: null,
+    isDev: null,
+    isEnded: null,
+    moyenne: 0,
+    pick: 0,
+  };
 
-  // Flags Services :
-  public serviceActive: number | null = null;
-  public serviceDev: number | null = null;
-  public serviceStop: number | null = null;
-
-  // Service selected :
-  public selectedID!: number;
-
-  // Subscribe date and data changed :
+  // subscribe date and data changed :
   public dataChanged: Subject<any> = new Subject();
   private onDateChangedSubscription!: Subscription;
 
-  // Date Picker visibility :
+  // full screen charts :
+  public fullScreen: boolean = false;
+
+  // toggle date picker :
   public datePicker: boolean = true;
 
   constructor(private route: ActivatedRoute) {}
@@ -48,39 +60,50 @@ export class ListservicesComponent implements OnInit {
     this.datePicker = !this.datePicker;
   }
 
+  fullscreen(value: boolean) {
+    this.fullScreen = value;
+  }
+
   ngOnInit() {
     this.statService.get_services().subscribe((res) => {
-      this.listServices = res.data;
-      this.selectedID = this.listServices[1].id;
+      this.listServices = res.data.slice();
+      this.selectedService.id = this.listServices[1].id;
       this.filterListServices = this.listServices.slice();
     });
 
     this.route.params.subscribe((params: Params) => {
-      this.selectedID = params['id'];
-      this.statService.get_service(this.selectedID).subscribe((res) => {
-        this.service = res.data[0];
+      this.selectedService.id = params['id'];
+      this.statService.get_service(this.selectedService.id).subscribe((res) => {
+        this.selectedService = res.data[0];
       });
 
-      this.statService.get_access_service(this.selectedID).subscribe((res) => {
-        res.data.active === 1
-          ? (this.serviceActive = null)
-          : (this.serviceActive = 1);
-        res.data.isDev === 0 ? (this.serviceDev = null) : (this.serviceDev = 1);
-        res.data.isEnded === 0
-          ? (this.serviceStop = null)
-          : (this.serviceStop = 1);
-        this.dataChanged.next(res.data);
-      });
+      this.statService
+        .get_access_service(this.selectedService.id)
+        .subscribe((res) => {
+          res.data.active === 1
+            ? (this.selectedService.active = null)
+            : (this.selectedService.active = 1);
+          res.data.isDev === 0
+            ? (this.selectedService.isDev = null)
+            : (this.selectedService.isDev = 1);
+          res.data.isEnded === 0
+            ? (this.selectedService.isEnded = null)
+            : (this.selectedService.isEnded = 1);
+          this.selectedService.pick = res.data.pick;
+          this.selectedService.moyenne = res.data.moyenne;
+          this.dataChanged.next(res.data);
+        });
     });
 
     this.onDateChangedSubscription = this.statService.dateChanged.subscribe(
       () => {
         this.statService
-          .get_access_service(this.selectedID)
+          .get_access_service(this.selectedService.id)
           .subscribe((res) => {
             res.data.active
-              ? (this.serviceActive = null)
-              : (this.serviceActive = 1);
+              ? (this.selectedService.active = 1)
+              : (this.selectedService.active = null);
+            this.selectedService = res.data;
             this.dataChanged.next(res.data);
           });
       }
@@ -92,6 +115,11 @@ export class ListservicesComponent implements OnInit {
       return el.name.startsWith(event.target.value);
     });
     this.serviceName = event.target.value;
+  }
+
+  resetSearch() {
+    this.serviceName = '';
+    this.filterListServices = this.listServices.slice();
   }
 
   set_sidenav() {
@@ -106,11 +134,6 @@ export class ListservicesComponent implements OnInit {
       sidenav?.classList.add('open');
       arrowview?.classList.toggle('active');
     }
-  }
-
-  resetSearch() {
-    this.serviceName = '';
-    this.filterListServices = this.listServices.slice();
   }
 
   ngOnDestroy() {

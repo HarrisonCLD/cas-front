@@ -1,4 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
@@ -12,14 +20,18 @@ import { ActivatedRoute, Params } from '@angular/router';
   styleUrl: './stackedbar.component.scss',
 })
 export class StackedbarComponent implements OnInit, OnDestroy {
-  // Data service :
+  @Output() onFullScreen = new EventEmitter<boolean>();
+
+  public fullscreenSave: boolean = false;
+
+  // data about service :
   public dataServiceID: any;
   public dataService: any;
 
-  // Style Charts :
+  // style charts :
   public height: any;
 
-  // Follow change ID :
+  // reaction switch id :
   @Input() onDataChanged: any;
 
   private onDataChangedSubscription!: Subscription;
@@ -42,8 +54,14 @@ export class StackedbarComponent implements OnInit, OnDestroy {
         this.barChartData.labels = this.dataService?.labels;
         this.barChartData.datasets = this.dataService?.datasets;
         this.chart?.render();
+        console.log(this.dataService);
       }
     );
+  }
+
+  fullScreen() {
+    this.fullscreenSave = !this.fullscreenSave;
+    this.onFullScreen.emit(this.fullscreenSave);
   }
 
   ngOnDestroy() {

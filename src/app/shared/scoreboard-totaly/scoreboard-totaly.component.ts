@@ -59,6 +59,7 @@ export class ScoreboardTotalyComponent implements OnInit, OnDestroy {
         display: false,
       },
       datalabels: {
+        display: false,
         anchor: 'start',
         align: 'end',
       },
@@ -70,7 +71,7 @@ export class ScoreboardTotalyComponent implements OnInit, OnDestroy {
       {
         data: [],
         fill: true,
-        barThickness: 15,
+        // barThickness: 15,
         backgroundColor: [],
       },
     ],
