@@ -4,18 +4,19 @@
 
 .bot {
   @extend %flexCenter;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 90%;
   max-width: 1590px;
   width: 90%;
+  opacity: 0;
+  animation: fadeInClassic 600ms ease-in forwards;
 
   .left {
     @extend %overflowY;
     @extend %webkitScrollbar;
-    min-width: 425px;
-    width: 35%;
+    width: 435px !important;
     height: 100%;
-    padding: 20px 30px 5px 30px;
+    padding: 20px 25px 5px 25px;
     border-radius: 5px;
     background-color: white;
     box-shadow: $main-boxShadow;
@@ -38,7 +39,7 @@
     }
 
     mat-list-item {
-      margin: 5px 0px;
+      margin: 3px 0px;
       padding: 5px 0;
       border-radius: 5px;
       cursor: pointer;
@@ -92,8 +93,7 @@
   .right {
     @extend %overflowY;
     @extend %webkitScrollbar;
-    min-width: 730px;
-    width: 60%;
+    width: 740px !important;
     height: 100%;
     padding: 20px 30px 20px 15px;
     border-radius: 3px;
@@ -115,7 +115,7 @@
     hr {
       width: 70%;
       height: 1px;
-      margin: 15px auto;
+      margin: 10px auto 15px auto;
       background-color: $main-color;
       border: none;
     }

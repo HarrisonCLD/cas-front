@@ -68,9 +68,12 @@
     @extend %overflowY;
     width: 40%;
     height: 100%;
+    padding-right: 30px;
+    opacity: 0;
+    animation: fadeInClassic 500ms ease-in forwards;
 
     &::-webkit-scrollbar {
-      width: 9px;
+      width: 7px;
     }
 
     li {
@@ -128,6 +131,9 @@
     width: 49%;
     height: 92%;
     padding: 0 20px 0 0;
+    opacity: 0;
+    animation: fadeInClassic 500ms ease-in forwards;
+    animation-delay: 200ms;
 
     &::-webkit-scrollbar {
       width: 9px;
@@ -151,6 +157,30 @@
 
         &:hover {
           background-color: darken($main-grey, 10);
+        }
+      }
+    }
+
+    .selection {
+      @extend %flexCenter;
+      justify-content: space-between;
+      margin-bottom: 13px;
+      padding: 10px 18px;
+
+      div {
+        @extend %flexCenter;
+
+        input {
+          width: 16px;
+          height: 16px;
+          margin-right: 8px;
+          cursor: pointer;
+        }
+        p {
+          margin: 0;
+          font-size: 0.9em;
+          font-weight: 300;
+          color: darken($main-grey, 40);
         }
       }
     }

@@ -1,5 +1,5 @@
 @import "./scss/variables";
-@import "./scss/_mixins";
+@import "./scss/mixins";
 @import "./scss/animations";
 
 * {
@@ -32,7 +32,7 @@ app-root {
     flex-direction: column;
     justify-content: flex-start;
     width: 80%;
-    max-width: 1500px;
+    max-width: 1250px;
     height: 80%;
     max-height: 80%;
     margin: auto;
@@ -40,6 +40,8 @@ app-root {
     border-radius: 5px;
     background-color: white;
     box-shadow: $main-boxShadow;
+    opacity: 0;
+    animation: fadeInClassic 400ms ease-in forwards;
 
     .mat-expansion-panel-body {
       padding: 0 12px 0 0;
@@ -69,7 +71,7 @@ app-root {
           justify-content: flex-start;
           padding: 2px 5px !important;
           font-size: 1.1em;
-          font-weight: 400;
+          font-weight: 300;
           color: black;
           transition: color 200ms ease-in-out;
         }
@@ -91,12 +93,13 @@ app-root {
     @extend %flexCenter;
     overflow: hidden;
     height: 100%;
+    width: 100%;
   }
 
   administration {
     width: 80%;
     min-width: 600px;
-    max-width: 1200px;
+    max-width: 1250px;
     min-height: 500px;
     max-height: 850px;
     height: 100%;
@@ -105,6 +108,8 @@ app-root {
     background-color: white;
     box-shadow: $main-boxShadow;
     border-radius: 3px;
+    opacity: 0;
+    animation: fadeInClassic 500ms ease-in forwards;
 
     .mat-mdc-tab-body-wrapper {
       height: 100%;
@@ -141,5 +146,13 @@ app-root {
         }
       }
     }
+  }
+}
+
+
+// media queries :
+@media (max-width: 1300px) {
+  dashboard {
+    padding: 40px 20px 40px 30px!important;
   }
 }

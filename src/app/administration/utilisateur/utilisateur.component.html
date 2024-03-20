@@ -30,10 +30,7 @@
     <h4>Liste d'utilisateur</h4>
     <ul>
       @for(row of users; track user){
-      <li
-        [ngClass]="{ on: row.uid === user.uid }"
-        (click)="set_user_selected({ nom: row.nom, uid: row.uid })"
-      >
+      <li (click)="set_user_selected({ nom: row.nom, uid: row.uid })">
         <p>{{ row.nom }}</p>
       </li>
       }
@@ -169,10 +166,29 @@
             />
           </div>
           @if(filterListServices && filterListServices.length > 0 ) {
+          <div class="select-service">
+            <div>
+              <input
+                class="select"
+                type="checkbox"
+                (change)="selectAll(1, '.select-service ', filterListServices)"
+              />
+              <p>Sélectionner tous les éléments</p>
+            </div>
+            <div>
+              <input
+                class="deselect"
+                type="checkbox"
+                (change)="selectAll(2, '.select-service ', filterListServices)"
+              />
+              <p>Désélectionner tous les éléments</p>
+            </div>
+          </div>
+
           @for(service of filterListServices ; track service) {
           <li>
             <p>{{ service.name }}</p>
-            <mat-checkbox (change)="onCheckboxChange(service.id, $event)" />
+            <mat-checkbox [(ngModel)]="service.checked" (change)="onCheckboxChange(service.id, $event)" />
           </li>
           } } @else {
           <div class="error-select">
@@ -202,11 +218,21 @@
               (click)="validate_association()"
             />
           </div>
-          @if(filterListGroup && filterListGroup.length > 0) { @for(group of
-          filterListGroup; track group) {
+          @if(filterListGroup && filterListGroup.length > 0) {
+          <div class="select-group">
+            <div>
+              <input class="select" type="checkbox" (change)="selectAll(1, '.select-group ', filterListGroup)" />
+              <p>Sélectionner tous les éléments</p>
+            </div>
+            <div>
+              <input class="deselect" type="checkbox" (change)="selectAll(2, '.select-group ', filterListGroup)" />
+              <p>Désélectionner tous les éléments</p>
+            </div>
+          </div>
+          @for(group of filterListGroup; track group) {
           <li>
             <p>{{ group.label }}</p>
-            <mat-checkbox (change)="onCheckboxChange(group.id, $event)" />
+            <mat-checkbox [(ngModel)]="group.checked" (change)="onCheckboxChange(group.id, $event)" />
           </li>
           } } @else {
           <div class="error-select">
@@ -236,11 +262,21 @@
               (click)="validate_association()"
             />
           </div>
-          @if(filterListServices.length > 0) { @for(service of
-          filterListServices ; track service) {
+          @if(filterListServices.length > 0) {
+          <div class="select-admin">
+            <div>
+              <input class="select" type="checkbox" (change)="selectAll(1, '.select-admin ', filterListServices)" />
+              <p>Sélectionner tous les éléments</p>
+            </div>
+            <div>
+              <input class="deselect" type="checkbox" (change)="selectAll(2, '.select-admin ', filterListServices)" />
+              <p>Désélectionner tous les éléments</p>
+            </div>
+          </div>
+          @for(service of filterListServices ; track service) {
           <li>
             <p>{{ service.name }}</p>
-            <mat-checkbox (change)="onCheckboxChange(service.id, $event)" />
+            <mat-checkbox [(ngModel)]="service.checked" (change)="onCheckboxChange(service.id, $event)" />
           </li>
           } }@else {
           <div class="error-select">

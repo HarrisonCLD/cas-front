@@ -7,12 +7,13 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
-
-import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Params } from '@angular/router';
+
+import { Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+import DataLabelsPlugin from 'chartjs-plugin-datalabels';
+import Annotation from 'chartjs-plugin-annotation';
 
 @Component({
   selector: 'stackedbar',
@@ -29,14 +30,16 @@ export class StackedbarComponent implements OnInit, OnDestroy {
   public dataService: any;
 
   // style charts :
-  public height: any;
+  public height: number = 600;
 
   // reaction switch id :
   @Input() onDataChanged: any;
 
   private onDataChangedSubscription!: Subscription;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute) {
+    Chart.register(Annotation);
+  }
 
   ngOnInit() {
     this.barChartData = {
@@ -54,7 +57,6 @@ export class StackedbarComponent implements OnInit, OnDestroy {
         this.barChartData.labels = this.dataService?.labels;
         this.barChartData.datasets = this.dataService?.datasets;
         this.chart?.render();
-        console.log(this.dataService);
       }
     );
   }

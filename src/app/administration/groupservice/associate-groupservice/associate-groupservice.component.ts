@@ -86,7 +86,36 @@ export class AssociateGroupserviceComponent implements OnInit {
       }
 
       this.associateServices = [];
-      console.log(this.associateTo);
+    }
+  }
+
+  selectAll(action: number): void {
+    let otherInput: HTMLInputElement | null;
+
+    switch (action) {
+      case 1:
+        otherInput = document.querySelector('.deselect');
+        otherInput ? (otherInput.checked = false) : null;
+        this.listservices.map((row: any) => {
+          row.checked = true;
+          if (row.checked) {
+            this.associateServices.push(row.id);
+          }
+        });
+        break;
+      case 2:
+        otherInput = document.querySelector('.select');
+        otherInput ? (otherInput.checked = false) : null;
+        this.listservices.map((row: any) => {
+          row.checked = false;
+          if (!row.checked) {
+            const indexToDelete = this.associateServices.indexOf(row.id);
+            if (indexToDelete !== -1) {
+              this.associateServices.splice(indexToDelete, 1);
+            }
+          }
+        });
+        break;
     }
   }
 
@@ -128,24 +157,24 @@ export class AssociateGroupserviceComponent implements OnInit {
   delete(id_groupe: number, id_service: number) {
     // template HTTP request :
     const body = {
-      id_groupe: id_groupe,
-      id_service: id_service,
+      id_groupe: +id_groupe,
+      id_service: +id_service,
     };
 
     this.statService.delete_service_to_group(body).subscribe((res: any) => {
-      if (res.data === 1) {
+      if (res.code === 0) {
         openValidateSnackBar(this._snackBar);
 
         // function to directly delete the group service :
-        const indexGroup = this.groupServices.findIndex(
-          (row: any) => row.id === body.id_groupe
-        );
+        const indexGroup = this.groupServices.findIndex((row: any) => {
+          return row.id === body.id_groupe;
+        });
         if (indexGroup !== -1) {
           const indexToDelete = this.groupServices[
             indexGroup
-          ].services.findIndex(
-            (row: any) => row.id_service === body.id_service
-          );
+          ].services.findIndex((row: any) => {
+            return row.id_service === body.id_service;
+          });
           if (indexToDelete !== -1) {
             this.groupServices[indexGroup].services.splice(indexToDelete, 1);
 
@@ -156,6 +185,7 @@ export class AssociateGroupserviceComponent implements OnInit {
                 );
               }
             );
+
             this.listservices = filterListServices;
           }
         }
@@ -186,7 +216,22 @@ export class AssociateGroupserviceComponent implements OnInit {
         this.listgroup.push({ id_service: row.id, label: row.label });
       });
 
-      this.changeGroupe(null);
+      if (this.groupServices.length > 0 && this.groupServices[0].services) {
+        this.groupServices.map((row: any) => {
+          row.services.sort((a: any, b: any) => {
+            if (a.isAdmin != null && b.isAdmin != null) {
+              if (a.isAdmin !== b.isAdmin) {
+                return b.isAdmin - a.isAdmin;
+              }
+            }
+            if (typeof a.fqdn === 'string' && typeof b.fqdn === 'string') {
+              return a.fqdn.localeCompare(b.fqdn);
+            }
+            return 0;
+          });
+        });
+        this.changeGroupe(null);
+      }
     });
   }
 }

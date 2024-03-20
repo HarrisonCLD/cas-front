@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BarchartComponent } from './barchart.component';
+import { PopupAdminComponent } from './popup-admin.component';
 
-describe('BarchartComponent', () => {
-  let component: BarchartComponent;
-  let fixture: ComponentFixture<BarchartComponent>;
+describe('PopupAdminComponent', () => {
+  let component: PopupAdminComponent;
+  let fixture: ComponentFixture<PopupAdminComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BarchartComponent]
+      declarations: [PopupAdminComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(BarchartComponent);
+    fixture = TestBed.createComponent(PopupAdminComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,7 +1,13 @@
+<popup-admin
+  *ngIf="informationsAdmin"
+  [togglePopup]="informationsAdmin"
+  [dataReceive]="listAdmin"
+  (toggleInformationAdmin)="get_info_admin()"
+/>
 <div class="listservices">
   <mat-list class="sidenav open">
     <img
-      class="arrowtoggle1"
+      class="arrowtoggle1 active"
       src="assets/arrow_back.svg"
       alt="arrow"
       (click)="set_sidenav()"
@@ -22,19 +28,20 @@
       <mat-icon (click)="resetSearch()">close</mat-icon>
       }
     </div>
-    @for (service of filterListServices; track service.id) {
-    <mat-list-item
-      *ngIf="filterListServices"
-      [ngClass]="{ selected: service.id === selectedService.id }"
-      routerLink="/services/{{ service.id }}"
-      class="row"
-    >
-      <p class="new" *ngIf="service.new === 1">NEW</p>
-      {{ service.name }}
-    </mat-list-item>
-    }
+    <div class="list_service">
+      @for (service of filterListServices; track service.id) {
+      <mat-list-item
+        data-item
+        routerLink="/services/{{ service.id }}"
+        class="row"
+        [ngClass]="{ selected: service.id === selectedService.id }"
+      >
+        <p class="new" *ngIf="service.new === 1">NEW</p>
+        {{ service.name }}
+      </mat-list-item>
+      }
+    </div>
   </mat-list>
-
   <div class="view">
     <img
       class="arrowtoggle2"
@@ -42,7 +49,6 @@
       alt="arrow"
       (click)="set_sidenav()"
     />
-
     <div class="options" [ngClass]="{ date: datePicker }">
       <mat-form-field *ngIf="datePicker">
         <mat-label>Sélectionner votre date :</mat-label>
@@ -86,16 +92,30 @@
       </div>
     </div>
     <div class="presentation" *ngIf="selectedService.id != 0">
-      <h3>Informations</h3>
+      <div class="top">
+        <h3>Informations</h3>
+        <img
+          src="assets/info.svg"
+          alt="info-icon"
+          (click)="get_info_admin()"
+          #tooltip="matTooltip"
+          matTooltip="Informations sur le service"
+          [matTooltipPosition]="'above'"
+          matTooltipHideDelay="150"
+        />
+      </div>
       <div class="bot">
-        <div class="left">
+        <div class="informations">
           <div class="pick">
             <h4>Pick utilisateur :</h4>
             <p>{{ selectedService.pick }}</p>
           </div>
+          <hr />
           <div class="moy">
             <h4>Moyenne utilisateur :</h4>
-            <p>{{ selectedService.moyenne }}</p>
+            <p>
+              {{ selectedService.moyenne }}
+            </p>
           </div>
         </div>
         <div
@@ -106,40 +126,38 @@
             selectedService.active
           "
         >
-          <div class="check">
-            <div
-              *ngIf="selectedService.isDev"
-              class="devServer"
-              mat-raised-button
-              #tooltip="matTooltip"
-              matTooltip="Service de développement"
-              [matTooltipPosition]="'above'"
-              matTooltipHideDelay="200"
-            >
-              <img src="assets/dev-icon.svg" alt="#" />
-            </div>
-            <div
-              *ngIf="selectedService.isEnded"
-              class="stopServer"
-              mat-raised-button
-              #tooltip="matTooltip"
-              matTooltip="Service arrêté"
-              [matTooltipPosition]="'above'"
-              matTooltipHideDelay="200"
-            >
-              <img src="assets/stop-icon.svg" alt="#" />
-            </div>
-            <div
-              *ngIf="selectedService.active"
-              class="nodata"
-              mat-raised-button
-              #tooltip="matTooltip"
-              matTooltip="Aucune donnée pour les dates demandées"
-              [matTooltipPosition]="'above'"
-              matTooltipHideDelay="200"
-            >
-              <img src="assets/warning.svg" alt="#" />
-            </div>
+          <div
+            *ngIf="selectedService.isDev"
+            class="devServer"
+            mat-raised-button
+            #tooltip="matTooltip"
+            matTooltip="Service de développement"
+            [matTooltipPosition]="'above'"
+            matTooltipHideDelay="200"
+          >
+            <img src="assets/dev-icon.svg" alt="#" />
+          </div>
+          <div
+            *ngIf="selectedService.isEnded"
+            class="stopServer"
+            mat-raised-button
+            #tooltip="matTooltip"
+            matTooltip="Service arrêté"
+            [matTooltipPosition]="'above'"
+            matTooltipHideDelay="200"
+          >
+            <img src="assets/stop-icon.svg" alt="#" />
+          </div>
+          <div
+            *ngIf="selectedService.active"
+            class="nodata"
+            mat-raised-button
+            #tooltip="matTooltip"
+            matTooltip="Aucune donnée pour les dates demandées"
+            [matTooltipPosition]="'above'"
+            matTooltipHideDelay="200"
+          >
+            <img src="assets/warning.svg" alt="#" />
           </div>
         </div>
       </div>

@@ -1,0 +1,32 @@
+<div class="popup">
+  <div class="bg"></div>
+  <div class="list">
+    <h4>Administrateur(s) :</h4>
+    <img
+      class="close-btn"
+      src="assets/close.svg"
+      alt="close-icon"
+      (click)="set_togglePopup()"
+    />
+    @if (dataReceive.length > 0) {
+    <ul>
+      @for(row of dataReceive; track row) {
+      <li>
+        <div>
+          <img src="assets/user-icon.svg" alt="user-icon" />
+          <p>{{ row.nom }}</p>
+        </div>
+        <div>
+          <img src="assets/at-icon.svg" alt="at-icon" />
+          <p>{{ row.mail }}</p>
+        </div>
+      </li>
+      }
+    </ul>
+    } @else {
+    <div class="empty-admin">
+      <p>Non renseigné</p>
+    </div>
+    }
+  </div>
+</div>

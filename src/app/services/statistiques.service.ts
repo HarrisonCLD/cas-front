@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.development';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class StatistiquesService {
+
+
   public date!: { datedebut: Date; datefin: Date };
 
   public dateChanged: Subject<any> = new Subject();
@@ -38,6 +41,11 @@ export class StatistiquesService {
   }
 
   // GETTER
+  get_last_update() {
+    const url = this.http.get(`${environment.apiUrl}/services/lastupdate`);
+    return url;
+  }
+
   get_access() {
     const url = this.http.get(`${environment.apiUrl}/services/access`);
     return url;

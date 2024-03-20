@@ -7,11 +7,15 @@ import { StatistiquesService } from '../services/statistiques.service';
 interface Service {
   id: number;
   name: string;
+  admin: {
+    nom: string;
+    mail: string;
+  };
   active: number | null;
   isDev: number | null;
   isEnded: number | null;
-  moyenne: number;
-  pick: number;
+  moyenne: number | null;
+  pick: number | null;
 }
 
 @Component({
@@ -31,7 +35,11 @@ export class ListservicesComponent implements OnInit {
 
   // service selected (id, name and flags):
   public selectedService: Service = {
-    id: 0,
+    id: 477,
+    admin: {
+      nom: '',
+      mail: '',
+    },
     name: '',
     active: null,
     isDev: null,
@@ -45,6 +53,8 @@ export class ListservicesComponent implements OnInit {
   private onDateChangedSubscription!: Subscription;
 
   // full screen charts :
+  public listAdmin!: Array<object>;
+  public informationsAdmin: boolean = false;
   public fullScreen: boolean = false;
 
   // toggle date picker :
@@ -80,17 +90,25 @@ export class ListservicesComponent implements OnInit {
       this.statService
         .get_access_service(this.selectedService.id)
         .subscribe((res) => {
-          res.data.active === 1
-            ? (this.selectedService.active = null)
-            : (this.selectedService.active = 1);
+          Object.assign(this.selectedService, res.data);
           res.data.isDev === 0
             ? (this.selectedService.isDev = null)
             : (this.selectedService.isDev = 1);
           res.data.isEnded === 0
             ? (this.selectedService.isEnded = null)
             : (this.selectedService.isEnded = 1);
+          if (!res.data.isEnded) {
+            res.data.active === 1
+              ? (this.selectedService.active = null)
+              : (this.selectedService.active = 1);
+          } else {
+            this.selectedService.active = null;
+          }
           this.selectedService.pick = res.data.pick;
           this.selectedService.moyenne = res.data.moyenne;
+          if (res.data.admin) {
+            this.listAdmin = res.data.admin;
+          }
           this.dataChanged.next(res.data);
         });
     });
@@ -100,11 +118,12 @@ export class ListservicesComponent implements OnInit {
         this.statService
           .get_access_service(this.selectedService.id)
           .subscribe((res) => {
-            res.data.active
-              ? (this.selectedService.active = 1)
-              : (this.selectedService.active = null);
-            this.selectedService = res.data;
+            Object.assign(this.selectedService, res.data);
+            res.data.active === 1
+              ? (this.selectedService.active = null)
+              : (this.selectedService.active = 1);
             this.dataChanged.next(res.data);
+            res.data.admin ? (this.listAdmin = res.data.admin) : null;
           });
       }
     );
@@ -124,16 +143,23 @@ export class ListservicesComponent implements OnInit {
 
   set_sidenav() {
     const sidenav = document.querySelector('.sidenav');
-    const arrowview = document.querySelector('.arrowtoggle2');
+    const arrowview1 = document.querySelector('.arrowtoggle1');
+    const arrowview2 = document.querySelector('.arrowtoggle2');
     if (sidenav?.classList.contains('open')) {
       sidenav?.classList.remove('open');
       sidenav?.classList.add('close');
-      arrowview?.classList.toggle('active');
+      arrowview1?.classList.remove('active');
+      arrowview2?.classList.add('active');
     } else {
       sidenav?.classList.remove('close');
       sidenav?.classList.add('open');
-      arrowview?.classList.toggle('active');
+      arrowview2?.classList.remove('active');
+      arrowview1?.classList.add('active');
     }
+  }
+
+  get_info_admin() {
+    this.informationsAdmin = !this.informationsAdmin;
   }
 
   ngOnDestroy() {

@@ -43,11 +43,8 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ScoreboardComponent } from './shared/scoreboard/scoreboard.component';
-import { UnitestatComponent } from './shared/unitestat/unitestat.component';
-import { BarChartComponent } from './shared/barchart/barchart.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ListservicesComponent } from './listservices/listservices.component';
-import { LinechartComponent } from './shared/linechart/linechart.component';
 import { StackedbarComponent } from './shared/stackedbar/stackedbar.component';
 import { ClassementComponent } from './classement/classement.component';
 import { ScoreboardTotalyComponent } from './shared/scoreboard-totaly/scoreboard-totaly.component';
@@ -61,6 +58,7 @@ import { CreateGroupComponent } from './administration/groupservice/create-group
 import { DialogEditLabelComponent } from './administration/groupservice/create-group/dialog-edit-label/dialog-edit-label.component';
 import { UtilisateurComponent } from './administration/utilisateur/utilisateur.component';
 import { ServiceComponent } from './administration/service/service.component';
+import { PopupAdminComponent } from './listservices/popup-admin/popup-admin.component';
 
 @NgModule({
   declarations: [
@@ -68,10 +66,7 @@ import { ServiceComponent } from './administration/service/service.component';
     HeaderComponent,
     DashboardComponent,
     ScoreboardComponent,
-    UnitestatComponent,
-    BarChartComponent,
     ListservicesComponent,
-    LinechartComponent,
     StackedbarComponent,
     ClassementComponent,
     ScoreboardTotalyComponent,
@@ -85,6 +80,7 @@ import { ServiceComponent } from './administration/service/service.component';
     DialogEditLabelComponent,
     UtilisateurComponent,
     ServiceComponent,
+    PopupAdminComponent,
   ],
   imports: [
     BrowserModule,

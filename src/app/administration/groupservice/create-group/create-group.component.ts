@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-  inject,
-} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { DialogGroupServiceComponent } from './dialog-group-service/dialog-group-service.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -66,7 +60,7 @@ export class CreateGroupComponent implements OnInit {
       const indexToDelete = this.groupServices.findIndex(
         (row: any) => row.id === id
       );
-      if (indexToDelete !== 1) {
+      if (indexToDelete !== -1) {
         this.groupServices.splice(indexToDelete, 1);
       }
     });

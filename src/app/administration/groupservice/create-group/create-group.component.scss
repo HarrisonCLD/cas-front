@@ -3,11 +3,14 @@
 @import "../../../../scss/animations";
 
 .listgroup {
+  height: 100%;
   padding: 10px 0;
 
   .line-service {
     @extend %flexCenter;
     flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
 
     .empty-groups {
       @extend %flexCenter;

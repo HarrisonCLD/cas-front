@@ -62,6 +62,16 @@
       }
     </div>
     @if (listservices.length > 0) {
+    <div class="selection">
+      <div>
+        <input class="select" type="checkbox" (change)="selectAll(1)" />
+        <p>Sélectionner tous les éléments</p>
+      </div>
+      <div>
+        <input class="deselect" type="checkbox" (change)="selectAll(2)" />
+        <p>Désélectionner tous les éléments</p>
+      </div>
+    </div>
     <ul>
       @for(row of listservices; track row) {
       <li>

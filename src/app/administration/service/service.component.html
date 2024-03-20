@@ -15,7 +15,7 @@
   </mat-form-field>
 </div>
 <hr />
-@if(filterListServices.length > 0) {
+@if(filterListServices && filterListServices.length > 0) {
 <ul class="listServices">
   @for(service of filterListServices; track service) {
   <li>

@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { StatistiquesService } from '../../services/statistiques.service';
 import { LDAPService } from '../../services/auth.service';
 
-import User from '../../helpers/entities/user.entitie';
+import User from '../../../models/user.model';
 
 import { openValidateSnackBar } from '../../helpers/popup.helper';
 import { openErrorSnackBar } from '../../helpers/popup.helper';
@@ -149,8 +149,83 @@ export class UtilisateurComponent implements OnInit {
     }
   }
 
+  selectAll(action: number, div: string, array: Array<any>): void {
+    let otherInput: HTMLInputElement | null;
+    switch (action) {
+      case 1:
+        otherInput = document.querySelector(div + '.deselect');
+        otherInput ? (otherInput.checked = false) : null;
+        console.log(array);
+        array.map((row: any) => {
+          row.checked = true;
+          if (row.checked) {
+            this.groupServices.push(row.id);
+          }
+        });
+        break;
+      case 2:
+        otherInput = document.querySelector(div + '.select');
+        otherInput ? (otherInput.checked = false) : null;
+        console.log(array);
+        array.map((row: any) => {
+          row.checked = false;
+          if (!row.checked) {
+            const indexToDelete = this.groupServices.indexOf(row.id);
+            if (indexToDelete !== -1) {
+              this.groupServices.splice(indexToDelete, 1);
+            }
+          }
+        });
+        break;
+    }
+
+    // switch (action) {
+    //   case 1:
+    //     otherInput = document.querySelector('.select-service .deselect');
+    //     otherInput ? (otherInput.checked = false) : null;
+    //     this.filterListServices.map((row: any) => {
+    //       row.checked = true;
+    //       if (row.checked) {
+    //         this.groupServices.push(row.id);
+    //       }
+    //     });
+    //     break;
+    //   case 2:
+    //     otherInput = document.querySelector('.select-service .select');
+    //     otherInput ? (otherInput.checked = false) : null;
+    //     this.filterListServices.map((row: any) => {
+    //       row.checked = false;
+    //       if (!row.checked) {
+    //         const indexToDelete = this.groupServices.indexOf(row.id);
+    //         if (indexToDelete !== -1) {
+    //           this.groupServices.splice(indexToDelete, 1);
+    //         }
+    //       }
+    //     });
+    //     break;
+    // }
+  }
+
   set_user_selected(target: object) {
     Object.assign(this.user, target);
+    this.statService.get_infos_user(this.user.uid).subscribe((res: any) => {
+      if (res.code === 0) {
+        Object.assign(this.user, res.data);
+
+        // sort list of services by administrator and A-Z :
+        this.user.services.sort((a, b) => {
+          if (a.isAdmin != null && b.isAdmin != null) {
+            if (a.isAdmin !== b.isAdmin) {
+              return b.isAdmin - a.isAdmin;
+            }
+          }
+          if (typeof a.fqdn === 'string' && typeof b.fqdn === 'string') {
+            return a.fqdn.localeCompare(b.fqdn);
+          }
+          return 0;
+        });
+      }
+    });
     this.ui_utilisateur.userSelected = true;
   }
 
@@ -239,25 +314,37 @@ export class UtilisateurComponent implements OnInit {
     switch (this.ui_utilisateur.actionSelected) {
       case 2:
         this.statService.set_service_to_user(body).subscribe((res: any) => {
-          openValidateSnackBar(this._snackBar);
-          this.filterListServices = [];
-          this.ui_utilisateur.actionSelected = null;
+          if (res.code === 0) {
+            openValidateSnackBar(this._snackBar);
+            this.filterListServices = [];
+            this.ui_utilisateur.actionSelected = null;
+          } else {
+            openErrorSnackBar(this._snackBar);
+          }
         });
         break;
 
       case 3:
         this.statService.set_group_to_user(body).subscribe((res: any) => {
-          openValidateSnackBar(this._snackBar);
-          this.filterListGroup = [];
-          this.ui_utilisateur.actionSelected = null;
+          if (res.code === 0) {
+            openValidateSnackBar(this._snackBar);
+            this.filterListGroup = [];
+            this.ui_utilisateur.actionSelected = null;
+          } else {
+            openErrorSnackBar(this._snackBar);
+          }
         });
         break;
 
       case 4:
         this.statService.set_user_admin_service(body).subscribe((res: any) => {
-          openValidateSnackBar(this._snackBar);
-          this.filterListServices = [];
-          this.ui_utilisateur.actionSelected = null;
+          if (res.code === 0) {
+            openValidateSnackBar(this._snackBar);
+            this.filterListServices = [];
+            this.ui_utilisateur.actionSelected = null;
+          } else {
+            openErrorSnackBar(this._snackBar);
+          }
         });
         break;
     }

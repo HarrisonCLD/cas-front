@@ -24,6 +24,9 @@ export class DashboardComponent implements OnInit {
     error: 0,
   };
 
+  // last update data :
+  public lastUpdate!: string;
+
   // data sending to charts dashboard :
   public scoreboardCharts: Subject<any> = new Subject();
 
@@ -34,6 +37,40 @@ export class DashboardComponent implements OnInit {
   public constructor() {}
 
   ngOnInit() {
+    this.statService.get_last_update().subscribe((res: any) => {
+      console.log(res);
+      if (res.code === 0) {
+        const dateParts = res.data.split('-');
+        const date = new Date(
+          Number(dateParts[0]),
+          Number(dateParts[1]) - 1,
+          Number(dateParts[2]) - 1
+        );
+        const monthNames = [
+          'Janvier',
+          'Février',
+          'Mars',
+          'Avril',
+          'Mai',
+          'Juin',
+          'Juillet',
+          'Août',
+          'Septembre',
+          'Octobre',
+          'Novembre',
+          'Décembre',
+        ];
+        const formattedDate =
+          date.getDate() +
+          ' ' +
+          monthNames[date.getMonth()] +
+          ' ' +
+          date.getFullYear();
+        console.log(typeof formattedDate);
+        this.lastUpdate = formattedDate;
+      }
+    });
+
     this.statService.get_access().subscribe((res: any) => {
       if (res.data) {
         this.access = res.data;

@@ -16,7 +16,7 @@ export class ScoreboardComponent implements OnInit {
   // subcription for updating charts :
   public dateReceive: Subscription = new Subscription();
 
-  // data used 
+  // data used
   public data: any;
 
   constructor() {}
@@ -24,30 +24,32 @@ export class ScoreboardComponent implements OnInit {
   ngOnInit() {
     this.dateReceive = this.dataSending.subscribe((res: any) => {
       this.data = res;
-      this.height = this.data.labels.slice(0, 10).length * 40;
-      this.barChartData = {
-        labels: this.data.labels.slice(0, 10),
-        datasets: [
-          {
-            label: 'Top 10',
-            data: this.data.data.slice(0, 10),
-            fill: false,
-            barThickness: 20,
-            backgroundColor: [
-              'hsla(0, 100%, 50%, 0.4)',
-              'hsla(20, 100%, 50%, 0.4)',
-              'hsla(40, 100%, 50%,0.4)',
-              'hsla(60, 100%, 50%, 0.4)',
-              'hsla(80, 100%, 50%,0.4)',
-              'hsla(100, 100%, 50%, 0.4)',
-              'hsla(120, 100%, 50%, 0.4)',
-              'hsla(140, 100%, 50%, 0.4)',
-              'hsla(160, 100%, 50%, 0.4)',
-              'hsla(180, 100%, 50%, 0.4)',
-            ],
-          },
-        ],
-      };
+      if (this.data) {
+        this.height = this.data.labels.slice(0, 10).length * 40;
+        this.barChartData = {
+          labels: this.data.labels.slice(0, 10),
+          datasets: [
+            {
+              label: 'Top 10',
+              data: this.data.data.slice(0, 10),
+              fill: false,
+              barThickness: 20,
+              backgroundColor: [
+                'hsla(0, 100%, 50%, 0.4)',
+                'hsla(20, 100%, 50%, 0.4)',
+                'hsla(40, 100%, 50%,0.4)',
+                'hsla(60, 100%, 50%, 0.4)',
+                'hsla(80, 100%, 50%,0.4)',
+                'hsla(100, 100%, 50%, 0.4)',
+                'hsla(120, 100%, 50%, 0.4)',
+                'hsla(140, 100%, 50%, 0.4)',
+                'hsla(160, 100%, 50%, 0.4)',
+                'hsla(180, 100%, 50%, 0.4)',
+              ],
+            },
+          ],
+        };
+      }
     });
   }
 
