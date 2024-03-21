@@ -72,9 +72,8 @@
       }
 
       .row {
-        display: flex;
+        @extend %flexCenter;
         justify-content: space-between;
-        align-items: center;
         padding: 0 10px;
 
         p {

@@ -71,7 +71,6 @@ export class ScoreboardTotalyComponent implements OnInit, OnDestroy {
       {
         data: [],
         fill: true,
-        // barThickness: 15,
         backgroundColor: [],
       },
     ],

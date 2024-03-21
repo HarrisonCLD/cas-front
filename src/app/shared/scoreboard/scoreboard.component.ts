@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 export class ScoreboardComponent implements OnInit {
   // data received from subject for the construction of the charts :
   @Input() dataSending: any;
+  
   // subcription for updating charts :
   public dateReceive: Subscription = new Subscription();
 

@@ -38,7 +38,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.statService.get_last_update().subscribe((res: any) => {
-      console.log(res);
       if (res.code === 0) {
         const dateParts = res.data.split('-');
         const date = new Date(
@@ -66,7 +65,6 @@ export class DashboardComponent implements OnInit {
           monthNames[date.getMonth()] +
           ' ' +
           date.getFullYear();
-        console.log(typeof formattedDate);
         this.lastUpdate = formattedDate;
       }
     });
@@ -91,7 +89,6 @@ export class DashboardComponent implements OnInit {
       .get_resume_access_detail(usertype)
       .subscribe((res: any) => {
         this.resumeDetailStats = res.data.slice();
-        console.log(this.resumeDetailStats);
       });
   }
 }

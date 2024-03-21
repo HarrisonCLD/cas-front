@@ -90,26 +90,6 @@ export class StackedbarComponent implements OnInit, OnDestroy {
       },
     },
     plugins: {
-      annotation: {
-        // annotations: [
-        //   {
-        //     type: 'line',
-        //     scaleID: 'y',
-        //     value: res.data.moyenne.toString(),
-        //     borderColor: 'orange',
-        //     borderWidth: 2,
-        //     label: {
-        //       display: true,
-        //       position: 'center',
-        //       color: 'orange',
-        //       content: res.data.moyenne.toString(),
-        //       font: {
-        //         weight: 'bold',
-        //       },
-        //     },
-        //   },
-        // ],
-      },
       legend: {
         display: true,
       },

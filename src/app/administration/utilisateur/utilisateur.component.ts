@@ -155,7 +155,6 @@ export class UtilisateurComponent implements OnInit {
       case 1:
         otherInput = document.querySelector(div + '.deselect');
         otherInput ? (otherInput.checked = false) : null;
-        console.log(array);
         array.map((row: any) => {
           row.checked = true;
           if (row.checked) {
@@ -166,7 +165,6 @@ export class UtilisateurComponent implements OnInit {
       case 2:
         otherInput = document.querySelector(div + '.select');
         otherInput ? (otherInput.checked = false) : null;
-        console.log(array);
         array.map((row: any) => {
           row.checked = false;
           if (!row.checked) {
@@ -178,32 +176,6 @@ export class UtilisateurComponent implements OnInit {
         });
         break;
     }
-
-    // switch (action) {
-    //   case 1:
-    //     otherInput = document.querySelector('.select-service .deselect');
-    //     otherInput ? (otherInput.checked = false) : null;
-    //     this.filterListServices.map((row: any) => {
-    //       row.checked = true;
-    //       if (row.checked) {
-    //         this.groupServices.push(row.id);
-    //       }
-    //     });
-    //     break;
-    //   case 2:
-    //     otherInput = document.querySelector('.select-service .select');
-    //     otherInput ? (otherInput.checked = false) : null;
-    //     this.filterListServices.map((row: any) => {
-    //       row.checked = false;
-    //       if (!row.checked) {
-    //         const indexToDelete = this.groupServices.indexOf(row.id);
-    //         if (indexToDelete !== -1) {
-    //           this.groupServices.splice(indexToDelete, 1);
-    //         }
-    //       }
-    //     });
-    //     break;
-    // }
   }
 
   set_user_selected(target: object) {
