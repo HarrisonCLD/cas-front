@@ -1,0 +1,43 @@
+<div class="bot">
+  <div class="left">
+    <mat-paginator
+      #paginator
+      class="demo-paginator"
+      (page)="handlePageEvent($event)"
+      [length]="length"
+      [pageSizeOptions]="pageSizeOptions"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+    <mat-list class="content">
+      <div class="example">
+        <p>Nom du service</p>
+        <p>Access</p>
+      </div>
+      @for (service of listPagination; track service.id) {
+      <mat-list-item routerLink="/services/{{ service.id }}">
+        <div class="row">
+          <p>{{ service.label }}</p>
+          <p
+            [ngClass]="{
+              min: service.access < 10000,
+              moy: service.access > 10000 && service.access < 50000,
+              max: service.access > 50000
+            }"
+          >
+            {{ service.access }}
+          </p>
+        </div>
+      </mat-list-item>
+      }
+    </mat-list>
+  </div>
+  <div class="right">
+    <h3>Trafic des services depuis avril 2023</h3>
+    <hr />
+    <scoreboard-totaly
+      *ngIf="dataScoreboard"
+      [dataSending]="statService.scoreboardChart"
+    ></scoreboard-totaly>
+  </div>
+</div>

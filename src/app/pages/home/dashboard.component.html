@@ -1,0 +1,57 @@
+<p class="lastUpdate">Dernière mise à jour des données : {{ lastUpdate }}</p>
+<h3>Récapitulatif des derniers 24h</h3>
+<div class="content">
+  <div class="left">
+    <div class="top">
+      <div class="simply_stat">
+        <img src="assets/screen.svg" alt="screen-icon" />
+        <p>{{ access.access }}</p>
+        <h4>Accès total</h4>
+      </div>
+      <div class="simply_stat">
+        <img src="assets/check-o.svg" alt="check-icon" />
+        <p>{{ access.success }}</p>
+        <h4>Connexion réussie</h4>
+      </div>
+      <div class="simply_stat">
+        <img src="assets/close-o.svg" alt="close-icon" />
+        <p>{{ access.error }}</p>
+        <h4>Connexion échouée</h4>
+      </div>
+    </div>
+    <hr class="separation-left" />
+    <div class="bot">
+      <scoreboard [dataSending]="scoreboardCharts" />
+    </div>
+  </div>
+  <hr class="separation-right" />
+  <div class="right">
+    <mat-accordion *ngIf="resumeStats">
+      @for( row of resumeStats; track row) {
+      <mat-expansion-panel
+        hideToggle
+        (click)="get_resume_access_detail(row.name)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <img src="assets/{{ row.name }}.svg" alt="icon-usertype" />
+            {{ row.name }}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ row.valeur }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="content">
+          @if(resumeDetailStats) { 
+            @for (line of resumeDetailStats; track line.id_service) {
+          <div class="detail" routerLink="/services/{{ line.id_service }}">
+            <p>{{ line.name }}</p>
+            <p>{{ line.access }}</p>
+          </div>
+          } }
+        </div>
+      </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </div>
+</div>

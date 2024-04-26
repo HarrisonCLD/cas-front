@@ -1,0 +1,24 @@
+<ul >
+  <li
+    [ngClass]="{ on: groupServiceNavigation === 1 }"
+    (click)="set_groupServiceNavigation(1)"
+  >
+    Créer un groupe de service
+  </li>
+  <li
+    [ngClass]="{ on: groupServiceNavigation === 2 }"
+    (click)="set_groupServiceNavigation(2)"
+  >
+    Associer des services à des groupes
+  </li>
+</ul>
+<div class="content" *ngIf="!loader" [ngSwitch]="groupServiceNavigation">
+  <create-group
+    *ngSwitchCase="1"
+    (serviceNavigation)="onServiceClicked($event)"
+  />
+  <associate-groupservice
+    *ngSwitchCase="2"
+    [idGroupForAssociation]="serviceToAssociate"
+  />
+</div>

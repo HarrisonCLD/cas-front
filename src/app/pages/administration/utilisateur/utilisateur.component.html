@@ -1,0 +1,324 @@
+<div class="search-box">
+  <h4>Rechercher un utilisateur :</h4>
+  <div class="search-name">
+    <mat-form-field>
+      <mat-label>Utilisateur</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Ex. CLEMENT"
+        [(ngModel)]="user.nom"
+        (ngModelChange)="researchUser()"
+      />
+
+      @if (user.nom) {
+      <mat-icon (click)="clearSearch(1)">close</mat-icon>
+      }
+
+      <mat-hint *ngIf="this.user.nom && this.user.nom.length < 3"
+        >min. 3 lettres</mat-hint
+      >
+    </mat-form-field>
+  </div>
+</div>
+
+<hr />
+
+<div class="content">
+  @if (users.length > 0) {
+  <div class="select-user">
+    <h4>Liste d'utilisateur</h4>
+    <ul>
+      @for(row of users; track user){
+      <li (click)="getUserSelected({ nom: row.nom, uid: row.uid })">
+        <p>{{ row.nom }}</p>
+      </li>
+      }
+    </ul>
+  </div>
+  @if (ui_utilisateur.userSelected) {
+  <div class="actions-user" *ngIf="ui_utilisateur.userSelected">
+    <div class="actions">
+      <div class="list-actions">
+        <ul>
+          <h4>Options</h4>
+          <li
+            [ngClass]="{
+              on: ui_utilisateur.actionSelected === 1
+            }"
+            (click)="get_action(1)"
+          >
+            <img src="assets/info-icon.svg" alt="info-icon" />
+            <p>Informations utilisateur</p>
+          </li>
+          <hr />
+          <li
+            [ngClass]="{
+              on: ui_utilisateur.actionSelected === 2
+            }"
+            (click)="get_action(2)"
+          >
+            <img src="assets/globe-icon.svg" alt="globe-icon" />
+            <p>Associer à un service</p>
+          </li>
+          <li
+            [ngClass]="{
+              on: ui_utilisateur.actionSelected === 3
+            }"
+            (click)="get_action(3)"
+          >
+            <img src="assets/user-group-icon.svg" alt="user-group-icon" />
+            <p>Associer à un groupe de service</p>
+          </li>
+          <li
+            [ngClass]="{
+              on: ui_utilisateur.actionSelected === 4
+            }"
+            (click)="get_action(4)"
+          >
+            <img src="assets/crown-icon.svg" alt="crown-icon" />
+            <p>Définir en tant que responsable de service</p>
+          </li>
+        </ul>
+      </div>
+      <div class="actions-content">
+        <ul class="list-infos" *ngIf="ui_utilisateur.actionSelected === 1">
+          @if(ui_utilisateur.userSelected) {
+          <div class="uid">
+            <span>UID :</span>
+            <p>{{ user.uid }}</p>
+          </div>
+          <div *ngIf="this.user.groups.length > 0" class="list-groups">
+            <span>Groupes :</span>
+            <ul>
+              @for(row of user.groups; track row) {
+              <li>
+                <p>
+                  {{ row.label }}
+                </p>
+                <img
+                  src="assets/close.svg"
+                  alt="#"
+                  (click)="delete(1, row.id_groupe)"
+                  class="delete"
+                />
+              </li>
+              }
+            </ul>
+          </div>
+          <div *ngIf="this.user.services.length > 0" class="list-services">
+            <span>Services :</span>
+            <ul>
+              @for(row of user.services; track row) {
+              <li
+                [ngClass]="{
+                  'service-admin': row.isAdmin === 1,
+                  'service-user': row.isAdmin === 0
+                }"
+              >
+                <div class="row">
+                  <img
+                    *ngIf="row.isAdmin === 1"
+                    src="assets/crown-icon.svg"
+                    alt="crown"
+                    class="crown"
+                  />
+                  <p>
+                    {{ row.fqdn }}
+                  </p>
+                </div>
+                <img
+                  src="assets/close.svg"
+                  alt="#"
+                  (click)="delete(2, row.id_service)"
+                  class="delete"
+                />
+              </li>
+              }
+            </ul>
+          </div>
+          } @else {
+          <div class="error-select">
+            <p class="unknown">Aucune informations sur l'utilisateur</p>
+          </div>
+          }
+        </ul>
+        <ul class="list-service" *ngIf="ui_utilisateur.actionSelected === 2">
+          <div class="row-search">
+            <mat-form-field>
+              <mat-label>Nom du service</mat-label>
+              <input
+                matInput
+                [(ngModel)]="ui_utilisateur.serviceValue"
+                (input)="get_searchChange(1, $event)"
+                placeholder="Ex. ebureau.univ-reims.fr"
+                value=""
+              />
+              @if (ui_utilisateur.serviceValue) {
+              <mat-icon (click)="clearSearch(2)">close</mat-icon>
+              }
+            </mat-form-field>
+            <img
+              src="assets/valid-check-icon.svg"
+              alt="#"
+              *ngIf="groupServices.length > 0"
+              (click)="validate_association()"
+            />
+          </div>
+          @if(filteredListGroup && filteredListServices.length > 0 ) {
+          <div class="select-service">
+            <div>
+              <input
+                class="select"
+                type="checkbox"
+                (change)="
+                  selectAll(1, '.select-service ', filteredListServices)
+                "
+              />
+              <p>Sélectionner tous les éléments</p>
+            </div>
+            <div>
+              <input
+                class="deselect"
+                type="checkbox"
+                (change)="
+                  selectAll(2, '.select-service ', filteredListServices)
+                "
+              />
+              <p>Désélectionner tous les éléments</p>
+            </div>
+          </div>
+
+          @for(service of filteredListServices ; track service) {
+          <li>
+            <p>{{ service.name }}</p>
+            <mat-checkbox
+              [(ngModel)]="service.checked"
+              (change)="onCheckboxChange(service.id, $event)"
+            />
+          </li>
+          } } @else {
+          <div class="error-select">
+            <p class="unknown">Aucun résultat !</p>
+          </div>
+          }
+        </ul>
+        <ul class="list-group" *ngIf="ui_utilisateur.actionSelected === 3">
+          <div class="row-search">
+            <mat-form-field>
+              <mat-label>Nom du groupe</mat-label>
+              <input
+                matInput
+                [(ngModel)]="ui_utilisateur.groupValue"
+                (input)="get_searchChange(2, $event)"
+                placeholder="Ex. Pipa"
+                value=""
+              />
+              @if (ui_utilisateur.groupValue) {
+              <mat-icon (click)="clearSearch(3)">close</mat-icon>
+              }
+            </mat-form-field>
+            <img
+              src="assets/valid-check-icon.svg"
+              alt="#"
+              *ngIf="groupServices.length > 0"
+              (click)="validate_association()"
+            />
+          </div>
+          @if(filteredListGroup && filteredListGroup.length > 0) {
+          <div class="select-group">
+            <div>
+              <input
+                class="select"
+                type="checkbox"
+                (change)="selectAll(1, '.select-group ', filteredListGroup)"
+              />
+              <p>Sélectionner tous les éléments</p>
+            </div>
+            <div>
+              <input
+                class="deselect"
+                type="checkbox"
+                (change)="selectAll(2, '.select-group ', filteredListGroup)"
+              />
+              <p>Désélectionner tous les éléments</p>
+            </div>
+          </div>
+          @for(group of filteredListGroup; track group) {
+          <li>
+            <p>{{ group.label }}</p>
+            <mat-checkbox
+              [(ngModel)]="group.checked"
+              (change)="onCheckboxChange(group.id, $event)"
+            />
+          </li>
+          } } @else {
+          <div class="error-select">
+            <p class="unknown">Aucun résultat !</p>
+          </div>
+          }
+        </ul>
+        <ul class="list-admin" *ngIf="ui_utilisateur.actionSelected === 4">
+          <div class="row-search">
+            <mat-form-field>
+              <mat-label>Nom du service</mat-label>
+              <input
+                matInput
+                [(ngModel)]="ui_utilisateur.serviceValue"
+                (input)="get_searchChange(1, $event)"
+                placeholder="Ex. ebureau.univ-reims.fr"
+                value=""
+              />
+              @if (ui_utilisateur.serviceValue) {
+              <mat-icon (click)="clearSearch(2)">close</mat-icon>
+              }
+            </mat-form-field>
+            <img
+              src="assets/valid-check-icon.svg"
+              alt="#"
+              *ngIf="groupServices.length > 0"
+              (click)="validate_association()"
+            />
+          </div>
+          @if(filteredListServices.length > 0) {
+          <div class="select-admin">
+            <div>
+              <input
+                class="select"
+                type="checkbox"
+                (change)="selectAll(1, '.select-admin ', filteredListServices)"
+              />
+              <p>Sélectionner tous les éléments</p>
+            </div>
+            <div>
+              <input
+                class="deselect"
+                type="checkbox"
+                (change)="selectAll(2, '.select-admin ', filteredListServices)"
+              />
+              <p>Désélectionner tous les éléments</p>
+            </div>
+          </div>
+          @for(service of filteredListServices ; track service) {
+          <li>
+            <p>{{ service.name }}</p>
+            <mat-checkbox
+              [(ngModel)]="service.checked"
+              (change)="onCheckboxChange(service.id, $event)"
+            />
+          </li>
+          } }@else {
+          <div class="error-select">
+            <p class="unknown">Aucun résultat !</p>
+          </div>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+  } @else {
+  <p class="wait-user">Aucun utilisateur sélectionner</p>
+  } } @else {
+  <p class="wait-user">Veuillez rechercher un utilisateur</p>
+  }
+</div>

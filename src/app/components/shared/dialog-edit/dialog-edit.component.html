@@ -1,0 +1,11 @@
+<mat-dialog-content>
+  <h4>{{ data.message }}</h4>
+  <mat-form-field>
+    <input matInput placeholder="Ex. Pippa" [(ngModel)]="data.payload" />
+    <mat-hint *ngIf="errorLength">{{ errorLength }}</mat-hint>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Quitter</button>
+  <button mat-button (click)="onOkClick()">Valider</button>
+</mat-dialog-actions>

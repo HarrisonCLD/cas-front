@@ -1,0 +1,376 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins";
+@import "../../../scss/animations";
+
+// class scss active by javascript :
+.close {
+  padding: 10px 30px;
+  min-width: 0px;
+  animation: sidenavEffect 400ms forwards;
+}
+.open {
+  padding: 10px 30px;
+  min-width: 400px;
+  animation: reverse_sidenavEffect 400ms forwards;
+}
+
+.active {
+  display: block !important;
+  animation: fadeInClassic 600ms ease-in forwards;
+  animation-delay: 300ms;
+}
+
+.full {
+  width: 95% !important;
+}
+
+// global arrow toggle sidenav :
+.arrowtoggle1,
+.arrowtoggle2 {
+  position: absolute;
+  z-index: 1;
+  height: 45px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.arrowtoggle1 {
+  top: 10px;
+  right: 20px;
+  opacity: 0;
+}
+
+.arrowtoggle2 {
+  display: none;
+  position: absolute;
+  opacity: 0;
+  top: 85px;
+  left: 20px;
+  transform: rotate(180deg);
+}
+
+// scss :
+.listservices {
+  display: flex;
+  width: 100%;
+
+  .params {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    mat-form-field {
+      width: 100%;
+      opacity: 0;
+      animation: fadeInClassic 500ms ease-in forwards;
+      animation-delay: 400ms;
+    }
+
+    button {
+      position: absolute;
+      right: 17px;
+      top: 17px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+    }
+  }
+
+  mat-list {
+    @extend %webkitScrollbar;
+    @extend %overflowY;
+    position: relative;
+    min-width: 390px;
+    padding: 10px 25px;
+    background-color: white;
+    opacity: 0;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    h2 {
+      text-wrap: nowrap;
+      margin-top: 15px;
+      color: $main-color;
+      opacity: 0;
+      animation: fadeInClassic 500ms ease-in forwards;
+    }
+
+    .params {
+      mat-icon {
+        @extend %flexCenter;
+        position: absolute;
+        top: 8%;
+        right: 7px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken($main-grey, 10);
+        }
+      }
+    }
+
+    .list_service {
+      opacity: 0;
+      animation: fadeInClassic 300ms ease-in forwards;
+      animation-delay: 800ms;
+    }
+
+    mat-list-item {
+      text-wrap: nowrap;
+      width: 100%;
+      height: fit-content;
+      margin: 6px 0;
+      padding: 8px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+
+      .new {
+        margin: 0 10px 0 0;
+        padding: 0 6px;
+        color: white;
+        background-color: green;
+        font-size: 0.8em;
+        font-weight: 500;
+        border-radius: 3px;
+      }
+
+      &:hover {
+        background-color: $main-grey;
+      }
+    }
+  }
+
+  .view {
+    @extend %flexCenter;
+    flex-direction: column;
+    width: 90%;
+    margin: auto;
+    opacity: 0;
+    animation: fadeInClassic 500ms ease-in forwards;
+    animation-delay: 350ms;
+
+    .date {
+      display: flex !important;
+      animation: fadeInRangeDate 200ms ease-in forwards !important;
+    }
+
+    .options {
+      @extend %flexCenter;
+      position: absolute;
+      z-index: 1;
+      top: 100px;
+      right: 0px;
+      width: 35%;
+      max-width: 400px;
+      height: 90px;
+      background-color: rgba(104, 104, 104, 0.8);
+      border-radius: 5px 0px 0px 5px;
+      box-shadow: $main-boxShadow;
+      animation: fadeOutRangeDate 200ms ease-in forwards;
+
+      .startDate {
+        width: 50px;
+        height: 100%;
+        margin-left: 10px;
+
+        &:hover {
+          background-color: darken(rgba(104, 104, 104, 0.5), 1);
+        }
+
+        button {
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+          background-color: transparent;
+          border: none;
+          color: white;
+          font-weight: 300;
+        }
+      }
+
+      mat-form-field {
+        position: relative;
+        top: 5px;
+        padding: 13px 20px 13px 20px;
+
+        .mat-mdc-form-field-hint {
+          font-size: 1em;
+          font-weight: 200;
+          text-wrap: nowrap;
+          color: white;
+        }
+      }
+
+      .actions {
+        @extend %flexCenter;
+        height: 100%;
+        margin-right: 15px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken(rgba(104, 104, 104, 0.5), 1);
+        }
+
+        img {
+          height: 35px;
+        }
+
+        .first {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    .presentation {
+      @extend %flexCenter;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 75%;
+      max-width: 1350px;
+      height: fit-content;
+      padding: 10px 30px 20px 30px;
+      border-radius: 5px;
+      background-color: white;
+      box-shadow: $main-boxShadow;
+
+      h3 {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        font-size: 1.3em;
+        font-weight: 400;
+        color: $main-color;
+        text-transform: uppercase;
+        margin: 0;
+
+        &::after {
+          content: "";
+          width: 40%;
+          height: 0.1px;
+          margin-top: -2px;
+          background-color: $main-color;
+        }
+      }
+
+      .top {
+        @extend %flexCenter;
+        justify-content: flex-start;
+        width: 100%;
+        margin: 8px 0;
+
+        h3 {
+          font-size: 1.5em;
+          margin-right: 30px;
+        }
+
+        img {
+          width: 27px;
+          height: 27px;
+          padding: 5px;
+          border-radius: 50%;
+          border: 2px solid $main-color;
+          cursor: pointer;
+
+          &:hover {
+            background-color: lighten($main-grey, 5);
+          }
+        }
+      }
+
+      .bot {
+        @extend %flexCenter;
+        justify-content: space-between;
+        width: 100%;
+        margin: 15px 0 0 0;
+
+        .informations {
+          display: flex;
+          align-items: center;
+          height: 45px;
+          padding: 5px 15px;
+          border: 3px solid $main-grey;
+          border-radius: 3px;
+
+          hr {
+            margin: 0 15px;
+            width: 1px;
+            height: 70%;
+            background-color: $main-grey;
+            border: none;
+          }
+
+          .moy,
+          .pick,
+          .total {
+            display: flex;
+            align-items: center;
+
+            h4,
+            p {
+              margin: 0;
+              font-size: 0.9em;
+            }
+            h4 {
+              margin-right: 15px;
+              color: $main-color;
+              font-weight: 500;
+            }
+            p {
+              color: black;
+              font-weight: 300;
+              text-wrap: nowrap;
+            }
+          }
+        }
+
+        .status {
+          display: flex;
+          justify-content: flex-end;
+
+          div:nth-child(n) {
+            @extend %flexCenter;
+            width: 38px;
+            height: 38px;
+            margin-right: 12px;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+
+            img {
+              position: relative;
+            }
+          }
+
+          .devServer {
+            background-color: #4b87c6;
+          }
+          .stopServer {
+            background-color: #ff5d5d;
+          }
+          .nodata {
+            background-color: #d45c5c;
+          }
+          div:last-child {
+            margin-right: 0;
+          }
+          p {
+            margin: 0;
+            text-wrap: nowrap;
+            color: white;
+          }
+        }
+      }
+    }
+    .stats {
+      width: 75%;
+      max-height: 710px;
+      margin: 20px 0px;
+      transition: width 300ms ease-in-out;
+    }
+  }
+}

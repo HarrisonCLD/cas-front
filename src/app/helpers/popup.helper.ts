@@ -1,5 +1,5 @@
-import { PopupValidateComponent } from '../administration/popup-validate/popup-validate.component';
-import { PopupErrorComponent } from '../administration/popup-error/popup-error.component';
+import { PopupValidateComponent } from '../pages/administration/popup-validate/popup-validate.component';
+import { PopupErrorComponent } from '../pages/administration/popup-error/popup-error.component';
 
 const durationInSeconds: number = 1;
 

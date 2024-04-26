@@ -1,0 +1,53 @@
+@media (max-width: 1300px) {
+  .listservices {
+    .view {
+      overflow-y: hidden !important;
+      overflow-y: auto !important;
+      justify-content: flex-start !important;
+      height: 100% !important;
+      padding: 20px 0;
+
+      &::-webkit-scrollbar {
+        width: 7px;
+      }
+
+      &::-webkit-scrollbar-track {
+        border-radius: 8px;
+        background-color: #f5f5f5;
+        border: 1px solid #cacaca;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #448a95;
+      }
+    }
+  }
+}
+
+@media (max-height: 820px) {
+  .listservices {
+    .view {
+      overflow-x: hidden;
+      overflow-y: auto;
+      justify-content: flex-start;
+      height: 100%;
+      padding: 20px 0;
+
+      &::-webkit-scrollbar {
+        width: 9px;
+      }
+
+      &::-webkit-scrollbar-track {
+        border-radius: 8px;
+        background-color: #f5f5f5;
+        border: 1px solid #cacaca;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #448a95;
+      }
+    }
+  }
+}

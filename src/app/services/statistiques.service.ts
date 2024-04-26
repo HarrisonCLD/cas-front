@@ -1,20 +1,25 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Params } from '@angular/router';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
+// .env :
 import { environment } from '../../environments/environment.development';
 
+// services :
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StatistiquesService {
+  private service = inject(ApiService);
 
-
+  public initialCreationDate!: { datedebut: Date; datefin: Date };
   public date!: { datedebut: Date; datefin: Date };
 
   public dateChanged: Subject<any> = new Subject();
+
+  public scoreboardChart!: any;
 
   constructor(private http: HttpClient) {
     // default date :
@@ -41,6 +46,11 @@ export class StatistiquesService {
   }
 
   // GETTER
+  get_initial_date() {
+    const url = this.http.get(`${environment.apiUrl}/services/initialdate`);
+    return url;
+  }
+
   get_last_update() {
     const url = this.http.get(`${environment.apiUrl}/services/lastupdate`);
     return url;
@@ -81,19 +91,19 @@ export class StatistiquesService {
     return url;
   }
 
-  get_service(id: number): Observable<any> {
-    let params = new HttpParams();
-    params = params.set('id', id);
-    const url = this.http.get(`${environment.apiUrl}/services/one`, {
-      params: params,
-    });
-    return url;
-  }
+  // get_service(id: number): Observable<any> {
+  //   let params = new HttpParams();
+  //   params = params.set('id', id);
+  //   const url = this.http.get(`${environment.apiUrl}/services/one`, {
+  //     params: params,
+  //   });
+  //   return url;
+  // }
 
-  get_services(): Observable<any> {
-    const url = this.http.get(`${environment.apiUrl}/services/list`);
-    return url;
-  }
+  // get_services(): Observable<any> {
+  //   const url = this.http.get(`${environment.apiUrl}/services/list`);
+  //   return url;
+  // }
 
   get_access_service(id: number): Observable<any> {
     let params = new HttpParams();
@@ -114,44 +124,45 @@ export class StatistiquesService {
     return url;
   }
 
-  get_totaly_scoreboard(): Observable<any> {
-    const url = this.http.get(`${environment.apiUrl}/services/scoreboard/all`);
-    return url;
+  // get_totaly_scoreboard(): Observable<any> {
+  //   const url = this.http.get(`${environment.apiUrl}/services/scoreboard/all`);
+  //   return url;
+  // }
+
+  get_totaly_scoreboard() {
+    return new Promise((resolve) => {
+      this.service.getAll('/services/scoreboard/all').subscribe((res: any) => {
+        resolve(res.data);
+      });
+    });
   }
 
-  get_groupe(): Observable<any> {
-    const url = this.http.get(
-      `${environment.apiUrl}/services/administration/groupe`
-    );
-    return url;
-  }
+  // get_groupe(): Observable<any> {
+  //   const url = this.http.get(
+  //     `${environment.apiUrl}/services/administration/groupe`
+  //   );
+  //   return url;
+  // }
 
-  get_groupe_service(): Observable<any> {
-    const url = this.http.get(
-      `${environment.apiUrl}/services/administration/groupe/service`
-    );
-    return url;
-  }
+  // get_service_user(id: number): Observable<any> {
+  //   let params = new HttpParams();
+  //   params = params.set('id', id);
+  //   const url = this.http.get(
+  //     `${environment.apiUrl}/services/administration/user/service`,
+  //     { params: params }
+  //   );
+  //   return url;
+  // }
 
-  get_service_user(id: number): Observable<any> {
-    let params = new HttpParams();
-    params = params.set('id', id);
-    const url = this.http.get(
-      `${environment.apiUrl}/services/administration/user/service`,
-      { params: params }
-    );
-    return url;
-  }
-
-  get_groupe_user(id: number): Observable<any> {
-    let params = new HttpParams();
-    params = params.set('id', id);
-    const url = this.http.get(
-      `${environment.apiUrl}/services/administration/user/groupe`,
-      { params: params }
-    );
-    return url;
-  }
+  // get_groupe_user(id: number): Observable<any> {
+  //   let params = new HttpParams();
+  //   params = params.set('id', id);
+  //   const url = this.http.get(
+  //     `${environment.apiUrl}/services/administration/user/groupe`,
+  //     { params: params }
+  //   );
+  //   return url;
+  // }
 
   get_user_admin_service(id: number): Observable<any> {
     let params = new HttpParams();
@@ -163,69 +174,69 @@ export class StatistiquesService {
     return url;
   }
 
-  get_infos_user(uid: string) {
-    let params = new HttpParams();
-    params = params.set('uid', uid);
-    const url = this.http.get(`${environment.apiUrl}/auth/user/info`, {
-      params: params,
-    });
-    return url;
-  }
+  // get_infos_user(uid: string) {
+  //   let params = new HttpParams();
+  //   params = params.set('uid', uid);
+  //   const url = this.http.get(`${environment.apiUrl}/auth/user/info`, {
+  //     params: params,
+  //   });
+  //   return url;
+  // }
 
   // SETTER
-  set_groupe(body: any): Observable<any> {
-    const url = `${environment.apiUrl}/services/administration/groupe`;
-    return this.http.post(url, body);
-  }
-  set_groupe_service(body: any): Observable<any> {
-    const url = `${environment.apiUrl}/services/administration/groupe/service`;
-    return this.http.post(url, body);
-  }
-  set_server_status(body: any): Observable<any> {
-    const url = `${environment.apiUrl}/services/administration/server/status`;
-    return this.http.patch(url, body);
-  }
-  set_delete_label_group(id: number): Observable<any> {
-    let params = new HttpParams();
-    params = params.set('id', id);
-    const url = this.http.delete(
-      `${environment.apiUrl}/services/administration/groupe/label`,
-      { params }
-    );
-    return url;
-  }
-  set_edit_label_group(body: object): Observable<any> {
-    const url = `${environment.apiUrl}/services/administration/groupe/label`;
-    return this.http.patch(url, body);
-  }
-  set_service_to_user(body: object): Observable<any> {
-    const url = `${environment.apiUrl}/services/administration/user/service`;
-    return this.http.post(url, body);
-  }
-  set_group_to_user(body: object): Observable<any> {
-    const url = `${environment.apiUrl}/services/administration/user/groupe`;
-    return this.http.post(url, body);
-  }
+  // set_groupe(body: any): Observable<any> {
+  //   const url = `${environment.apiUrl}/services/administration/groupe`;
+  //   return this.http.post(url, body);
+  // }
+  // set_groupe_service(body: any): Observable<any> {
+  //   const url = `${environment.apiUrl}/services/administration/groupe/service`;
+  //   return this.http.post(url, body);
+  // }
+  // set_server_status(body: any): Observable<any> {
+  //   const url = `${environment.apiUrl}/services/administration/server/status`;
+  //   return this.http.patch(url, body);
+  // }
+  // set_delete_label_group(id: number): Observable<any> {
+  //   let params = new HttpParams();
+  //   params = params.set('id', id);
+  //   const url = this.http.delete(
+  //     `${environment.apiUrl}/services/administration/groupe/label`,
+  //     { params }
+  //   );
+  //   return url;
+  // }
+  // set_edit_label_group(body: object): Observable<any> {
+  //   const url = `${environment.apiUrl}/services/administration/groupe/label`;
+  //   return this.http.patch(url, body);
+  // }
+  // set_service_to_user(body: object): Observable<any> {
+  //   const url = `${environment.apiUrl}/services/administration/user/service`;
+  //   return this.http.post(url, body);
+  // }
+  // set_group_to_user(body: object): Observable<any> {
+  //   const url = `${environment.apiUrl}/services/administration/user/groupe`;
+  //   return this.http.post(url, body);
+  // }
   set_user_admin_service(body: object): Observable<any> {
     const url = `${environment.apiUrl}/services/administration/user/service/admin`;
     return this.http.post(url, body);
   }
 
   // DELETE
-  delete_service_to_user(body: object): Observable<any> {
-    const url = `${environment.apiUrl}/services/administration/user/service`;
-    return this.http.patch(url, body);
-  }
-  delete_group_to_user(body: object): Observable<any> {
-    const url = `${environment.apiUrl}/services/administration/user/groupe`;
-    return this.http.patch(url, body);
-  }
+  // delete_service_to_user(body: object): Observable<any> {
+  //   const url = `${environment.apiUrl}/services/administration/user/service`;
+  //   return this.http.patch(url, body);
+  // }
+  // delete_group_to_user(body: object): Observable<any> {
+  //   const url = `${environment.apiUrl}/services/administration/user/groupe`;
+  //   return this.http.patch(url, body);
+  // }
   delete_admin_to_user(body: object): Observable<any> {
     const url = `${environment.apiUrl}/services/administration/user/service/admin`;
     return this.http.patch(url, body);
   }
-  delete_service_to_group(body: object): Observable<any> {
-    const url = `${environment.apiUrl}/services/administration/groupe/service`;
-    return this.http.patch(url, body);
-  }
+  // delete_service_to_group(body: object): Observable<any> {
+  //   const url = `${environment.apiUrl}/services/administration/groupe/service`;
+  //   return this.http.patch(url, body);
+  // }
 }
