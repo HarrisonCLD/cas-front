@@ -10,6 +10,8 @@ import { ApiService } from './api.service';
 
 // interfaces :
 import { DataService } from '../interfaces/dataservice.interface';
+import { User } from '../interfaces/user.interface';
+import { uid } from 'chart.js/dist/helpers/helpers.core';
 
 @Injectable({
   providedIn: 'root',
@@ -17,44 +19,59 @@ import { DataService } from '../interfaces/dataservice.interface';
 export class UserService {
   private service: DataService = inject(ApiService);
 
-  public user!: any;
-  public users!: any[];
+  public userJWT!: string;
 
-  public userServices!: any[];
-  public userGroups!: any[];
-  public userAdminServices!: any[];
+  public user: User = {
+    id: 0,
+    uid: '',
+    nom: '',
+    groups: [],
+    services: [],
+  };
+
+  public users: User[] = [];
 
   constructor() {}
 
-  getUser(name: string): Promise<any> {
+  getUser(): Promise<User | number> {
+    let params: any = {
+      id: this.user.uid,
+    };
     return new Promise((resolve) => {
-      this.service.get(`/auth/user/private`, name).subscribe((res: any) => {
-        this.userServices = res.data.services.slice();
-        this.userGroups = res.data.groups.slice();
-        resolve({ services: this.userServices, groups: this.userGroups });
+      this.service.get(`/auth/user`, params).subscribe((res: any) => {
+        if (res.code !== 0) {
+          resolve(1);
+        } else {
+          this.user = {
+            ...this.user,
+            id: res.data.id,
+            services: res.data.services.slice(),
+            groups: res.data.groups.slice(),
+          };
+          this.user.services.sort((a: any, b: any) => {
+            if (a.isAdmin !== b.isAdmin) {
+              return b.isAdmin - a.isAdmin;
+            }
+            return a.fqdn.localeCompare(b.fqdn);
+          });
+          resolve(this.user);
+        }
       });
     });
   }
 
-  getUsers(name: string): Promise<any> {
+  getUsers(): Promise<any> {
+    let params: any = {
+      id: this.user.nom,
+    };
     return new Promise((resolve) => {
-      this.service.get(`/auth/user`, name).subscribe((res: any) => {
-        this.users = res.data.slice();
+      this.service.get(`/auth/user/list`, params).subscribe((res: any) => {
+        console.log('res', res);
+        if (res.code === 0) {
+          this.users = res.data.slice();
+        }
         resolve(this.users);
       });
     });
   }
-
-  createUser(data: any) {
-    return new Promise((resolve) => {
-      this.service.post(`/user`, data).subscribe((res: any) => {
-        console.log('user', res);
-        resolve(res);
-      });
-    });
-  }
-
-  updateUser() {}
-
-  deleteUser() {}
 }

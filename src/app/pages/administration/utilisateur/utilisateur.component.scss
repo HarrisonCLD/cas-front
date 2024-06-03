@@ -174,7 +174,7 @@ hr {
       height: 100%;
 
       .list-actions {
-        padding: 0 25px;
+        // padding: 0 25px;
         z-index: 2;
         opacity: 0;
         width: 0%;
@@ -270,19 +270,20 @@ hr {
               margin-top: 10px;
 
               li:first-child {
-                margin-top: 0;
+                margin-top: 5px;
               }
               li:last-child {
-                margin-bottom: 0;
+                margin-bottom: 5px;
               }
 
               li {
                 @extend %flexCenter;
                 justify-content: space-between;
-                margin: 5px 0px;
+                margin: 20px 0px;
 
                 div {
                   display: flex;
+                  margin: 0;
                 }
               }
             }

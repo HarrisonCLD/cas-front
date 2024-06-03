@@ -15,9 +15,9 @@
         <p>Access</p>
       </div>
       @for (service of listPagination; track service.id) {
-      <mat-list-item routerLink="/services/{{ service.id }}">
+      <mat-list-item routerLink="services/{{ service.id }}">
         <div class="row">
-          <p>{{ service.label }}</p>
+          <p>{{ service }}</p>
           <p
             [ngClass]="{
               min: service.access < 10000,
@@ -37,7 +37,7 @@
     <hr />
     <scoreboard-totaly
       *ngIf="dataScoreboard"
-      [dataSending]="statService.scoreboardChart"
+      [dataSending]="dataScoreboard"
     ></scoreboard-totaly>
   </div>
 </div>

@@ -59,8 +59,8 @@ export class ScoreboardTotalyComponent implements OnInit, OnDestroy {
         display: false,
       },
       datalabels: {
-        display: false,
-        anchor: 'start',
+        display: true,
+        anchor: 'center',
         align: 'end',
       },
     },

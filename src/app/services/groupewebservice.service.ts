@@ -13,9 +13,11 @@ import { ApiService } from './api.service';
 export class GroupeWebService {
   private service: DataService = inject(ApiService);
 
-  public group!: GroupService;
-  public listGroups: GroupService[] = [];
   public userGroups!: GroupService[];
+
+  public listGroups: GroupService[] = [];
+
+  public associateUserToGroups: Array<number> = [];
 
   constructor() {
     this.getGroups();
@@ -104,15 +106,35 @@ export class GroupeWebService {
   }
 
   setUserToGroup(data: any) {
-    this.service.post('/services/administration/user/groupe', data);
+    return new Promise((resolve) => {
+      this.service.post('/group/user', data).subscribe((res: any) => {
+        let result: number;
+        res.code === 0 ? (result = 0) : (result = 1);
+        resolve(result);
+      });
+    });
+  }
+
+  deleteUserToGroup(data: any): Promise<any> {
+    let params: any = {
+      id_user: data.id_user,
+      id_groupe: data.id_groupe,
+    };
+    return new Promise((resolve) => {
+      this.service.delete(`/group/user`, params).subscribe((res: any) => {
+        let result: number;
+        res.code === 0 ? (result = 0) : (result = 1);
+        resolve(result);
+      });
+    });
   }
 
   getUserGroups(id: number) {
+    let params: any = {
+      id: id,
+    };
     this.service
-      .get('/', id)
-      .subscribe((res: any) => {
-        console.log(res);
-        this.userGroups = res.data.slice();
-      });
+      .get('/', params)
+      .subscribe((res: any) => (this.userGroups = res.data.slice()));
   }
 }

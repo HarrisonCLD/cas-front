@@ -32,7 +32,7 @@
               {{ row.label }}
             </mat-panel-title>
           </mat-expansion-panel-header>
-
+          <hr class="separator-accordeon">
           @for (line of row.services; track line) {
           <div class="row">
             <p>- {{ line.fqdn }}</p>
@@ -72,7 +72,6 @@
           value=""
         />
       </mat-form-field>
-
       @if (serviceName) {
       <mat-icon (click)="clearSearchService()">close</mat-icon>
       }

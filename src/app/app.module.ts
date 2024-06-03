@@ -16,7 +16,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -50,15 +50,27 @@ import { ClassementComponent } from './pages/classement/classement.component';
 import { ScoreboardTotalyComponent } from './components/shared/scoreboard-totaly/scoreboard-totaly.component';
 import { AdministrationComponent } from './pages/administration/administration.component';
 import { GroupserviceComponent } from './pages/administration/groupservice/groupservice.component';
-import { PopupErrorComponent } from './pages/administration/popup-error/popup-error.component';
-import { PopupValidateComponent } from './pages/administration/popup-validate/popup-validate.component';
+import { PopupErrorComponent } from './components/shared/popup-error/popup-error.component';
+import { PopupValidateComponent } from './components/shared/popup-validate/popup-validate.component';
 import { AssociateGroupserviceComponent } from './pages/administration/groupservice/associate-groupservice/associate-groupservice.component';
 import { CreateGroupComponent } from './pages/administration/groupservice/create-group/create-group.component';
 import { UtilisateurComponent } from './pages/administration/utilisateur/utilisateur.component';
 import { ServiceComponent } from './pages/administration/service/service.component';
 import { PopupAdminComponent } from './pages/detailServices/popup-admin/popup-admin.component';
 import { DialogComponent } from './components/shared/dialog-component/dialog-component.component';
-import { DialogEditComponent } from './components/shared/dialog-edit/dialog-edit.component';
+import { DialogEditComponent } from './pages/administration/dialog-edit/dialog-edit.component';
+
+const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
 
 @NgModule({
   declarations: [
@@ -123,7 +135,7 @@ import { DialogEditComponent } from './components/shared/dialog-edit/dialog-edit
     MatAutocompleteModule,
     MatTooltipModule,
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [{provide: MAT_DATE_LOCALE, useValue: 'fr-Fr'} ,provideNativeDateAdapter()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

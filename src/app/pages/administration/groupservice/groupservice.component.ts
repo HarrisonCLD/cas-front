@@ -28,7 +28,7 @@ export class GroupserviceComponent {
       );
   }
 
-  set_groupServiceNavigation(id: number) {
+  setGroupeServiceNavigation(id: number) {
     this.groupServiceNavigation = id;
   }
 

@@ -13,8 +13,9 @@ import {
   openValidateSnackBar,
 } from '../../../../helpers/popup.helper';
 
+// components :
 import { DialogComponent } from '../../../../components/shared/dialog-component/dialog-component.component';
-import { DialogEditComponent } from '../../../../components/shared/dialog-edit/dialog-edit.component';
+import { DialogEditComponent } from '../../dialog-edit/dialog-edit.component';
 
 @Component({
   selector: 'create-group',
@@ -48,16 +49,10 @@ export class CreateGroupComponent implements OnInit {
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (!result) {
-        openErrorSnackBar(this._snackBar);
-        return;
-      }
+      if (result === 1) return;
       this.groupsWebServices
         .updateGroup(data.id, { id: data.id, label: result })
-        .then(() => {
-          console.log('recover', this.groupsWebServices.listGroups);
-          this.recoverGroups();
-        });
+        .then(() => this.recoverGroups());
     });
   }
 

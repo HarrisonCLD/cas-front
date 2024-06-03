@@ -38,11 +38,20 @@ export class AssociateGroupserviceComponent implements OnInit {
 
   public allChecked: boolean = false;
 
-  constructor(private _snackBar: MatSnackBar, public dialog: MatDialog) {}
+  constructor(private _snackBar: MatSnackBar, public dialog: MatDialog) {
+    setTimeout(() => {
+      if (this.idGroupForAssociation != undefined)
+        this.filteredListGroupsServices =
+          this.filteredListGroupsServices.filter((row: any) => {
+            return row.id === this.idGroupForAssociation;
+          });
+    }, 100);
+  }
 
   ngOnInit() {
     this.recoverServices();
     this.recoverGroups();
+    this.changeGroupe(this.idGroupForAssociation);
   }
 
   private recoverServices(): void {
@@ -54,6 +63,9 @@ export class AssociateGroupserviceComponent implements OnInit {
   }
 
   changeGroupe(event: any) {
+    this.allChecked = false;
+    this.associationGroupsServices = [];
+
     this.recoverServices();
     this.recoverGroups();
 
@@ -122,10 +134,11 @@ export class AssociateGroupserviceComponent implements OnInit {
   selectAllServices(event: any): void {
     const isChecked = event.target.checked;
     this.allChecked = isChecked;
-    this.filteredListServices.forEach((row: any) => (row.checked = isChecked));
-    this.associationGroupsServices = isChecked
-      ? [...this.filteredListServices]
-      : [];
+    this.filteredListServices.forEach((row: any) => {
+      row.checked = isChecked;
+      if (this.allChecked) this.associationGroupsServices.push(row.id);
+    });
+    if (!this.allChecked) this.associationGroupsServices = [];
   }
 
   onCheckboxChange(row: any): void {
@@ -159,5 +172,6 @@ export class AssociateGroupserviceComponent implements OnInit {
     this.serviceName = '';
     this.idGroupForAssociation = undefined;
     this.associationGroupsServices = [];
+    this.allChecked = false;
   }
 }

@@ -1,17 +1,15 @@
 <popup-admin
-  *ngIf="informationsAdmin"
-  [togglePopup]="informationsAdmin"
-  [dataReceive]="listAdmin"
-  (toggleInformationAdmin)="get_info_admin()"
+  *ngIf="toggleAdminWindow && webService.serviceSelectedAccess.admin"
+  [togglePopup]="toggleAdminWindow"
+  [dataReceive]="webService.serviceSelectedAccess.admin"
+  (toggleInformationAdmin)="get_info_admin($event)"
 />
-<div class="listservices">
-  <mat-list class="sidenav open">
-    <img
-      class="arrowtoggle1 active"
-      src="assets/arrow_back.svg"
-      alt="arrow"
-      (click)="openSideNav()"
-    />
+
+<div class="listservices" *ngIf="this.webService.listServices.length > 0">
+  <mat-list
+    class="sidenav open"
+    style="padding: {{ fullscreen ? '0px' : '10px 25px' }};"
+  >
     <h2 mat-subheader>Listes des services :</h2>
     <div class="params">
       <mat-form-field>
@@ -33,8 +31,10 @@
       <mat-list-item
         data-item
         routerLink="/services/{{ service.id }}"
-        class="row"
-        [ngClass]="{ selected: service.id === selectedService.id }"
+        [ngClass]="{
+          selected: this.webService.serviceSelectedAccess.name === service.name
+        }"
+        id="_{{ service.id }}"
       >
         <p class="new" *ngIf="service.new === 1">NEW</p>
         {{ service.name }}
@@ -43,16 +43,32 @@
     </div>
   </mat-list>
   <div class="view">
-    <img
-      class="arrowtoggle2"
-      src="assets/arrow_back.svg"
-      alt="arrow"
+    <svg
+      class="arrowtoggle1 active"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
       (click)="openSideNav()"
-    />
+    >
+      <path
+        fill="currentColor"
+        d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"
+      />
+    </svg>
+    <svg
+      class="arrowtoggle2"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      (click)="openSideNav()"
+    >
+      <path
+        fill="currentColor"
+        d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"
+      />
+    </svg>
     <div class="options" [ngClass]="{ date: datepicker }">
-      <div class="startDate">
+      <div class="startDate" *ngIf="datepicker">
         <button (click)="get_initial_date()">
-          Dates de création initiales
+          <img src="assets/reload.svg" alt="reload-icon" />
         </button>
       </div>
       <mat-form-field *ngIf="datepicker">
@@ -61,15 +77,15 @@
           <input
             matStartDate
             placeholder="Date début"
-            [(ngModel)]="statService.date.datedebut"
+            [(ngModel)]="webService.date.datedebut"
           />
           <input
             matEndDate
             placeholder="Date fin"
-            [(ngModel)]="statService.date.datefin"
+            [(ngModel)]="webService.date.datefin"
           />
         </mat-date-range-input>
-        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
         <mat-datepicker-toggle
           matIconSuffix
           [for]="rangePicker"
@@ -96,13 +112,13 @@
         }
       </div>
     </div>
-    <div class="presentation" *ngIf="selectedService.id != 0">
+    <div class="presentation" *ngIf="webService.serviceSelectedAccess.id">
       <div class="top">
         <h3>Informations</h3>
         <img
           src="assets/info.svg"
           alt="info-icon"
-          (click)="get_info_admin()"
+          (click)="get_info_admin($event)"
           #tooltip="matTooltip"
           matTooltip="Informations sur le service"
           [matTooltipPosition]="'above'"
@@ -110,73 +126,130 @@
         />
       </div>
       <div class="bot">
+        <div class="infos">
+          <div class="row">
+            <div class="id">
+              <p>ID</p>
+              <p>{{ webService.serviceSelectedAccess.id }}</p>
+            </div>
+            <div class="title">
+              <h3>{{ webService.serviceSelectedAccess.name }}</h3>
+              <a
+                [href]="'https://' + webService.serviceSelectedAccess.name"
+                target="_blank"
+              >
+                <img src="assets/external-link.svg" alt="external-link" />
+              </a>
+            </div>
+          </div>
+          <!-- <img
+          src="assets/expand-icon.svg"
+          alt="expand-icon"
+          (click)="openSideNav()"
+          /> -->
+        </div>
         <div class="informations">
+          <div
+            class="status"
+            *ngIf="
+              webService.serviceSelectedAccess.isDev ||
+              webService.serviceSelectedAccess.isEnded ||
+              webService.serviceSelectedAccess.active
+            "
+          >
+            <hr class="separator-status" />
+            <div>
+              <div
+                *ngIf="webService.serviceSelectedAccess.isDev"
+                class="devServer"
+                mat-raised-button
+                #tooltip="matTooltip"
+                matTooltip="Service de développement"
+                [matTooltipPosition]="'above'"
+                matTooltipHideDelay="200"
+              >
+                <img src="assets/dev-icon.svg" alt="#" />
+              </div>
+              <div
+                *ngIf="webService.serviceSelectedAccess.isEnded"
+                class="stopServer"
+                mat-raised-button
+                #tooltip="matTooltip"
+                matTooltip="Service arrêté"
+                [matTooltipPosition]="'above'"
+                matTooltipHideDelay="200"
+              >
+                <img src="assets/stop-icon.svg" alt="#" />
+              </div>
+              <div
+                *ngIf="webService.serviceSelectedAccess.active"
+                class="nodata"
+                mat-raised-button
+                #tooltip="matTooltip"
+                matTooltip="Aucune donnée pour les dates demandées"
+                [matTooltipPosition]="'above'"
+                matTooltipHideDelay="200"
+              >
+                <img src="assets/warning.svg" alt="#" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="stats"
+      [ngClass]="{ full: fullscreen }"
+      *ngIf="webService.serviceSelectedUnique"
+    >
+      <div class="accessglobal">
+        <div class="numbersglobal">
           <div class="pick">
-            <h4>Peak utilisateur :</h4>
-            <p>{{ selectedService.peak }}</p>
+            <h4>Peak connexion :</h4>
+            <p>{{ webService.serviceSelectedAccess.peak }}</p>
           </div>
           <hr />
           <div class="moy">
             <h4>Moyenne utilisateur :</h4>
             <p>
-              {{ selectedService.moyenne }}
+              {{ webService.serviceSelectedAccess.moyenne }}
             </p>
           </div>
           <hr />
           <div class="total">
             <h4>Total utilisateur :</h4>
-            <p>{{ selectedService.total }}</p>
+            <p>{{ webService.serviceSelectedAccess.total }}</p>
           </div>
         </div>
-        <div
-          class="status"
-          *ngIf="
-            selectedService.isDev ||
-            selectedService.isEnded ||
-            selectedService.active
-          "
-        >
-          <div
-            *ngIf="selectedService.isDev"
-            class="devServer"
-            mat-raised-button
-            #tooltip="matTooltip"
-            matTooltip="Service de développement"
-            [matTooltipPosition]="'above'"
-            matTooltipHideDelay="200"
-          >
-            <img src="assets/dev-icon.svg" alt="#" />
-          </div>
-          <div
-            *ngIf="selectedService.isEnded"
-            class="stopServer"
-            mat-raised-button
-            #tooltip="matTooltip"
-            matTooltip="Service arrêté"
-            [matTooltipPosition]="'above'"
-            matTooltipHideDelay="200"
-          >
-            <img src="assets/stop-icon.svg" alt="#" />
-          </div>
-          <div
-            *ngIf="selectedService.active"
-            class="nodata"
-            mat-raised-button
-            #tooltip="matTooltip"
-            matTooltip="Aucune donnée pour les dates demandées"
-            [matTooltipPosition]="'above'"
-            matTooltipHideDelay="200"
-          >
-            <img src="assets/warning.svg" alt="#" />
-          </div>
-        </div>
+        <stackedbar
+          [onDataChanged]="dataChangedAccess"
+          [isFullscreen]="fullscreenChanged"
+        />
       </div>
-    </div>
-    <div class="stats" [ngClass]="{ full: fullScreen }">
-      <stackedbar
-        [onDataChanged]="dataChanged"
-        (onFullScreen)="fullscreen($event)"
-      />
+      <div class="accessunique">
+        <div class="numbersunique">
+          <div class="pick">
+            <h4>Peak connexion :</h4>
+            <p>{{ webService.serviceSelectedUnique.peak }}</p>
+          </div>
+          <hr />
+          <div class="moy">
+            <h4>Moyenne utilisateur :</h4>
+            <p>
+              {{ webService.serviceSelectedUnique.moyenne }}
+            </p>
+          </div>
+          <hr />
+          <div class="total">
+            <h4>Total utilisateur :</h4>
+            <p>{{ webService.serviceSelectedUnique.total }}</p>
+          </div>
+        </div>
+        <stackedbar
+          [onDataChanged]="dataChangedUnique"
+          [isFullscreen]="fullscreenChanged"
+        />
+      </div>
     </div>
   </div>
 </div>

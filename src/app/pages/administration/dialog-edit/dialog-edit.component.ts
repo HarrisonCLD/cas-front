@@ -14,7 +14,6 @@ export class DialogEditComponent {
   constructor(public dialogRef: MatDialogRef<DialogEditComponent>) {}
 
   onOkClick(): void {
-    console.log(this.data.payload);
     this.dialogRef.close(this.data.payload);
   }
 

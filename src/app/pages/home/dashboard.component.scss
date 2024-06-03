@@ -67,15 +67,21 @@ h3 {
         animation: fadeInClassic 400ms ease-in forwards;
         animation-delay: 200ms;
       }
+
       .simply_stat:nth-child(2) {
         opacity: 0;
         animation: fadeInClassic 400ms ease-in forwards;
-        animation-delay: 500ms;
+        animation-delay: 400ms;
       }
       .simply_stat:nth-child(3) {
         opacity: 0;
         animation: fadeInClassic 400ms ease-in forwards;
-        animation-delay: 900ms;
+        animation-delay: 600ms;
+      }
+      .simply_stat:nth-child(4) {
+        opacity: 0;
+        animation: fadeInClassic 400ms ease-in forwards;
+        animation-delay: 800ms;
       }
 
       .simply_stat {
@@ -109,9 +115,12 @@ h3 {
           color: $main-color;
         }
         &:nth-child(2) {
-          color: #00da00;
+          color: $main-color;
         }
         &:nth-child(3) {
+          color: #00da00;
+        }
+        &:nth-child(4) {
           color: red;
         }
       }
@@ -126,6 +135,19 @@ h3 {
 
   .right {
     width: 25%;
+
+    .mat-expansion-panel {
+      box-shadow: none;
+      border: 0.5px solid $main-color;
+
+      &::after {
+        content: "";
+        background-color: $main-color;
+        height: 1px;
+        width: 100%;
+        margin-top: 3px;
+      }
+    }
 
     .mat-expansion-panel:nth-child(1) {
       animation-delay: 300ms;

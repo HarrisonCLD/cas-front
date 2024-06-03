@@ -1,7 +1,15 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+  inject,
+} from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject } from 'rxjs';
 
 // services :
 import { StatistiquesService } from '../../services/statistiques.service';
@@ -10,9 +18,6 @@ import { WebService } from '../../services/webservice.service';
 // interfaces :
 import { Service } from '../../interfaces/service.interface';
 
-// helpers :
-import { openErrorSnackBar } from '../../helpers/popup.helper';
-
 @Component({
   selector: 'detailsservices',
   templateUrl: './detailsservices.component.html',
@@ -20,7 +25,7 @@ import { openErrorSnackBar } from '../../helpers/popup.helper';
 })
 export class DetailsServicesComponent implements OnInit {
   public statService = inject(StatistiquesService);
-  private webService = inject(WebService);
+  public webService = inject(WebService);
 
   // filter search name :
   public serviceName!: string;
@@ -28,139 +33,93 @@ export class DetailsServicesComponent implements OnInit {
   // list and filter about services :
   public filteredListServices!: Service[];
 
-  // service selected (id, name and flags) (default value):
-  public selectedService: Service = {
-    id: 477,
-    admin: {
-      nom: '',
-      mail: '',
-    },
-    name: '',
-    active: null,
-    isDev: null,
-    isEnded: null,
-    moyenne: 0,
-    peak: 0,
-    total: 0,
-    datasets: [],
-    new: 0,
-  };
-
   // subscribe date and data changed :
-  public dataChanged: Subject<any> = new Subject();
-  private onDateChangedSubscription!: Subscription;
+  public dataChangedAccess: Subject<any> = new Subject();
+  public dataChangedUnique: Subject<any> = new Subject();
+  public fullscreenChanged: Subject<boolean> = new Subject();
 
   // informations about administrator :
-  public listAdmin!: object[];
-  public informationsAdmin: boolean = false;
-  public fullScreen: boolean = false;
+  public toggleAdminWindow: boolean = false;
 
   // toggle date peaker :
   public datepicker: boolean = true;
+  public fullscreen: boolean = false;
 
-  constructor(private route: ActivatedRoute, private _snackBar: MatSnackBar) {}
+  constructor(private route: ActivatedRoute) {}
 
   async ngOnInit() {
-    this.statService.get_initial_date().subscribe((res: any) => {
-      const { datedebut, datefin } = res.data;
-      if (!datedebut || !datefin) {
-        openErrorSnackBar(this._snackBar);
-        return;
-      }
-      this.statService.initialCreationDate = {
-        datedebut: new Date(datedebut),
-        datefin: new Date(datefin),
+    this.webService.get_initial_date().then(() => {
+      this.webService.initialCreationDate = {
+        datedebut: new Date(this.webService.date.datedebut),
+        datefin: new Date(this.webService.date.datefin),
       };
     });
 
-    // this.statService.get_services().subscribe((res) => {
-    //   const services = res.data;
-    //   this.listServices = services.slice();
-    //   this.selectedService.id = services[1].id;
-    //   this.filterListServices = services.slice();
-    // });
-
-    this.route.params.subscribe((params: Params) => {
-      this.selectedService.id = params['id'];
-
-      // this.statService
-      //   .get_service(this.selectedService.id)
-      //   .subscribe((res: any) => (this.selectedService = res.data[0]));
-
-      this.webService.getService(this.selectedService.id);
-
-      this.statService
-        .get_access_service(this.selectedService.id)
-        .subscribe((res) => {
-          Object.assign(this.selectedService, res.data);
-          this.selectedService.isDev = res.data.isDev === 0 ? null : 1;
-          this.selectedService.isEnded = res.data.isEnded === 0 ? null : 1;
-          this.selectedService.active = res.data.isEnded
-            ? null
-            : res.data.active === 1
-            ? null
-            : 1;
-
-          const total = (this.selectedService.datasets || [])
-            .flatMap((row: any) => row.data)
-            .reduce((acc: any, curr: any) => acc + curr, 0);
-
-          this.selectedService.total = total.toLocaleString('fr-FR');
-          this.selectedService.peak = res.data.pick.toLocaleString('fr-FR');
-          this.selectedService.moyenne =
-            res.data.moyenne.toLocaleString('fr-FR');
-
-          this.listAdmin = res.data.admin || [];
-          this.dataChanged.next(res.data);
-        });
-    });
-
-    this.onDateChangedSubscription = this.statService.dateChanged.subscribe(
-      () => {
-        this.statService
-          .get_access_service(this.selectedService.id)
-          .subscribe((res) => {
-            Object.assign(this.selectedService, res.data);
-            res.data.active === 1
-              ? (this.selectedService.active = null)
-              : (this.selectedService.active = 1);
-            const total =
-              this.selectedService.datasets
-                ?.flatMap((row: any) => row.data)
-                .reduce((acc: any, curr: any) => acc + curr, 0) || 0;
-            this.selectedService.total = total.toLocaleString('fr-FR');
-            this.selectedService.peak = res.data.pick.toLocaleString('fr-FR');
-            this.selectedService.moyenne =
-              res.data.moyenne.toLocaleString('fr-FR');
-            this.dataChanged.next(res.data);
-            res.data.admin ? (this.listAdmin = res.data.admin) : null;
-          });
-      }
-    );
     this.webService
       .getServices()
-      .then((res: any) => (this.filteredListServices = res.slice()));
+      .then(
+        () => (this.filteredListServices = this.webService.listServices.slice())
+      );
+
+    this.route.params.subscribe((params: Params) => {
+      this.webService.serviceSelectedAccess = {
+        id: parseInt(params['id']),
+      };
+      this.webService.serviceSelectedUnique = {
+        id: parseInt(params['id']),
+      };
+      setTimeout(() => {
+        this.webService.get_access_service().then(() => {
+          this.dataChangedAccess.next(this.webService.serviceSelectedAccess);
+          if (this.webService.serviceSelectedAccess.name) {
+            this.serviceName = this.webService.serviceSelectedAccess.name;
+          }
+        });
+      }, 100);
+      setTimeout(() => {
+        this.webService.get_unique_access_service().then(() => {
+          this.dataChangedUnique.next(this.webService.serviceSelectedUnique);
+        });
+      }, 200);
+    });
+    setTimeout(() => this.scrollToSelectedElement(), 600);
   }
 
   onDateChange() {
-    this.statService.dateChanged.next('date changed');
+    this.webService
+      .get_access_service()
+      .then(() =>
+        this.dataChangedAccess.next(this.webService.serviceSelectedAccess)
+      );
+    this.webService.get_unique_access_service().then(() => {
+      this.dataChangedUnique.next(this.webService.serviceSelectedUnique);
+    });
   }
 
   set_datepicker() {
     this.datepicker = !this.datepicker;
   }
 
-  fullscreen(value: boolean) {
-    this.fullScreen = value;
+  toggleFullscreen() {
+    this.fullscreen = !this.fullscreen;
+    this.fullscreenChanged.next(this.fullscreen);
   }
 
-  get_info_admin() {
-    this.informationsAdmin = !this.informationsAdmin;
+  scrollToSelectedElement() {
+    const selectedElement = document.getElementById(
+      `_${this.webService.serviceSelectedAccess.id}`
+    );
+    if (selectedElement)
+      selectedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  get_info_admin(event: any) {
+    this.toggleAdminWindow = !this.toggleAdminWindow;
   }
 
   get_initial_date() {
-    this.statService.date = this.statService.initialCreationDate;
-    this.statService.dateChanged.next('');
+    this.webService.date = { ...this.webService.initialCreationDate };
+    this.onDateChange();
   }
 
   get_searchChange(event: any) {
@@ -185,6 +144,7 @@ export class DetailsServicesComponent implements OnInit {
     isOpen
       ? this.closeSidenav(sidenav, arrowview1, arrowview2)
       : this.openSidenav(sidenav, arrowview1, arrowview2);
+    this.toggleFullscreen();
   }
 
   private closeSidenav(
@@ -210,6 +170,7 @@ export class DetailsServicesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.onDateChangedSubscription.unsubscribe();
+    this.serviceName = '';
+    this.webService.serviceSelectedAccess.name = '';
   }
 }

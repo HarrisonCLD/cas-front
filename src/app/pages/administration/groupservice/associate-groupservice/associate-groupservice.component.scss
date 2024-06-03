@@ -86,11 +86,34 @@
             color: $main-color;
           }
 
+          .separator-accordeon {
+            height: 1px;
+            width: 80%;
+            background-color: $main-color;
+            margin: 0 auto;
+          }
+
           .row {
             @extend %flexCenter;
             justify-content: space-between;
             width: 100%;
             margin: 10px 0;
+
+            button {
+              box-shadow: none;
+
+              &:hover {
+                mat-icon {
+                  color: red;
+                }
+              }
+
+              mat-icon {
+                color: $main-color;
+                margin: 0;
+                transition: color 100ms ease;
+              }
+            }
 
             p {
               margin: 0;

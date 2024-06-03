@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
@@ -6,25 +6,22 @@ import { Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 // services :
-import { StatistiquesService } from '../../../services/statistiques.service';
 import { UserService } from '../../../services/user.service';
 import { WebService } from '../../../services/webservice.service';
-
-// models :
-import User from '../../../../models/user.model';
+import { GroupeWebService } from '../../../services/groupewebservice.service';
 
 // helpers :
 import {
   openValidateSnackBar,
   openErrorSnackBar,
 } from '../../../helpers/popup.helper';
-import { GroupeWebService } from '../../../services/groupewebservice.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DialogComponent } from '../../../components/shared/dialog-component/dialog-component.component';
 
 interface UIUtilisateur {
-  userSelected?: boolean;
-  actionSelected?: number | null;
-  serviceValue?: string;
-  groupValue?: string;
+  userSelected: boolean;
+  actionSelected: 'informations' | 'service' | 'group' | 'admin' | null;
+  research: boolean;
 }
 
 @Component({
@@ -32,23 +29,18 @@ interface UIUtilisateur {
   templateUrl: './utilisateur.component.html',
   styleUrl: './utilisateur.component.scss',
 })
-export class UtilisateurComponent implements OnInit {
-  private statService = inject(StatistiquesService);
-  private userService = inject(UserService);
-  private webService = inject(WebService);
-  private groupWebService = inject(GroupeWebService);
+export class UtilisateurComponent implements OnInit, OnDestroy {
+  public userService = inject(UserService);
+  public webService = inject(WebService);
+  public groupWebService = inject(GroupeWebService);
 
-  // user search subject :
   private searchTerms = new Subject<string>();
 
-  // list of users :
-  public users: Array<User> = [];
-
-  // value of diferents items ( searching, selected, ...) :
-  public ui_utilisateur: UIUtilisateur = new Object();
-
-  // user entitie :
-  public user: User = new User();
+  public ui_utilisateur: UIUtilisateur = {
+    userSelected: false,
+    actionSelected: null,
+    research: false,
+  };
 
   // list of services :
   public listServices: Array<any> = [];
@@ -58,345 +50,357 @@ export class UtilisateurComponent implements OnInit {
   public listGroup: Array<any> = [];
   public filteredListGroup: Array<any> = [];
 
-  // array of associations :
-  public groupServices: Array<any> = [];
+  public listAdmin: Array<any> = [];
+  public filteredListAdmin: Array<any> = [];
 
-  constructor(private _snackBar: MatSnackBar) {}
+  public allChecked: boolean = false;
+
+  public errorUserMessage = {
+    toggle: false,
+    message: '',
+  };
+
+  constructor(private _snackBar: MatSnackBar, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    // delay for automatic user search with a limit of 3 letters :
     this.searchTerms.pipe(debounceTime(250)).subscribe((searchTerm: string) => {
       if (searchTerm.length > 2) {
-        this.userService
-          .getUsers(this.user.nom)
-          .then((res: any) => (this.users = res.slice()));
+        this.userService.getUsers().then(() => {
+          if (this.userService.users.length < 1) {
+            setTimeout(() => {
+              this.errorUserMessage.toggle = true;
+              this.errorUserMessage.message =
+                'Identifiant utilisateur incorrect';
+            }, 200);
+          }
+        });
       }
     });
   }
 
-  researchUser() {
-    this.searchTerms.next(this.user.nom);
-  }
-
-  clearSearch(id: number) {
-    // reset the different possibilities :
-    switch (id) {
-      case 1:
-        this.user.nom = '';
-        this.ui_utilisateur.userSelected = false;
-        this.users = [];
-        break;
-      case 2:
-        this.ui_utilisateur.serviceValue = '';
-        this.filteredListServices = this.listServices;
-        break;
-      case 3:
-        this.ui_utilisateur.groupValue = '';
-        this.filteredListGroup = this.listGroup;
-        break;
-    }
-  }
-
-  get_action(id: number) {
-    let target: number;
-    // reset ui utilisateur :
+  ngOnDestroy() {
     this.ui_utilisateur = {
-      ...this.ui_utilisateur,
-      actionSelected: id,
-      serviceValue: undefined,
-      groupValue: undefined,
+      userSelected: false,
+      actionSelected: null,
+      research: false,
     };
-    this.groupServices = [];
+    this.userService.users = [];
+    this.userService.user = {
+      id: 0,
+      uid: '',
+      nom: '',
+      groups: [],
+      services: [],
+    };
+  }
 
-    switch (id) {
-      case 1:
-        // get id, uid, services, groups of user selected :
-        // this.statService.get_infos_user(this.user.uid).subscribe((res: any) => {
-        //   Object.assign(this.user, res.data);
-
-        //   // sort list of services by administrator and A-Z :
-        //   this.user.services.sort((a, b) => {
-        //     if (a.isAdmin != null && b.isAdmin != null) {
-        //       if (a.isAdmin !== b.isAdmin) {
-        //         return b.isAdmin - a.isAdmin;
-        //       }
-        //     }
-        //     if (typeof a.fqdn === 'string' && typeof b.fqdn === 'string') {
-        //       return a.fqdn.localeCompare(b.fqdn);
-        //     }
-        //     return 0;
-        //   });
-        // });
-        this.userService.getUser(this.user.nom);
-        this.userService.user.services.sort((a: any, b: any) => {
-          if (a.isAdmin != null && b.isAdmin != null) {
-            if (a.isAdmin !== b.isAdmin) {
-              return b.isAdmin - a.isAdmin;
-            }
-          }
-          if (typeof a.fqdn === 'string' && typeof b.fqdn === 'string') {
-            return a.fqdn.localeCompare(b.fqdn);
-          }
-          return 0;
+  refreshData(type: 'service' | 'admin' | 'group') {
+    switch (type) {
+      case 'service':
+        this.listServices = this.webService.listServices.filter((row: any) => {
+          return !this.userService.user.services.some(
+            (line: any) => row.id === line.id_service
+          );
         });
+        this.filteredListServices = this.listServices.slice();
         break;
-      case 2:
-        // get services database and user services for the filter :
-        // this.statService
-        //   .get_service_user(this.user.id)
-        //   .subscribe((res: any) => {
-        //     this.listServices = res.data.slice();
-        //     this.filterListServices = res.data.slice();
-        //   });
-        target = 1;
-        this.webService.getUserServices(target);
-        this.filteredListServices = this.webService.userServices.slice();
+      case 'group':
+        this.listGroup = this.groupWebService.listGroups.filter((row: any) => {
+          return !this.userService.user.groups.some(
+            (line: any) => row.id === line.id_groupe
+          );
+        });
+        this.filteredListGroup = this.listGroup.slice();
         break;
-      case 3:
-        // get groups database and user groups for the filter :
-        // this.statService.get_groupe_user(this.user.id).subscribe((res: any) => {
-        //   this.listGroup = res.data.slice();
-        //   this.filterListGroup = res.data.slice();
-        // });
-        target = 1;
-        this.groupWebService.getUserGroups(target);
-        this.filteredListGroup = this.groupWebService.userGroups.slice();
-        break;
-      case 4:
-        // get services database and user admin services for the filter :
-        this.statService
-          .get_user_admin_service(this.user.id)
-          .subscribe((res: any) => {
-            this.listServices = res.data.slice();
-            this.filteredListServices = res.data.slice();
+      case 'admin':
+        this.userService.getUser().then(() => {
+          this.listAdmin = this.webService.listServices.filter((row: any) => {
+            return !this.userService.user.services.find((line: any) => {
+              return line.id_service === row.id && line.isAdmin === 1;
+            });
           });
+          this.filteredListAdmin = this.listAdmin.slice();
+        });
         break;
     }
   }
 
-  selectAll(action: number, div: string, array: Array<any>): void {
-    let otherInput: HTMLInputElement | null;
-    switch (action) {
-      case 1:
-        otherInput = document.querySelector(div + '.deselect');
-        otherInput ? (otherInput.checked = false) : null;
-        array.map((row: any) => {
-          row.checked = true;
-          if (row.checked) {
-            this.groupServices.push(row.id);
-          }
+  researchUser() {
+    this.searchTerms.next(this.userService.user.nom);
+    this.errorUserMessage.toggle = false;
+  }
+
+  getResearch(event: any) {
+    this.ui_utilisateur.research = true;
+    const searchValue = event.target.value.toLowerCase();
+    switch (this.ui_utilisateur.actionSelected) {
+      case 'service':
+        this.filteredListServices = this.listServices.filter((row: any) => {
+          return row.name.toLowerCase().startsWith(searchValue);
         });
         break;
-      case 2:
-        otherInput = document.querySelector(div + '.select');
-        otherInput ? (otherInput.checked = false) : null;
-        array.map((row: any) => {
-          row.checked = false;
-          if (!row.checked) {
-            const indexToDelete = this.groupServices.indexOf(row.id);
-            if (indexToDelete !== -1) {
-              this.groupServices.splice(indexToDelete, 1);
-            }
-          }
+      case 'group':
+        this.filteredListGroup = this.listGroup.filter((row: any) => {
+          return row.label.toLowerCase().startsWith(searchValue);
+        });
+        break;
+      case 'admin':
+        this.filteredListAdmin = this.listAdmin.filter((row: any) => {
+          return row.name.toLowerCase().startsWith(searchValue);
         });
         break;
     }
+  }
+
+  clearSearch(type: 'user' | 'service') {
+    this.deselectAllLines();
+
+    if (type === 'user') {
+      this.userService.user = {
+        id: 0,
+        uid: '',
+        nom: '',
+        groups: [],
+        services: [],
+      };
+      this.userService.users = [];
+      this.ui_utilisateur.userSelected = false;
+    }
+    this.ui_utilisateur.actionSelected = null;
   }
 
   getUserSelected(data: any) {
-    console.log('data', data);
-    this.userService
-      .getUser(data.uid)
-      .then((res: any) => console.log('user', res));
-    // this.statService.get_infos_user(this.user.uid).subscribe((res: any) => {
-    //   if (res.code === 0) {
-    //     Object.assign(this.user, res.data);
+    this.ui_utilisateur.actionSelected = null;
 
-    //     // sort list of services by administrator and A-Z :
-    //     this.user.services.sort((a, b) => {
-    //       if (a.isAdmin != null && b.isAdmin != null) {
-    //         if (a.isAdmin !== b.isAdmin) {
-    //           return b.isAdmin - a.isAdmin;
-    //         }
-    //       }
-    //       if (typeof a.fqdn === 'string' && typeof b.fqdn === 'string') {
-    //         return a.fqdn.localeCompare(b.fqdn);
-    //       }
-    //       return 0;
-    //     });
-    //   }
-    // });
-    // this.ui_utilisateur.userSelected = true;
-    // const name: string = '';
-    // this.userService.getUser(name);
-    // this.userService.user.services.sort((a: any, b: any) => {
-    //   if (a.isAdmin != null && b.isAdmin != null && a.isAdmin !== b.isAdmin)
-    //     return b.isAdmin - a.isAdmin;
-    //   if (typeof a.fqdn === 'string' && typeof b.fqdn === 'string')
-    //     return a.fqdn.localeCompare(b.fqdn);
-    //   return 0;
-    // });
-    // this.ui_utilisateur.userSelected = true;
+    this.userService.user = {
+      groups: [],
+      services: [],
+      id: data.id,
+      uid: data.uid,
+      nom: data.nom,
+    };
+
+    this.ui_utilisateur.userSelected = true;
+    this.userService.getUser().then(() => {
+      this.refreshData('service');
+      this.refreshData('group');
+      setTimeout(() => this.refreshData('admin'), 100);
+    });
   }
 
   onCheckboxChange(id: any, row: any): void {
-    // check and delete associations of services/groups :
-    if (row.checked) {
-      this.groupServices.push(id);
-    } else {
-      const indexToDelete = this.groupServices.indexOf(id);
-      if (indexToDelete !== -1) this.groupServices.splice(indexToDelete, 1);
+    let list: any[] = [];
+
+    switch (this.ui_utilisateur.actionSelected) {
+      case 'group':
+        list = this.groupWebService.associateUserToGroups;
+        break;
+      case 'service':
+        list = this.webService.associateUserToServices;
+        break;
+      case 'admin':
+        list = this.webService.associateAdminUserToServices;
+        break;
+    }
+
+    const indexToDelete = list.indexOf(id);
+    row.checked ? list.push(id) : list.splice(indexToDelete, 1);
+  }
+
+  OnCheckboxChangeAll(event: Event) {
+    const input = event.target as HTMLInputElement;
+    input.checked ? this.selectAllLines() : this.deselectAllLines();
+  }
+
+  selectAllLines(): void {
+    this.allChecked = true;
+    switch (this.ui_utilisateur.actionSelected) {
+      case 'group':
+        this.filteredListGroup.forEach((row: any) => {
+          row.checked = true;
+          this.groupWebService.associateUserToGroups.push(row.id);
+        });
+        break;
+      case 'service':
+        this.filteredListServices.forEach((row: any) => {
+          row.checked = true;
+          this.webService.associateUserToServices.push(row.id);
+        });
+        break;
+      case 'admin':
+        this.filteredListAdmin.forEach((row: any) => {
+          row.checked = true;
+          this.webService.associateAdminUserToServices.push(row.id);
+        });
+        break;
     }
   }
 
-  delete(mode: number, id: number) {
-    // template for HTTP request :
-    const body = {
-      id_user: this.user.id,
-      id_service: 0,
-      id_groupe: 0,
-    };
-    let indexToDelete: number;
-    switch (mode) {
-      case 1:
-        body.id_groupe = id;
-        // this.groupWebService.deleteUserToGroup(id);
-        openValidateSnackBar(this._snackBar);
-        indexToDelete = this.user.groups.findIndex(
-          (row: any) => row.id_groupe === body.id_groupe
-        );
-        if (indexToDelete !== -1) this.user.groups.splice(indexToDelete, 1);
-        // this.statService.delete_group_to_user(body).subscribe((res: any) => {
-        //   if (res.data === 1) {
-        //     openValidateSnackBar(this._snackBar);
-        //     const indexToDelete = this.user.groups.findIndex(
-        //       (row: any) => row.id_groupe === body.id_groupe
-        //     );
-        //     if (indexToDelete !== -1) {
-        //       this.user.groups.splice(indexToDelete, 1);
-        //     }
-        //   } else {
-        //     openErrorSnackBar(this._snackBar);
-        //   }
-        // });
+  deselectAllLines(): void {
+    this.allChecked = false;
+    switch (this.ui_utilisateur.actionSelected) {
+      case 'group':
+        this.filteredListGroup.forEach((row: any) => (row.checked = false));
+        this.groupWebService.associateUserToGroups = [];
         break;
-
-      case 2:
-        body.id_service = id;
-        this.webService.deleteUserToService(id);
-        openValidateSnackBar(this._snackBar);
-        indexToDelete = this.user.services.findIndex(
-          (row: any) => row.id_service === body.id_service
-        );
-        if (indexToDelete !== -1) this.user.services.splice(indexToDelete, 1);
-
-        // this.statService.delete_service_to_user(body).subscribe((res: any) => {
-        //   if (res.data === 1) {
-        //     openValidateSnackBar(this._snackBar);
-        //     const indexToDelete = this.user.services.findIndex(
-        //       (row: any) => row.id_service === body.id_service
-        //     );
-        //     if (indexToDelete !== -1) {
-        //       this.user.services.splice(indexToDelete, 1);
-        //     }
-        //   } else {
-        //     openErrorSnackBar(this._snackBar);
-        //   }
-        // });
+      case 'service':
+        this.filteredListServices.forEach((row: any) => (row.checked = false));
+        this.webService.associateUserToServices = [];
         break;
-      case 3:
-        body.id_service = id;
-        // this.statService.delete_admin_to_user(body).subscribe((res: any) => {
-        //   if (res.data === 1) {
-        //     openValidateSnackBar(this._snackBar);
-        //     const indexToDelete = this.user.services.findIndex(
-        //       (row: any) => row.id_service === body.id_service
-        //     );
-        //     if (indexToDelete !== -1) {
-        //       this.user.services.splice(indexToDelete, 1);
-        //     }
-        //   } else {
-        //     openErrorSnackBar(this._snackBar);
-        //   }
-        // });
+      case 'admin':
+        this.filteredListAdmin.forEach((row: any) => (row.checked = false));
+        this.webService.associateAdminUserToServices = [];
         break;
     }
   }
 
   validate_association() {
-    // template for HTTP request :
     const body = {
-      id_user: this.user.id ? this.user.id : null,
-      uid: this.user.uid,
-      services: this.groupServices,
+      id_user: this.userService.user.id ? this.userService.user.id : null,
+      uid: this.userService.user.uid,
+      services: this.webService.associateUserToServices,
+      groupe: this.groupWebService.associateUserToGroups,
+      admin: this.webService.associateAdminUserToServices,
     };
 
     switch (this.ui_utilisateur.actionSelected) {
-      case 2:
-        this.webService.setUserToService(body);
-        openValidateSnackBar(this._snackBar);
-        this.filteredListServices = [];
-        this.ui_utilisateur.actionSelected = null;
-        // this.statService.set_service_to_user(body).subscribe((res: any) => {
-        //   if (res.code === 0) {
-        //     openValidateSnackBar(this._snackBar);
-        //     this.filterListServices = [];
-        //     this.ui_utilisateur.actionSelected = null;
-        //   } else {
-        //     openErrorSnackBar(this._snackBar);
-        //   }
-        // });
-        break;
-
-      case 3:
-        this.groupWebService.setUserToGroup(body);
-        openValidateSnackBar(this._snackBar);
-        this.filteredListGroup = [];
-        this.ui_utilisateur.actionSelected = null;
-        // this.statService.set_group_to_user(body).subscribe((res: any) => {
-        //   if (res.code === 0) {
-        //     openValidateSnackBar(this._snackBar);
-        //     this.filterListGroup = [];
-        //     this.ui_utilisateur.actionSelected = null;
-        //   } else {
-        //     openErrorSnackBar(this._snackBar);
-        //   }
-        // });
-        break;
-
-      case 4:
-        this.statService.set_user_admin_service(body).subscribe((res: any) => {
-          if (res.code === 0) {
-            openValidateSnackBar(this._snackBar);
-            this.filteredListServices = [];
-            this.ui_utilisateur.actionSelected = null;
-          } else {
+      case 'service':
+        this.webService.setUserToService(body).then((res: any) => {
+          if (res !== 0) {
             openErrorSnackBar(this._snackBar);
+          } else {
+            openValidateSnackBar(this._snackBar);
+            this.userService.getUser().then(() => {
+              this.deselectAllLines();
+              this.refreshData('service');
+              this.ui_utilisateur.actionSelected = null;
+            });
+          }
+        });
+        break;
+      case 'group':
+        this.groupWebService.setUserToGroup(body).then((res: any) => {
+          if (res !== 0) {
+            openErrorSnackBar(this._snackBar);
+          } else {
+            openValidateSnackBar(this._snackBar);
+            this.userService.getUser().then(() => {
+              this.deselectAllLines();
+              this.refreshData('group');
+              this.ui_utilisateur.actionSelected = null;
+            });
+          }
+        });
+        break;
+      case 'admin':
+        this.webService.setAdminUserToService(body).then((res: any) => {
+          if (res !== 0) {
+            openErrorSnackBar(this._snackBar);
+          } else {
+            openValidateSnackBar(this._snackBar);
+            this.userService.getUser().then(() => {
+              this.deselectAllLines();
+              this.refreshData('admin');
+              this.ui_utilisateur.actionSelected = null;
+            });
           }
         });
         break;
     }
   }
 
-  get_searchChange(id: number, event: any) {
-    // services and groups search bar :
-    switch (id) {
-      case 1:
-        this.filteredListServices = this.webService.listServices.filter(
-          (row: any) => {
-            return row.name.startsWith(event.target.value);
-          }
-        );
-        this.ui_utilisateur.serviceValue = event.target.value;
+  openDialogDelete(type: 'isAdmin' | 'noAdmin' | 'group', id: number): void {
+    let dialogRef: MatDialogRef<DialogComponent, any>;
+    let message: string;
+    switch (type) {
+      case 'noAdmin':
+        message =
+          'Êtes-vous sûr de vouloir supprimer le service pour cet utilisateur ?';
+        dialogRef = this.dialog.open(DialogComponent, {
+          data: { message: message },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result !== 0) return;
+          this.delete(type, id);
+        });
         break;
+      case 'group':
+        message =
+          'Êtes-vous sûr de vouloir supprimer le groupe pour cet utilisateur ?';
+        dialogRef = this.dialog.open(DialogComponent, {
+          data: { message: message },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result !== 0) return;
+          this.delete(type, id);
+        });
+        break;
+      case 'isAdmin':
+        message =
+          "Êtes-vous sûr de vouloir supprimer l'administration de ce service pour cet utilisateur ?";
+        dialogRef = this.dialog.open(DialogComponent, {
+          data: { message: message },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result !== 0) return;
+          this.delete(type, id);
+        });
+        break;
+    }
+  }
 
-      case 2:
-        this.filteredListGroup = this.groupWebService.listGroups.filter(
-          (row: any) => {
-            return row.label.startsWith(event.target.value);
+  delete(type: 'isAdmin' | 'group' | 'noAdmin', id: number) {
+    const body = {
+      id_user: this.userService.user.id,
+      id_service: 0,
+      id_groupe: 0,
+      isAdmin: 0,
+    };
+
+    let indexToDelete: number;
+
+    switch (type) {
+      case 'group':
+        body.id_groupe = id;
+        this.groupWebService.deleteUserToGroup(body).then((res: any) => {
+          if (res !== 0) {
+            openErrorSnackBar(this._snackBar);
+          } else {
+            openValidateSnackBar(this._snackBar);
+            indexToDelete = this.userService.user.groups.findIndex(
+              (row: any) => row.id_groupe === body.id_groupe
+            );
+            this.userService.user.groups.splice(indexToDelete, 1);
+            this.userService.getUser();
+            this.refreshData('group');
           }
-        );
-        this.ui_utilisateur.groupValue = event.target.value;
+        });
+        break;
+      case 'noAdmin':
+        body.id_service = id;
+        this.webService.deleteUserToService(body).then((res: any) => {
+          if (res !== 0) {
+            openErrorSnackBar(this._snackBar);
+          } else {
+            openValidateSnackBar(this._snackBar);
+            indexToDelete = this.userService.user.services.findIndex(
+              (row: any) => row.id_service === body.id_service
+            );
+            this.userService.user.services.splice(indexToDelete, 1);
+            this.refreshData('service');
+          }
+        });
+        break;
+      case 'isAdmin':
+        body.id_service = id;
+        this.webService.deleteAdminUserFromService(body).then((res: any) => {
+          if (res !== 0) {
+            openErrorSnackBar(this._snackBar);
+          } else {
+            openValidateSnackBar(this._snackBar);
+            this.refreshData('admin');
+          }
+        });
         break;
     }
   }

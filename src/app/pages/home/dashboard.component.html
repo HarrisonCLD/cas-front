@@ -4,18 +4,23 @@
   <div class="left">
     <div class="top">
       <div class="simply_stat">
+        <img src="assets/unique-icon.svg" alt="screen-icon" />
+        <p>{{ webService.accessService.unique }}</p>
+        <h4>Accès unique</h4>
+      </div>
+      <div class="simply_stat">
         <img src="assets/screen.svg" alt="screen-icon" />
-        <p>{{ access.access }}</p>
-        <h4>Accès total</h4>
+        <p>{{ webService.accessService.access }}</p>
+        <h4>Accès global</h4>
       </div>
       <div class="simply_stat">
         <img src="assets/check-o.svg" alt="check-icon" />
-        <p>{{ access.success }}</p>
+        <p>{{ webService.accessService.success }}</p>
         <h4>Connexion réussie</h4>
       </div>
       <div class="simply_stat">
         <img src="assets/close-o.svg" alt="close-icon" />
-        <p>{{ access.error }}</p>
+        <p>{{ webService.accessService.error }}</p>
         <h4>Connexion échouée</h4>
       </div>
     </div>
@@ -26,24 +31,24 @@
   </div>
   <hr class="separation-right" />
   <div class="right">
-    <mat-accordion *ngIf="resumeStats">
-      @for( row of resumeStats; track row) {
+    <mat-accordion *ngIf="webService.resumeAccess.length > 0">
+      @for( row of webService.resumeAccess; track row) {
       <mat-expansion-panel
         hideToggle
-        (click)="get_resume_access_detail(row.name)"
+        (click)="webService.get_resume_access_detail(row.name)"
       >
         <mat-expansion-panel-header>
           <mat-panel-title>
             <img src="assets/{{ row.name }}.svg" alt="icon-usertype" />
-            {{ row.name }}
+            {{ row.nameFR }}
           </mat-panel-title>
           <mat-panel-description>
             {{ row.valeur }}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="content">
-          @if(resumeDetailStats) { 
-            @for (line of resumeDetailStats; track line.id_service) {
+          @if(webService.resumeAccessDetails) { @for (line of
+          webService.resumeAccessDetails; track line.id_service) {
           <div class="detail" routerLink="/services/{{ line.id_service }}">
             <p>{{ line.name }}</p>
             <p>{{ line.access }}</p>
