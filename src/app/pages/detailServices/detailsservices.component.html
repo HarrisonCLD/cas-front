@@ -1,0 +1,255 @@
+<popup-admin
+  *ngIf="toggleAdminWindow && webService.serviceSelectedAccess.admin"
+  [togglePopup]="toggleAdminWindow"
+  [dataReceive]="webService.serviceSelectedAccess.admin"
+  (toggleInformationAdmin)="get_info_admin($event)"
+/>
+
+<div class="listservices" *ngIf="this.webService.listServices.length > 0">
+  <mat-list
+    class="sidenav open"
+    style="padding: {{ fullscreen ? '0px' : '10px 25px' }};"
+  >
+    <h2 mat-subheader>Listes des services :</h2>
+    <div class="params">
+      <mat-form-field>
+        <mat-label>Nom du service</mat-label>
+        <input
+          matInput
+          [(ngModel)]="serviceName"
+          (input)="get_searchChange($event)"
+          placeholder="Ex. ebureau.univ-reims.fr"
+          value=""
+        />
+      </mat-form-field>
+      @if (serviceName) {
+      <mat-icon (click)="resetSearch()">close</mat-icon>
+      }
+    </div>
+    <div class="list_service">
+      @for (service of filteredListServices; track service.id) {
+      <mat-list-item
+        data-item
+        routerLink="/services/{{ service.id }}"
+        [ngClass]="{
+          selected: this.webService.serviceSelectedAccess.name === service.name
+        }"
+        id="_{{ service.id }}"
+      >
+        <p class="new" *ngIf="service.new === 1">NEW</p>
+        {{ service.name }}
+      </mat-list-item>
+      }
+    </div>
+  </mat-list>
+  <div class="view">
+    <svg
+      class="arrowtoggle1 active"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      (click)="openSideNav()"
+    >
+      <path
+        fill="currentColor"
+        d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"
+      />
+    </svg>
+    <svg
+      class="arrowtoggle2"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      (click)="openSideNav()"
+    >
+      <path
+        fill="currentColor"
+        d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"
+      />
+    </svg>
+    <div class="options" [ngClass]="{ date: datepicker }">
+      <div class="startDate" *ngIf="datepicker">
+        <button (click)="get_initial_date()">
+          <img src="assets/reload.svg" alt="reload-icon" />
+        </button>
+      </div>
+      <mat-form-field *ngIf="datepicker">
+        <mat-label>Sélectionner votre date :</mat-label>
+        <mat-date-range-input [rangePicker]="rangePicker">
+          <input
+            matStartDate
+            placeholder="Date début"
+            [(ngModel)]="webService.date.datedebut"
+          />
+          <input
+            matEndDate
+            placeholder="Date fin"
+            [(ngModel)]="webService.date.datefin"
+          />
+        </mat-date-range-input>
+        <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="rangePicker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #rangePicker>
+          <mat-date-range-picker-actions>
+            <button mat-button matDateRangePickerCancel>Cancel</button>
+            <button
+              mat-raised-button
+              color="primary"
+              matDateRangePickerApply
+              (click)="onDateChange()"
+            >
+              Apply
+            </button>
+          </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+      </mat-form-field>
+      <div class="actions" (click)="set_datepicker()">
+        @if(datepicker) {
+        <img class="first" src="assets/arrow_back_white.svg" alt="#" />
+        } @else {
+        <img class="second" src="assets/arrow_back_white.svg" alt="#" />
+        }
+      </div>
+    </div>
+    <div class="presentation" *ngIf="webService.serviceSelectedAccess.id">
+      <div class="top">
+        <h3>Informations</h3>
+        <img
+          src="assets/info.svg"
+          alt="info-icon"
+          (click)="get_info_admin($event)"
+          #tooltip="matTooltip"
+          matTooltip="Informations sur le service"
+          [matTooltipPosition]="'above'"
+          matTooltipHideDelay="150"
+        />
+      </div>
+      <div class="bot">
+        <div class="infos">
+          <div class="row">
+            <div class="id">
+              <p>ID</p>
+              <p>{{ webService.serviceSelectedAccess.id }}</p>
+            </div>
+            <div class="title">
+              <h3>{{ webService.serviceSelectedAccess.name }}</h3>
+              <a
+                [href]="'https://' + webService.serviceSelectedAccess.name"
+                target="_blank"
+              >
+                <img src="assets/external-link.svg" alt="external-link" />
+              </a>
+            </div>
+          </div>
+          <!-- <img
+          src="assets/expand-icon.svg"
+          alt="expand-icon"
+          (click)="openSideNav()"
+          /> -->
+        </div>
+        <div class="informations">
+          <div
+            class="status"
+            *ngIf="
+              webService.serviceSelectedAccess.isDev ||
+              webService.serviceSelectedAccess.isEnded ||
+              webService.serviceSelectedAccess.active
+            "
+          >
+            <hr class="separator-status" />
+            <div>
+              <div
+                *ngIf="webService.serviceSelectedAccess.isDev"
+                class="devServer"
+                mat-raised-button
+                #tooltip="matTooltip"
+                matTooltip="Service de développement"
+                [matTooltipPosition]="'above'"
+                matTooltipHideDelay="200"
+              >
+                <img src="assets/dev-icon.svg" alt="#" />
+              </div>
+              <div
+                *ngIf="webService.serviceSelectedAccess.isEnded"
+                class="stopServer"
+                mat-raised-button
+                #tooltip="matTooltip"
+                matTooltip="Service arrêté"
+                [matTooltipPosition]="'above'"
+                matTooltipHideDelay="200"
+              >
+                <img src="assets/stop-icon.svg" alt="#" />
+              </div>
+              <div
+                *ngIf="webService.serviceSelectedAccess.active"
+                class="nodata"
+                mat-raised-button
+                #tooltip="matTooltip"
+                matTooltip="Aucune donnée pour les dates demandées"
+                [matTooltipPosition]="'above'"
+                matTooltipHideDelay="200"
+              >
+                <img src="assets/warning.svg" alt="#" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="stats"
+      [ngClass]="{ full: fullscreen }"
+      *ngIf="webService.serviceSelectedUnique"
+    >
+      <div class="accessglobal">
+        <div class="numbersglobal">
+          <div class="pick">
+            <h4>Peak connexion :</h4>
+            <p>{{ webService.serviceSelectedAccess.peak }}</p>
+          </div>
+          <hr />
+          <div class="moy">
+            <h4>Moyenne utilisateur :</h4>
+            <p>
+              {{ webService.serviceSelectedAccess.moyenne }}
+            </p>
+          </div>
+          <hr />
+          <div class="total">
+            <h4>Total utilisateur :</h4>
+            <p>{{ webService.serviceSelectedAccess.total }}</p>
+          </div>
+        </div>
+        <stackedbar
+          [onDataChanged]="dataChangedAccess"
+          [isFullscreen]="fullscreenChanged"
+        />
+      </div>
+      <div class="accessunique">
+        <div class="numbersunique">
+          <div class="pick">
+            <h4>Peak connexion :</h4>
+            <p>{{ webService.serviceSelectedUnique.peak }}</p>
+          </div>
+          <hr />
+          <div class="moy">
+            <h4>Moyenne utilisateur :</h4>
+            <p>
+              {{ webService.serviceSelectedUnique.moyenne }}
+            </p>
+          </div>
+          <hr />
+          <div class="total">
+            <h4>Total utilisateur :</h4>
+            <p>{{ webService.serviceSelectedUnique.total }}</p>
+          </div>
+        </div>
+        <stackedbar
+          [onDataChanged]="dataChangedUnique"
+          [isFullscreen]="fullscreenChanged"
+        />
+      </div>
+    </div>
+  </div>
+</div>

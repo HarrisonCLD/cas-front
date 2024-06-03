@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ListservicesComponent } from './listservices/listservices.component';
-import { ClassementComponent } from './classement/classement.component';
-import { AdministrationComponent } from './administration/administration.component';
-import { GroupserviceComponent } from './administration/groupservice/groupservice.component';
+import { DashboardComponent } from './pages/home/dashboard.component';
+import { DetailsServicesComponent } from './pages/detailServices/detailsservices.component';
+import { ClassementComponent } from './pages/classement/classement.component';
+import { AdministrationComponent } from './pages/administration/administration.component';
+import { GroupserviceComponent } from './pages/administration/groupservice/groupservice.component';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
   {
     path: 'services/:id',
-    component: ListservicesComponent,
+    component: DetailsServicesComponent,
   },
   {
     path: 'classement',

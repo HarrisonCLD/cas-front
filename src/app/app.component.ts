@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { UserService } from './services/user.service';
+import { ApiService } from './services/api.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,24 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  constructor() {}
+  private apiService = inject(ApiService);
+
+  constructor() {
+    this.getJWT();
+  }
+
+  getJWT(): void {
+    const ipt: HTMLInputElement = document.getElementById(
+      'token'
+    ) as HTMLInputElement;
+    if (!ipt) return;
+    const token = ipt.value;
+    if (!token) return;
+    this.apiService.jwt = token;
+    ipt.remove();
+    this.apiService.provisionHeaders(
+      'Authorization',
+      `Bearer ${this.apiService.jwt}`
+    );
+  }
 }

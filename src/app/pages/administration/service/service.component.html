@@ -1,0 +1,48 @@
+<div class="params">
+  <h4>Rechercher un service :</h4>
+  <mat-form-field>
+    <mat-label>Nom du service</mat-label>
+    <input
+      matInput
+      [(ngModel)]="serviceName"
+      (input)="get_searchChange($event)"
+      placeholder="Ex. ebureau.univ-reims.fr"
+      value=""
+    />
+    @if (serviceName) {
+    <mat-icon (click)="clear_search()">close</mat-icon>
+    }
+  </mat-form-field>
+</div>
+<hr />
+@if(filteredListServices) {
+<ul class="listServices">
+  @for(service of filteredListServices; track service) {
+  <li>
+    <div class="infos">
+      <p>{{ service.id }}</p>
+      <p>{{ service.name }}</p>
+      <p class="new" *ngIf="service.new === 1">NEW</p>
+    </div>
+    <div class="actions">
+      <mat-checkbox [checked]="service.isDev" (change)="toggleIsDev(service)">
+        Développement
+      </mat-checkbox>
+      <mat-checkbox
+        [checked]="service.isEnded"
+        (change)="toggleIsEnded(service)"
+      >
+        Arrêté
+      </mat-checkbox>
+      <button mat-flat-button color="primary" (click)="validateChange(service)">
+        Valider
+      </button>
+    </div>
+  </li>
+  }
+</ul>
+} @else {
+<div class="error-select">
+  <p class="unknown">Aucun résultat !</p>
+</div>
+}

@@ -1,0 +1,242 @@
+@import "../../../../../scss/variables";
+@import "../../../../../scss/mixins";
+@import "../../../../../scss/animations";
+
+.no-select-group {
+  height: 100%;
+
+  p {
+    font-size: 1.2em !important;
+  }
+}
+
+.empty-groups {
+  flex-grow: 1;
+}
+
+.empty-groups,
+.no-select-group {
+  @extend %flexCenter;
+
+  p {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: 300;
+    color: $main-color;
+  }
+}
+
+.selection-group {
+  @extend %flexCenter;
+  width: 100%;
+  margin: 20px 0 0 0;
+
+  h3 {
+    margin-right: 25px;
+    color: $main-color;
+  }
+
+  mat-form-field {
+    width: 300px;
+  }
+
+  img {
+    height: 40px;
+    margin: 0 10px 15px 15px;
+    padding: 6px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $main-grey;
+    }
+  }
+}
+
+.bot {
+  overflow: hidden;
+  @extend %flexCenter;
+  justify-content: space-between;
+  width: 100%;
+  flex-grow: 1;
+  padding: 0 2vh;
+
+  .actual-group {
+    @extend %webkitScrollbar;
+    @extend %overflowY;
+    width: 45%;
+    height: 100%;
+    padding: 0 5px;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ul {
+      margin: 0 15px 0 0;
+
+      mat-accordion {
+        mat-expansion-panel {
+          margin: 15px 0;
+
+          .mat-expansion-panel-header-title {
+            font-size: 1.3em;
+            color: $main-color;
+          }
+
+          .separator-accordeon {
+            height: 1px;
+            width: 80%;
+            background-color: $main-color;
+            margin: 0 auto;
+          }
+
+          .row {
+            @extend %flexCenter;
+            justify-content: space-between;
+            width: 100%;
+            margin: 10px 0;
+
+            button {
+              box-shadow: none;
+
+              &:hover {
+                mat-icon {
+                  color: red;
+                }
+              }
+
+              mat-icon {
+                color: $main-color;
+                margin: 0;
+                transition: color 100ms ease;
+              }
+            }
+
+            p {
+              margin: 0;
+              font-size: 1em;
+              font-weight: 300;
+              color: black;
+              top: 0px;
+              left: 0px;
+            }
+
+            img {
+              height: 20px;
+              cursor: pointer;
+              transition: transform 150ms ease-in;
+
+              &:hover {
+                transform: scale(1.1);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  hr {
+    height: 85%;
+    width: 0.1px;
+    border: none;
+    background-color: $main-color;
+  }
+
+  .selection-services {
+    @extend %overflowY;
+    @extend %webkitScrollbar;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 92%;
+    padding: 0 20px 0 0;
+    opacity: 0;
+    animation: fadeInClassic 500ms ease-in forwards;
+    animation-delay: 200ms;
+
+    &::-webkit-scrollbar {
+      width: 9px;
+    }
+
+    .row {
+      position: relative;
+
+      mat-form-field {
+        width: 100%;
+      }
+      mat-icon {
+        @extend %flexCenter;
+        position: absolute;
+        top: 10%;
+        right: 10px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken($main-grey, 10);
+        }
+      }
+    }
+
+    .selection {
+      @extend %flexCenter;
+      justify-content: space-between;
+      margin-bottom: 13px;
+      padding: 10px 18px;
+
+      div {
+        @extend %flexCenter;
+
+        input {
+          width: 16px;
+          height: 16px;
+          margin-right: 8px;
+          cursor: pointer;
+        }
+        p {
+          margin: 0;
+          font-size: 0.9em;
+          font-weight: 300;
+          color: darken($main-grey, 40);
+        }
+      }
+    }
+
+    .error-select {
+      @extend %flexCenter;
+      flex-grow: 1;
+
+      .unknown {
+        font-size: 1.2em;
+        font-weight: 300;
+        color: $main-color;
+        background: none;
+      }
+    }
+
+    ul {
+      li {
+        @extend %flexCenter;
+        justify-content: space-between;
+        padding: 1px 15px;
+        margin: 7px 0px;
+        border-radius: 5px;
+
+        p {
+          margin: 0;
+          color: $main-color;
+        }
+
+        &:nth-child(odd) {
+          background-color: $main-grey;
+        }
+      }
+    }
+  }
+}
