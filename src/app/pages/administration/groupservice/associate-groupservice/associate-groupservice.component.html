@@ -1,0 +1,115 @@
+<div class="selection-group">
+  <h3>Sélectionner un service :</h3>
+  <mat-form-field>
+    <mat-label>Groupe de service</mat-label>
+
+    <mat-select
+      [(ngModel)]="idGroupForAssociation"
+      (valueChange)="changeGroupe($event)"
+    >
+      @for (row of listGroups; track row; let index = $index) {
+      <mat-option [value]="row.id">
+        {{ row.label }}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <img
+    *ngIf="associationGroupsServices.length > 0"
+    src="assets/valid-check-icon.svg"
+    alt="valid-check-icon"
+    (click)="validate_associationGroup()"
+  />
+</div>
+<div class="bot">
+  <div class="actual-group">
+    <ul>
+      <mat-accordion>
+        @for(row of filteredListGroupsServices; track row) {
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ row.label }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <hr class="separator-accordeon">
+          @for (line of row.services; track line) {
+          <div class="row">
+            <p>- {{ line.fqdn }}</p>
+            <button
+              mat-raised-button
+              (click)="
+                openDialogDelete({
+                  id_groupe: row.id,
+                  id_service: line.id_service
+                })
+              "
+            >
+              <mat-icon
+                aria-hidden="false"
+                aria-label="Example home icon"
+                fontIcon="close"
+              ></mat-icon>
+            </button>
+          </div>
+          }
+        </mat-expansion-panel>
+        }
+      </mat-accordion>
+    </ul>
+  </div>
+  <hr />
+  <div class="selection-services">
+    @if (idGroupForAssociation !== undefined) {
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Nom du service</mat-label>
+        <input
+          matInput
+          [(ngModel)]="serviceName"
+          (input)="searchService($event)"
+          placeholder="Ex. ebureau.univ-reims.fr"
+          value=""
+        />
+      </mat-form-field>
+      @if (serviceName) {
+      <mat-icon (click)="clearSearchService()">close</mat-icon>
+      }
+    </div>
+    <div class="selection">
+      <div>
+        <input
+          class="select"
+          type="checkbox"
+          [(ngModel)]="allChecked"
+          (change)="selectAllServices($event)"
+        />
+        <p>
+          {{ allChecked ? "Désélectionner" : "Sélectionner" }} tous les éléments
+        </p>
+      </div>
+    </div>
+    <ul>
+      @for(row of filteredListServices; track row) {
+      <li>
+        <p>{{ row.name }}</p>
+        <mat-checkbox
+          [(ngModel)]="row.checked"
+          (change)="onCheckboxChange(row)"
+        />
+      </li>
+      }
+    </ul>
+    } @else {
+    <div class="no-select-group">
+      <p>Veuillez sélectionner un groupe pour y ajouter des services</p>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- @else {
+<div class="empty-groups">
+  <p>Aucune groupe disponible en base de données</p>
+</div>
+} -->

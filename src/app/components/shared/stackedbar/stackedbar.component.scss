@@ -1,0 +1,11 @@
+@import "../../../../scss/variables";
+@import "../../../../scss/mixins";
+@import "../../../../scss/animations";
+
+.stackedbar {
+  position: relative;
+  @extend %flexCenter;
+  flex-direction: column;
+  padding: 30px 40px;
+  width: 850px;
+}

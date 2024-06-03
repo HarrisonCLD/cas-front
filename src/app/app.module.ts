@@ -16,7 +16,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -40,25 +40,37 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ScoreboardComponent } from './shared/scoreboard/scoreboard.component';
+import { HeaderComponent } from './components/header/header.component';
+import { DashboardComponent } from './pages/home/dashboard.component';
+import { ScoreboardComponent } from './components/shared/scoreboard/scoreboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ListservicesComponent } from './listservices/listservices.component';
-import { StackedbarComponent } from './shared/stackedbar/stackedbar.component';
-import { ClassementComponent } from './classement/classement.component';
-import { ScoreboardTotalyComponent } from './shared/scoreboard-totaly/scoreboard-totaly.component';
-import { AdministrationComponent } from './administration/administration.component';
-import { GroupserviceComponent } from './administration/groupservice/groupservice.component';
-import { PopupErrorComponent } from './administration/popup-error/popup-error.component';
-import { PopupValidateComponent } from './administration/popup-validate/popup-validate.component';
-import { DialogGroupServiceComponent } from './administration/groupservice/create-group/dialog-group-service/dialog-group-service.component';
-import { AssociateGroupserviceComponent } from './administration/groupservice/associate-groupservice/associate-groupservice.component';
-import { CreateGroupComponent } from './administration/groupservice/create-group/create-group.component';
-import { DialogEditLabelComponent } from './administration/groupservice/create-group/dialog-edit-label/dialog-edit-label.component';
-import { UtilisateurComponent } from './administration/utilisateur/utilisateur.component';
-import { ServiceComponent } from './administration/service/service.component';
-import { PopupAdminComponent } from './listservices/popup-admin/popup-admin.component';
+import { DetailsServicesComponent } from './pages/detailServices/detailsservices.component';
+import { StackedbarComponent } from './components/shared/stackedbar/stackedbar.component';
+import { ClassementComponent } from './pages/classement/classement.component';
+import { ScoreboardTotalyComponent } from './components/shared/scoreboard-totaly/scoreboard-totaly.component';
+import { AdministrationComponent } from './pages/administration/administration.component';
+import { GroupserviceComponent } from './pages/administration/groupservice/groupservice.component';
+import { PopupErrorComponent } from './components/shared/popup-error/popup-error.component';
+import { PopupValidateComponent } from './components/shared/popup-validate/popup-validate.component';
+import { AssociateGroupserviceComponent } from './pages/administration/groupservice/associate-groupservice/associate-groupservice.component';
+import { CreateGroupComponent } from './pages/administration/groupservice/create-group/create-group.component';
+import { UtilisateurComponent } from './pages/administration/utilisateur/utilisateur.component';
+import { ServiceComponent } from './pages/administration/service/service.component';
+import { PopupAdminComponent } from './pages/detailServices/popup-admin/popup-admin.component';
+import { DialogComponent } from './components/shared/dialog-component/dialog-component.component';
+import { DialogEditComponent } from './pages/administration/dialog-edit/dialog-edit.component';
+
+const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
 
 @NgModule({
   declarations: [
@@ -66,7 +78,6 @@ import { PopupAdminComponent } from './listservices/popup-admin/popup-admin.comp
     HeaderComponent,
     DashboardComponent,
     ScoreboardComponent,
-    ListservicesComponent,
     StackedbarComponent,
     ClassementComponent,
     ScoreboardTotalyComponent,
@@ -74,13 +85,14 @@ import { PopupAdminComponent } from './listservices/popup-admin/popup-admin.comp
     GroupserviceComponent,
     PopupErrorComponent,
     PopupValidateComponent,
-    DialogGroupServiceComponent,
     AssociateGroupserviceComponent,
     CreateGroupComponent,
-    DialogEditLabelComponent,
     UtilisateurComponent,
     ServiceComponent,
     PopupAdminComponent,
+    DetailsServicesComponent,
+    DialogComponent,
+    DialogEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -123,7 +135,7 @@ import { PopupAdminComponent } from './listservices/popup-admin/popup-admin.comp
     MatAutocompleteModule,
     MatTooltipModule,
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [{provide: MAT_DATE_LOCALE, useValue: 'fr-Fr'} ,provideNativeDateAdapter()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,0 +1,38 @@
+<div class="listgroup">
+  <ul class="line-service">
+    <div class="infos">
+      <h3>Liste des groupes existant :</h3>
+      <img
+        src="assets/add-icon.svg"
+        alt="add-icon"
+        (click)="openDialogCreateGroup()"
+      />
+    </div>
+    <hr />
+    @if(filteredGroupsServices) { @for (row of filteredGroupsServices; track
+    row) {
+    <li (click)="onChangeGroupAssociate(row.id)">
+      <p>{{ row.label }}</p>
+      <div class="actions">
+        <img
+          (click)="
+            openDialogEditGroup($event, { id: row.id, label: row.label })
+          "
+          src="assets/edit-icon.svg"
+          alt="edit-icon"
+        />
+        <hr />
+        <img
+          (click)="openDialogDeleteGroup($event, row)"
+          src="assets/close.svg"
+          alt="close-icon"
+        />
+      </div>
+    </li>
+    } }@else {
+    <div class="empty-groups">
+      <p>Aucune groupe disponible en base de données</p>
+    </div>
+    }
+  </ul>
+</div>

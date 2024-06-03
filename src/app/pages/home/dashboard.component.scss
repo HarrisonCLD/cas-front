@@ -1,0 +1,226 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins";
+@import "../../../scss/animations";
+
+@import "./dashboard.responsive.scss";
+
+.lastUpdate {
+  position: absolute;
+  z-index: 1;
+  top: 50px;
+  right: 10px;
+  font-size: 0.8em;
+  font-weight: 300;
+  color: white;
+}
+
+h3 {
+  @extend %flexCenter;
+  flex-direction: column;
+  margin: 2vh 0 3vh 0;
+  color: $main-color;
+  font-size: 2em;
+  font-weight: 300;
+  opacity: 0;
+  animation: fadeInClassic 500ms ease-in forwards;
+  animation-delay: 800ms;
+
+  &::after {
+    content: "";
+    width: 95%;
+    height: 0.1px;
+    margin-top: 4px;
+    background-color: $main-color;
+  }
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+  .separation-left {
+    width: 100%;
+    height: 0px;
+    margin: 20px 0px;
+  }
+
+  .separation-right {
+    width: 1px;
+    height: 100%;
+    margin: 0px 30px;
+  }
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .top {
+      @extend %flexCenter;
+      justify-content: space-around;
+      height: 30%;
+      margin: 2vh 0 1.3vh 0;
+
+      .simply_stat:nth-child(1) {
+        opacity: 0;
+        animation: fadeInClassic 400ms ease-in forwards;
+        animation-delay: 200ms;
+      }
+
+      .simply_stat:nth-child(2) {
+        opacity: 0;
+        animation: fadeInClassic 400ms ease-in forwards;
+        animation-delay: 400ms;
+      }
+      .simply_stat:nth-child(3) {
+        opacity: 0;
+        animation: fadeInClassic 400ms ease-in forwards;
+        animation-delay: 600ms;
+      }
+      .simply_stat:nth-child(4) {
+        opacity: 0;
+        animation: fadeInClassic 400ms ease-in forwards;
+        animation-delay: 800ms;
+      }
+
+      .simply_stat {
+        @extend %flexCenter;
+        justify-content: space-between;
+        flex-direction: column;
+        width: 230px;
+        max-height: 160px;
+        height: 100%;
+        padding: 0;
+
+        img {
+          max-height: 30px;
+          height: 100%;
+        }
+
+        p {
+          font-size: 1.7em;
+          font-weight: 400;
+          margin: 3vh 0;
+        }
+
+        h4 {
+          font-size: 0.9em;
+          margin: 0;
+          color: #969696;
+        }
+
+        // color simply stat dashboard window
+        &:nth-child(1) {
+          color: $main-color;
+        }
+        &:nth-child(2) {
+          color: $main-color;
+        }
+        &:nth-child(3) {
+          color: #00da00;
+        }
+        &:nth-child(4) {
+          color: red;
+        }
+      }
+    }
+
+    .bot {
+      @extend %flexCenter;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+  }
+
+  .right {
+    width: 25%;
+
+    .mat-expansion-panel {
+      box-shadow: none;
+      border: 0.5px solid $main-color;
+
+      &::after {
+        content: "";
+        background-color: $main-color;
+        height: 1px;
+        width: 100%;
+        margin-top: 3px;
+      }
+    }
+
+    .mat-expansion-panel:nth-child(1) {
+      animation-delay: 300ms;
+    }
+    .mat-expansion-panel:nth-child(2) {
+      animation-delay: 500ms;
+    }
+    .mat-expansion-panel:nth-child(3) {
+      animation-delay: 700ms;
+    }
+    .mat-expansion-panel:nth-child(4) {
+      animation-delay: 900ms;
+    }
+    .mat-expansion-panel:nth-child(5) {
+      animation-delay: 1100ms;
+    }
+    .mat-expansion-panel:nth-child(6) {
+      animation-delay: 1300ms;
+    }
+    .mat-expansion-panel {
+      margin: 15px 0px;
+      opacity: 0;
+      animation: fadeInClassic 500ms ease-in forwards;
+
+      img {
+        width: 20px;
+        margin-right: 15px;
+      }
+
+      .mat-expansion-panel-header-description {
+        flex-grow: 0;
+        margin: 0;
+      }
+    }
+
+    .content {
+      @extend %overflowY;
+      @extend %webkitScrollbar;
+      display: flex;
+      flex-direction: column;
+      max-height: 220px;
+
+      &::-webkit-scrollbar {
+        width: 7px;
+      }
+
+      .detail {
+        display: flex;
+        justify-content: space-between;
+        width: 95%;
+        margin: 3px 0 3px 10px;
+        padding: 8px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $main-color;
+          color: white;
+        }
+
+        p {
+          margin: 0;
+          font-size: 0.9em;
+        }
+
+        p:nth-child(1) {
+          font-weight: 400;
+        }
+
+        p:nth-child(2) {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}

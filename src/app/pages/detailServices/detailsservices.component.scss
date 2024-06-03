@@ -1,0 +1,512 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins";
+@import "../../../scss/animations";
+
+// class scss active by javascript :
+.close {
+  padding: 10px 30px;
+  min-width: 0px;
+  animation: sidenavEffect 400ms forwards;
+}
+.open {
+  padding: 10px 30px;
+  min-width: 400px;
+  animation: reverse_sidenavEffect 400ms forwards;
+}
+
+.active {
+  display: block !important;
+  animation: fadeInClassic 600ms ease-in forwards;
+  animation-delay: 300ms;
+}
+
+.full {
+  gap: 60px !important;
+  flex-direction: row !important;
+  animation: fadeInClassic 400ms ease-in-out;
+}
+
+.selected {
+  padding-left: 20px;
+}
+
+.uniqueaccess {
+  left: 45% !important;
+}
+
+// global arrow toggle sidenav :
+.arrowtoggle1,
+.arrowtoggle2 {
+  position: absolute;
+  z-index: 1;
+  height: 50px;
+  padding: 8px 9px 8px 8px;
+  cursor: pointer;
+  opacity: 0;
+  color: $main-color;
+  border-radius: 50%;
+  transition: all 200ms ease-in-out;
+
+  &:hover {
+    color: white;
+    background-color: lighten(black, 50);
+  }
+}
+
+.arrowtoggle1 {
+  top: 30px;
+  left: 25px;
+}
+
+.arrowtoggle2 {
+  display: none;
+  top: 30px;
+  left: 40px;
+  transform: rotate(180deg);
+}
+
+// scss :
+.listservices {
+  display: flex;
+  width: 100%;
+
+  .params {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    mat-form-field {
+      width: 100%;
+      opacity: 0;
+      animation: fadeInClassic 500ms ease-in forwards;
+      animation-delay: 400ms;
+    }
+
+    button {
+      position: absolute;
+      right: 17px;
+      top: 17px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+    }
+  }
+
+  mat-list {
+    @extend %webkitScrollbar;
+    @extend %overflowY;
+    position: relative;
+    min-width: 390px;
+    max-width: 450px;
+    padding: 10px 25px;
+    background-color: white;
+    opacity: 0;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    h2 {
+      text-wrap: nowrap;
+      margin-top: 15px;
+      color: $main-color;
+      opacity: 0;
+      animation: fadeInClassic 500ms ease-in forwards;
+    }
+
+    .params {
+      mat-icon {
+        @extend %flexCenter;
+        position: absolute;
+        top: 8%;
+        right: 7px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken($main-grey, 10);
+        }
+      }
+    }
+
+    .list_service {
+      opacity: 0;
+      animation: fadeInClassic 200ms ease-in forwards;
+    }
+
+    mat-list-item {
+      text-wrap: nowrap;
+      width: 100%;
+      height: fit-content;
+      margin: 6px 0;
+      padding: 8px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+
+      .new {
+        margin: 0 10px 0 0;
+        padding: 0 6px;
+        color: white;
+        background-color: green;
+        font-size: 0.8em;
+        font-weight: 500;
+        border-radius: 3px;
+      }
+
+      &:hover {
+        background-color: $main-grey;
+      }
+    }
+  }
+
+  .view {
+    @extend %flexCenter;
+    @extend %overflowY;
+    position: relative;
+    flex-direction: column;
+    justify-content: flex-start;
+    // width: 100%;
+    flex-grow: 1;
+    padding: 40px 30px;
+    opacity: 0;
+    animation: fadeInClassic 500ms ease-in forwards;
+    animation-delay: 350ms;
+
+    .date {
+      display: flex !important;
+      animation: fadeInRangeDate 200ms ease-in forwards !important;
+    }
+
+    .options {
+      @extend %flexCenter;
+      position: absolute;
+      z-index: 1;
+      top: 20px;
+      right: 0px;
+      max-width: 450px;
+      height: 95px;
+      background-color: rgba(104, 104, 104, 0.8);
+      border-radius: 5px 0px 0px 5px;
+      box-shadow: $main-boxShadow;
+      animation: fadeOutRangeDate 200ms ease-in forwards;
+
+      .startDate {
+        width: 50px;
+        height: 50px;
+        padding: 12px;
+        border-radius: 50%;
+
+        &:hover {
+          background-color: darken(rgba(104, 104, 104, 0.5), 1);
+        }
+
+        button {
+          width: 100%;
+          cursor: pointer;
+          background-color: transparent;
+          border: none;
+          color: white;
+          font-weight: 300;
+        }
+      }
+
+      mat-form-field {
+        position: relative;
+        top: 5px;
+        padding: 13px 20px 13px 20px;
+
+        .mat-mdc-form-field-hint {
+          font-size: 1em;
+          font-weight: 200;
+          text-wrap: nowrap;
+          color: white;
+        }
+      }
+
+      .actions {
+        @extend %flexCenter;
+        height: 100%;
+        margin-right: 22px;
+        padding: 0 7px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken(rgba(104, 104, 104, 0.5), 1);
+        }
+
+        img {
+          height: 35px;
+        }
+
+        .first {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    .presentation {
+      @extend %flexCenter;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 75%;
+      max-width: 1350px;
+      height: fit-content;
+      padding: 20px 35px;
+      border-radius: 5px;
+      background-color: white;
+      box-shadow: $main-boxShadow;
+
+      h3 {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        font-size: 1.3em;
+        font-weight: 400;
+        color: $main-color;
+        text-transform: uppercase;
+        margin: 0;
+
+        &::after {
+          content: "";
+          width: 40%;
+          height: 0.1px;
+          margin-top: -2px;
+          background-color: $main-color;
+        }
+      }
+
+      .top {
+        @extend %flexCenter;
+        justify-content: flex-start;
+        width: 100%;
+        margin: 8px 0;
+
+        h3 {
+          font-size: 1.7em;
+          margin-right: 30px;
+        }
+
+        img {
+          width: 27px;
+          height: 27px;
+          padding: 5px;
+          border-radius: 50%;
+          border: 2px solid $main-color;
+          cursor: pointer;
+
+          &:hover {
+            background-color: lighten($main-grey, 5);
+          }
+        }
+      }
+
+      .bot {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+
+        .informations {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+        }
+
+        .status {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          width: 100%;
+
+          div {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            div:nth-child(n) {
+              @extend %flexCenter;
+              width: 38px;
+              height: 38px;
+              margin-right: 12px;
+              padding: 10px;
+              border-radius: 50%;
+              cursor: pointer;
+
+              img {
+                position: relative;
+                height: 100%;
+              }
+            }
+
+            .devServer {
+              background-color: #4b87c6;
+            }
+            .stopServer {
+              background-color: #ff5d5d;
+            }
+            .nodata {
+              background-color: #d45c5c;
+            }
+            div:last-child {
+              margin-right: 0;
+            }
+            p {
+              margin: 0;
+              text-wrap: nowrap;
+              color: white;
+            }
+          }
+        }
+      }
+      .infos {
+        @extend %flexCenter;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        margin: 10px 0;
+
+        hr {
+          margin: 20px auto;
+        }
+
+        .row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+
+          .id {
+            @extend %flexCenter;
+            padding: 9px 8px 8px 8px;
+            border: 3px solid $main-grey;
+            border-radius: 3px;
+
+            p {
+              margin: 0;
+              font-size: 1.2em;
+              font-weight: 500;
+              color: $main-color;
+            }
+
+            p:nth-child(1) {
+              margin-right: 8px;
+            }
+          }
+
+          .title {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: fit-content;
+            flex-grow: 1;
+            gap: 20px;
+            padding: 0 55px 0 0;
+
+            a {
+              @extend %flexCenter;
+              height: fit-content;
+              width: fit-content;
+
+              img {
+                height: 30px;
+                padding: 4px;
+              }
+            }
+
+            h3 {
+              color: $main-color;
+              font-size: 2em;
+              font-weight: 400;
+              margin: 0;
+              text-transform: none;
+
+              &::after {
+                all: initial;
+              }
+            }
+          }
+        }
+
+        img {
+          height: 40px;
+          padding: 8px;
+          border-radius: 5px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: $main-grey;
+          }
+        }
+      }
+
+      hr {
+        @extend %hrMainColor;
+        margin: 10px auto 20px auto;
+      }
+    }
+
+    .stats {
+      display: flex;
+      gap: 30px;
+      margin: 40px 0 0 0;
+      animation: fadeInClassic 300ms ease-in;
+      transition: all 300ms ease-in-out;
+
+      .accessglobal,
+      .accessunique {
+        display: flex;
+        flex-direction: column;
+
+        padding: 30px 0;
+        border-radius: 5px;
+        background-color: white;
+        box-shadow: $main-boxShadow;
+
+        .numbersglobal,
+        .numbersunique {
+          display: flex;
+          justify-content: center;
+          width: 80%;
+          margin: 0 auto;
+          padding: 8px 12px;
+          border-radius: 3px;
+          border: 3px solid $main-grey;
+
+          hr {
+            margin: 0 15px;
+            width: 1px;
+            height: 70%;
+            background-color: $main-grey;
+            border: none;
+          }
+
+          .moy,
+          .pick,
+          .total {
+            display: flex;
+            align-items: center;
+
+            h4,
+            p {
+              margin: 0;
+              font-size: 1em;
+            }
+            h4 {
+              margin-right: 15px;
+              color: $main-color;
+              font-weight: 500;
+            }
+            p {
+              color: black;
+              font-weight: 300;
+              text-wrap: nowrap;
+            }
+          }
+        }
+      }
+    }
+  }
+}

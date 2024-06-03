@@ -1,0 +1,122 @@
+@import "../../../scss/variables";
+@import "../../../scss/mixins";
+@import "../../../scss/animations";
+
+.bot {
+  @extend %flexCenter;
+  justify-content: space-around;
+  height: 90%;
+  max-width: 1590px;
+  width: 90%;
+  opacity: 0;
+  animation: fadeInClassic 600ms ease-in forwards;
+
+  .left {
+    @extend %overflowY;
+    @extend %webkitScrollbar;
+    width: 435px !important;
+    height: 100%;
+    padding: 20px 25px 5px 25px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: $main-boxShadow;
+
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    .example {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0 20px 0;
+      padding: 0 20px;
+
+      p {
+        font-size: 1em;
+        font-weight: 500;
+        margin: 0;
+      }
+    }
+
+    mat-list-item {
+      margin: 3px 0px;
+      padding: 5px 0;
+      border-radius: 5px;
+      cursor: pointer;
+
+      // scss color to classification criteria in classement
+      .min,
+      .moy,
+      .max {
+        color: white;
+        padding: 5px 8px;
+        border-radius: 3px;
+      }
+      .min {
+        background-color: #c70000;
+      }
+      .moy {
+        background-color: #00ad00;
+      }
+      .max {
+        background-color: $main-color;
+      }
+
+      p:nth-child(3) {
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+
+      &:hover {
+        background-color: $main-grey;
+      }
+
+      .row {
+        @extend %flexCenter;
+        justify-content: space-between;
+        padding: 0 10px;
+
+        p {
+          margin: 0;
+          font-size: 0.9em;
+        }
+
+        p:nth-child(2) {
+          padding: 4px 6px;
+          font-weight: 300;
+        }
+      }
+    }
+  }
+
+  .right {
+    @extend %overflowY;
+    @extend %webkitScrollbar;
+    width: 740px !important;
+    height: 100%;
+    padding: 20px 30px 20px 15px;
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: $main-boxShadow;
+
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    h3 {
+      text-align: center;
+      margin: 10px 0 0 0;
+      font-size: 1.6em;
+      font-weight: 500;
+      color: $main-color;
+    }
+
+    hr {
+      width: 70%;
+      height: 1px;
+      margin: 10px auto 15px auto;
+      background-color: $main-color;
+      border: none;
+    }
+  }
+}

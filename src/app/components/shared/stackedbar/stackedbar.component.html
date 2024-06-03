@@ -1,0 +1,11 @@
+<div class="stackedbar" *ngIf="dataService">
+  <canvas
+    baseChart
+    class="canvas"
+    [data]="barChartData"
+    [options]="barChartOptions"
+    [plugins]="barChartPlugins"
+    [type]="barChartType"
+  >
+  </canvas>
+</div>

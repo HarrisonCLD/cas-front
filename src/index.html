@@ -1,15 +1,31 @@
-<!doctype html>
+<!-- <?php
+
+
+
+phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
+phpCAS::setNoCasServerValidation();
+phpCAS::forceAuthentication();
+$uid = phpCAS::getUser();
+
+?> -->
+
+
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>CasApiFront</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="./index.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
+
 <body class="mat-typography">
   <app-root></app-root>
+  <input type="hidden" id="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTc0MTc0NzQsImp0aSI6Ik5xQ1U5ZU0yMER3bm9YSmZPL2wvaU5lbHVzVGoyeGtKQmIxQzJPMWk1YnM1WnM3NDJRV0UvK2NMTmlpTUxpY1UzaFVqdGdTNmlxa0l5RDVUTzZiWU1RckdUOVY0T2N4dkRycjFJM0s3ckVXNkErWE4yVkdmb2dPY2pCUjR3aFR2eWRPNHpyMjQrSmFtc1d4OGVNRnp5OVdVU1o2Uk1pcmZlcXBWRGZMaWZWTT0iLCJpc3MiOiJsb2NhbGhvc3QiLCJuYmYiOjE3MTc0MTc0NzQsImV4cCI6MTcxNzQ0NjI3NCwiZGF0YSI6eyJsb2dpbiI6ImhhcnIwMDA0IiwiaXNBZG1pbiI6MH19.ZGPhkQzS8XmvwZESAMManBCL9gnMksFTDXnDZBANgKc">
 </body>
+
 </html>
