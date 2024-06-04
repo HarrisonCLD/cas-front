@@ -68,11 +68,11 @@ export class StackedbarComponent implements OnInit, OnDestroy {
         const ArrayCanvas = Array.from(canvas);
         if (!res) {
           ArrayCanvas.forEach((el: any) => {
-            el.style.width = '850px';
+            el.style.width = '750px';
           });
         } else {
           ArrayCanvas.forEach((el: any) => {
-            el.style.width = '1050px';
+            el.style.width = '950px';
           });
         }
         this.chart?.update();
@@ -133,7 +133,7 @@ export class StackedbarComponent implements OnInit, OnDestroy {
       legend: {
         display: true,
         labels: {
-          padding: 30,
+          padding: 25,
           usePointStyle: true,
           pointStyle: 'circle',
         },
