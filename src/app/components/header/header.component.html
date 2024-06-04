@@ -6,7 +6,7 @@
       <span>Détail des services</span>
     </button>
     <button mat-button routerLink="/classement"><span>Classement</span></button>
-    <button mat-button routerLink="/administration">
+    <button mat-button routerLink="/administration" *ngIf="userService.currentUser.isAdmin">
       <span>Administration</span>
     </button>
   </div>
