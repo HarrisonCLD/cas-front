@@ -15,4 +15,5 @@ export interface User {
   uid: string;
   services: Array<ServiceUser>;
   groups: Array<GroupeUser>;
+  isAdmin?: boolean;
 }

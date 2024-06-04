@@ -9,7 +9,7 @@ import { ApiService } from './services/api.service';
 })
 export class AppComponent {
   private apiService = inject(ApiService);
-
+  private userService = inject(UserService);
   constructor() {
     this.getJWT();
   }
@@ -27,5 +27,6 @@ export class AppComponent {
       'Authorization',
       `Bearer ${this.apiService.jwt}`
     );
+    this.userService.getProfile().then((res: any) => console.log('res', res));
   }
 }

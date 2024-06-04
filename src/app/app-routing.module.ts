@@ -6,6 +6,7 @@ import { DetailsServicesComponent } from './pages/detailServices/detailsservices
 import { ClassementComponent } from './pages/classement/classement.component';
 import { AdministrationComponent } from './pages/administration/administration.component';
 import { GroupserviceComponent } from './pages/administration/groupservice/groupservice.component';
+import { isAdminGuard } from './guards/isAdmin.guard';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   {
     path: 'administration',
     component: AdministrationComponent,
+    canActivate: [isAdminGuard],
     children: [
       {
         path: 'group',
@@ -27,6 +29,9 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path:'**', redirectTo:'/'
+  }
 ];
 
 @NgModule({

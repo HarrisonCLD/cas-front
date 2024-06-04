@@ -21,12 +21,18 @@ export class UserService {
 
   public userJWT!: string;
 
+  public currentUser = {
+    uid: '',
+    isAdmin: false,
+  };
+
   public user: User = {
     id: 0,
     uid: '',
     nom: '',
     groups: [],
     services: [],
+    isAdmin: false,
   };
 
   public users: User[] = [];
@@ -66,11 +72,23 @@ export class UserService {
     };
     return new Promise((resolve) => {
       this.service.get(`/auth/user/list`, params).subscribe((res: any) => {
-        console.log('res', res);
         if (res.code === 0) {
           this.users = res.data.slice();
         }
         resolve(this.users);
+      });
+    });
+  }
+
+  getProfile(): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.getAll(`/auth/profile`).subscribe((res: any) => {
+        this.currentUser = {
+          uid: res.data.login,
+          isAdmin: res.data.isAdmin === 1,
+        };
+        console.log('resservice', this.user);
+        resolve(this.currentUser);
       });
     });
   }

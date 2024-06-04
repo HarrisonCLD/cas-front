@@ -1,13 +1,26 @@
-<!-- <?php
+<!--
+<?php
 
+require __DIR__ . "/api/vendor/autoload.php";
 
+use urca\cas\stats\api\daos\AuthDAO;
 
-phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
+// Full Hostname of your CAS Server
+$cas_host = 'cas.univ-reims.fr';
+// Context of the CAS Server
+$cas_context = '/cas/';
+// Port of your CAS server. Normally for a https server it's 443
+$cas_port = 443;
+
+$client_service_name = "https://dev-stagiaire01.univ-reims.fr";
+
+phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context, $client_service_name);
 phpCAS::setNoCasServerValidation();
 phpCAS::forceAuthentication();
 $uid = phpCAS::getUser();
-
-?> -->
+$jwt = AuthDAO::getJWT($uid);
+?>
+ -->
 
 
 <!DOCTYPE html>
@@ -25,7 +38,7 @@ $uid = phpCAS::getUser();
 
 <body class="mat-typography">
   <app-root></app-root>
-  <input type="hidden" id="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTc0MTc0NzQsImp0aSI6Ik5xQ1U5ZU0yMER3bm9YSmZPL2wvaU5lbHVzVGoyeGtKQmIxQzJPMWk1YnM1WnM3NDJRV0UvK2NMTmlpTUxpY1UzaFVqdGdTNmlxa0l5RDVUTzZiWU1RckdUOVY0T2N4dkRycjFJM0s3ckVXNkErWE4yVkdmb2dPY2pCUjR3aFR2eWRPNHpyMjQrSmFtc1d4OGVNRnp5OVdVU1o2Uk1pcmZlcXBWRGZMaWZWTT0iLCJpc3MiOiJsb2NhbGhvc3QiLCJuYmYiOjE3MTc0MTc0NzQsImV4cCI6MTcxNzQ0NjI3NCwiZGF0YSI6eyJsb2dpbiI6ImhhcnIwMDA0IiwiaXNBZG1pbiI6MH19.ZGPhkQzS8XmvwZESAMManBCL9gnMksFTDXnDZBANgKc">
+  <input type="hidden" id="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTc0OTA2NjQsImp0aSI6Ijl5QUx6MHJtMk5FVlhlQzJNOTM0anhlaWczbzV3YWx4QnkvTDBPbFY5R2FiNllSWllOamlOZ2tYL3NjMkZldThqdFptazlBM1dKeGU2aDlTZTRlZjdLeDBudUcvNlB0T01zd2NkSU1QN0Fvb1Bsc0RHMFN0WjZSSkdzYXN6VWZWblNIeVNxTEJmdnVIdzd0ZFUyTlFzK2JtN21VQk9YQTlDdGNCbmFWT3kwMD0iLCJpc3MiOiJsb2NhbGhvc3QiLCJuYmYiOjE3MTc0OTA2NjQsImV4cCI6MTcxNzUxOTQ2NCwiZGF0YSI6eyJsb2dpbiI6ImNsYXUwMDU2IiwiaXNBZG1pbiI6MX19.6w0jepu7ZDanj4AIKVCI_E8wCsAzifUcLHLDQmN0f8s">
 </body>
 
 </html>
