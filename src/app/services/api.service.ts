@@ -37,7 +37,7 @@ export class ApiService implements DataService {
       })
       .pipe(
         catchError((error) => {
-          console.error('HTTP GET Error:', error);
+          // console.error('HTTP GET Error:', error);
           return of({ code: 1, status: 'error' });
         })
       );
@@ -48,7 +48,7 @@ export class ApiService implements DataService {
       .get(`${environment.apiUrl}${path}`, { headers: this.headers })
       .pipe(
         catchError((error) => {
-          console.error('HTTP GET ALL Error:', error);
+          // console.error('HTTP GET ALL Error:', error);
           return of({ code: 1, status: 'error' });
         })
       );
@@ -59,7 +59,7 @@ export class ApiService implements DataService {
       .post(`${environment.apiUrl}${path}`, data, { headers: this.headers })
       .pipe(
         catchError((error) => {
-          console.error('HTTP POST Error:', error);
+          // console.error('HTTP POST Error:', error);
           return of({ code: 1, status: 'error' });
         })
       );
@@ -79,7 +79,7 @@ export class ApiService implements DataService {
       })
       .pipe(
         catchError((error) => {
-          console.error('HTTP DELETE Error:', error);
+          // console.error('HTTP DELETE Error:', error);
           return of({ code: 1, status: 'error' });
         })
       );
@@ -90,7 +90,7 @@ export class ApiService implements DataService {
       .patch(`${environment.apiUrl}${path}`, data, { headers: this.headers })
       .pipe(
         catchError((error) => {
-          console.error('HTTP PATCH Error:', error);
+          // console.error('HTTP PATCH Error:', error);
           return of({ code: 1, status: 'error' });
         })
       );

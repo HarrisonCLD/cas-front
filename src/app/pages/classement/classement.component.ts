@@ -10,6 +10,12 @@ interface ScoreboardData {
   data: string[];
 }
 
+interface ScoreboardPagination {
+  data: any[];
+  ids: any[];
+  labels: any[];
+}
+
 @Component({
   selector: 'classement',
   templateUrl: './classement.component.html',
@@ -21,7 +27,11 @@ export class ClassementComponent implements OnInit {
   public dataReceive!: ScoreboardData;
   public dataScoreboard: Subject<any> = new Subject();
 
-  public dataScoreboardPagination!: any;
+  public dataScoreboardPagination: ScoreboardPagination = {
+    data: [],
+    labels: [],
+    ids: [],
+  };
 
   public listPagination: Array<any> = [];
   public dataPagination: Array<any> = [];
@@ -47,6 +57,8 @@ export class ClassementComponent implements OnInit {
         labels: res.labels.slice(0, 25),
         ids: res.ids.slice(0, 25),
       };
+    console.log('data', this.dataScoreboardPagination);
+
       this.listPagination = this.getListPagination(0, 25);
       this.dataScoreboard.next(this.dataScoreboardPagination);
     });

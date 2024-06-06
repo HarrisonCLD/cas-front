@@ -9,23 +9,31 @@
       aria-label="Select page"
     >
     </mat-paginator>
-    <mat-list class="content">
+    <mat-list
+      class="content"
+      *ngIf="dataScoreboardPagination.labels.length > 0"
+    >
       <div class="example">
         <p>Nom du service</p>
         <p>Access</p>
       </div>
-      @for (service of listPagination; track service.id) {
-      <mat-list-item routerLink="services/{{ service.id }}">
+      @for (service of dataScoreboardPagination.labels; track service; let i =
+      $index) {
+      <mat-list-item
+        routerLink="/services/{{ dataScoreboardPagination.ids[i] }}"
+      >
         <div class="row">
           <p>{{ service }}</p>
           <p
             [ngClass]="{
-              min: service.access < 10000,
-              moy: service.access > 10000 && service.access < 50000,
-              max: service.access > 50000
+              min: dataScoreboardPagination.data[i] < 10000,
+              moy:
+                dataScoreboardPagination.data[i] > 10000 &&
+                dataScoreboardPagination.data[i] < 50000,
+              max: dataScoreboardPagination.data[i] > 50000
             }"
           >
-            {{ service.access }}
+            {{ dataScoreboardPagination.data[i] }}
           </p>
         </div>
       </mat-list-item>

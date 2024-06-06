@@ -27,6 +27,6 @@ export class AppComponent {
       'Authorization',
       `Bearer ${this.apiService.jwt}`
     );
-    this.userService.getProfile().then((res: any) => console.log('res', res));
+    this.userService.getProfile();
   }
 }

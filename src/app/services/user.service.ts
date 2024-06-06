@@ -87,7 +87,6 @@ export class UserService {
           uid: res.data.login,
           isAdmin: res.data.isAdmin === 1,
         };
-        console.log('resservice', this.user);
         resolve(this.currentUser);
       });
     });
