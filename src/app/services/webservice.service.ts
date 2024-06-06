@@ -206,6 +206,8 @@ export class WebService {
               max = 10;
             } else if (res.data.peak > 10 && res.data.peak < 50) {
               max = 50;
+            } else if (res.data.peak > 50 && res.data.peak < 100) {
+              max = 100;
             } else if (res.data.peak > 100 && res.data.peak < 250) {
               max = 250;
             } else if (res.data.peak > 250 && res.data.peak < 500) {
