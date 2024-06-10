@@ -2,10 +2,12 @@
 @import "../../../../scss/mixins";
 @import "../../../../scss/animations";
 
+
+
 .stackedbar {
   position: relative;
   @extend %flexCenter;
   flex-direction: column;
+  width: 100%;
   padding: 30px 40px;
-  width: 750px;
 }

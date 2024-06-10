@@ -9,13 +9,10 @@ import {
   ResumeAccessDetails,
 } from '../interfaces/statsaccess.interface';
 
-// .env :
-import { environment } from '../../environments/environment.development';
-
 // services :
 import { ApiService } from './api.service';
-import { Observable, Subject } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',

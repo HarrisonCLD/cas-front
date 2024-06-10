@@ -1,21 +1,20 @@
 import {
   Component,
-  EventEmitter,
+  HostListener,
   Input,
   OnDestroy,
   OnInit,
-  Output,
   ViewChild,
   inject,
 } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { ActivatedRoute, Params } from '@angular/router';
-
+import { ActivatedRoute } from '@angular/router';
 import { Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import Annotation from 'chartjs-plugin-annotation';
-import { Service } from '../../../interfaces/service.interface';
+
+// services :
 import { WebService } from '../../../services/webservice.service';
 
 @Component({
@@ -27,8 +26,11 @@ export class StackedbarComponent implements OnInit, OnDestroy {
   public webService = inject(WebService);
   public dataService!: any;
 
+  @HostListener('window:resize', ['$event'])
+
   // reaction switch id :
-  @Input() onDataChanged: any;
+  @Input()
+  onDataChanged: any;
   @Input() isFullscreen!: Subject<boolean>;
 
   private onDataChangedSubscription!: Subscription;
@@ -68,17 +70,21 @@ export class StackedbarComponent implements OnInit, OnDestroy {
         const ArrayCanvas = Array.from(canvas);
         if (!res) {
           ArrayCanvas.forEach((el: any) => {
-            el.style.width = '750px';
+            el.style.width = '100%';
           });
         } else {
           ArrayCanvas.forEach((el: any) => {
-            el.style.width = '950px';
+            el.style.width = '100%';
           });
         }
         this.chart?.update();
         this.chart?.render();
       }
     );
+  }
+
+  onResize(event:any) {
+    this.chart?.render();
   }
 
   ngOnDestroy() {
@@ -126,14 +132,14 @@ export class StackedbarComponent implements OnInit, OnDestroy {
         display: true,
         text: '',
         font: {
-          size: 20,
+          size: 18,
           weight: 100,
         },
       },
       legend: {
         display: true,
         labels: {
-          padding: 25,
+          padding: 15,
           usePointStyle: true,
           pointStyle: 'circle',
         },

@@ -1,4 +1,4 @@
-<div class="stackedbar" *ngIf="dataService">
+<div class="stackedbar" *ngIf="dataService" (window:resize)="onResize($event)">
   <canvas
     baseChart
     class="canvas"
